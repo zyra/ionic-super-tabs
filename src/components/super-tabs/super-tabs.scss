@@ -1,0 +1,35 @@
+super-tabs {
+
+  ion-segment.segment.segment-md {
+    ion-segment-button {
+      border-bottom: 0;
+      height: inherit;
+      ion-icon {
+        display: block;
+      }
+    }
+
+    + .slide {
+      bottom: 0;
+      position: absolute;
+      z-index: 2;
+      height: 2px;
+      background: map_get($colors, light);
+      &.ease {
+        transition: left .25s ease-in;
+      }
+    }
+
+  }
+
+  ion-slides {
+    text-align: inherit;
+    font-size: inherit;
+    ion-slide, ion-slide .slide-zoom, .swiper-slide {
+      text-align: inherit;
+      font-size: inherit;
+    }
+  }
+
+
+}
