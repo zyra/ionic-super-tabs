@@ -1,7 +1,7 @@
 # Swipeable tabs for Ionic 2
 Swipeable tabs that can be your main navigation, or just a part of your page.
 
-To see this in action, checkout the [example project here](../ionic2-super-tabs-example).
+To see this in action, checkout the [example project here](https://github.com/zyramedia/ionic2-super-tabs-example).
 
 <br><br><br>
 
@@ -135,3 +135,8 @@ export class MyPage {
   <super-tab [tabRoot]="page3" title="Third page" icon="heart"></super-tab>
 </super-tabs>
 ```
+
+<br><br><br>
+
+### Colors
+All color inputs takes color names like any other Ionic 2 component. Your color name must be defined in the `$colors` map in your `variables.scss` file. 
