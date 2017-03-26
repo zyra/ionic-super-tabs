@@ -1,18 +1,17 @@
-import {Component, ContentChildren, ElementRef, Input, QueryList, Renderer, ViewChild} from '@angular/core';
-import {SuperTabComponent} from "../super-tab/super-tab";
-import {Header, NavController, Platform, Slides, Toolbar} from "ionic-angular";
+import {
+  AfterViewInit, Component, ContentChildren, ElementRef, Input, OnDestroy, QueryList, Renderer,
+  ViewChild
+} from '@angular/core';
+import { SuperTabComponent } from "../super-tab/super-tab";
+import { NavController, Platform, Slides, Toolbar } from "ionic-angular";
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromEvent';
 
-/*
-  Generated class for the SuperTabs component.
-
-  See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
-  for more info on Angular 2 Components.
-*/
 @Component({
   selector: 'super-tabs',
   template: `
-      <ion-toolbar [color]="toolbarColor" #toolbar>
-          <ion-segment [color]="tabsColor" [(ngModel)]="selectedTabIndex">
+      <ion-toolbar [color]="toolbarColor" #toolbar mode="md">
+          <ion-segment [color]="tabsColor" [(ngModel)]="selectedTabIndex" mode="md">
               <ion-segment-button *ngFor="let tab of tabs; let i = index" [value]="i" (ionSelect)="onTabSelect(i)">
                   <ion-icon *ngIf="tab.icon" [name]="tab.icon"></ion-icon>
                   {{tab.title}}
@@ -27,7 +26,7 @@ import {Header, NavController, Platform, Slides, Toolbar} from "ionic-angular";
       </ion-slides>
   `
 })
-export class SuperTabsComponent {
+export class SuperTabsComponent implements OnDestroy, AfterViewInit {
 
   @ContentChildren(SuperTabComponent) superTabs: QueryList<SuperTabComponent>;
 
@@ -94,7 +93,18 @@ export class SuperTabsComponent {
 
   private validSliderLocations: number[] = [];
 
-  constructor(private platform: Platform, private el: ElementRef, private rnd: Renderer) {}
+  private screenOrientationWatch: any;
+
+  constructor( private el: ElementRef, private rnd: Renderer) {
+    // re-adjust the height of the slider when the orientation changes
+    this.screenOrientationWatch = Observable.fromEvent(window, 'orientationchange').subscribe(() => this.setHeights());
+  }
+
+  ngOnDestroy() {
+    if (this.screenOrientationWatch && this.screenOrientationWatch.unsubscribe) {
+      this.screenOrientationWatch.unsubscribe();
+    }
+  }
 
   /**
    * We listen to drag events to move the "slide" thingy along with the slides
@@ -156,10 +166,10 @@ export class SuperTabsComponent {
 
     // the width of the "slide", should be equal to the width of a single `ion-segment-button`
     // we'll just calculate it instead of querying for a segment button
-    this.slideWidth = this.platform.width() / this.tabs.length + 'px';
+    this.slideWidth = this.el.nativeElement.offsetWidth / this.tabs.length + 'px';
 
     // we need this to make sure the "slide" thingy doesn't move outside the screen
-    this.maxSlidePosition = this.platform.width() - (this.platform.width() / this.tabs.length);
+    this.maxSlidePosition = this.el.nativeElement.offsetWidth - (this.el.nativeElement.offsetWidth / this.tabs.length);
 
     // set slide speed to match slider
     this.slides.speed = 250;
@@ -181,6 +191,9 @@ export class SuperTabsComponent {
     }
 
     this.slides.ionSlideTouchEnd.subscribe(() => this.ensureSliderLocationIsValid());
+
+
+
   }
 
   private ensureSliderLocationIsValid() {

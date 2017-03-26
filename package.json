@@ -30,5 +30,8 @@
     "sw-toolbox": "3.4.0",
     "typescript": "2.0.9",
     "zone.js": "0.7.2"
+  },
+  "peerDependencies": {
+    "ionic-angular": "^2.2.0"
   }
 }

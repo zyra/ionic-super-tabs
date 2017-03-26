@@ -20,7 +20,7 @@ import { SuperTabsModule } from 'ionic2-super-tabs';
 ```
 
 ```
-<super-tabs>
+<super-tabs height="100%">
   <super-tab [tabRoot]="page1" title="First page" [icon]="'home'"></super-tab>
   <super-tab [tabRoot]="page2" title="Second page" [icon]="'pin'"></super-tab>
   <super-tab [tabRoot]="page3" title="Third page" [icon]="'heart'"></super-tab>
