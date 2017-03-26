@@ -21,48 +21,12 @@ import 'rxjs/add/observable/fromEvent';
       </ion-toolbar>
       <ion-slides [style.height]="slidesHeight + 'px'" (ionSlideDrag)="onDrag($event)" (ionSlideWillChange)="onSlideWillChange()" (ionSlideDidChange)="onSlideDidChange()" [initialSlide]="selectedTabIndex">
           <ion-slide *ngFor="let tab of tabs">
-              <ion-nav [root]="tab.tabRoot" [rootParams]="{ rootNavCtrl: rootNavCtrl }"></ion-nav>
+              <ion-nav [root]="tab.tabRoot" [rootParams]="tab.navParams"></ion-nav>
           </ion-slide>
       </ion-slides>
   `
 })
 export class SuperTabsComponent implements OnDestroy, AfterViewInit {
-
-  @ContentChildren(SuperTabComponent) superTabs: QueryList<SuperTabComponent>;
-
-  /**
-   * The different tabs we have
-   * @type {Array<SuperTabComponent>}
-   */
-  tabs: SuperTabComponent[] = [];
-
-  @ViewChild(Slides) slides: Slides;
-
-  @ViewChild('toolbar') toolbar: Toolbar;
-
-  @ViewChild('slide') slider: ElementRef;
-
-  slidesHeight: number = 0;
-
-  private _selectedTabIndex = 0;
-
-  /**
-   * The initial selected tab index
-   * @param val {number} tab index
-   */
-  @Input()
-  set selectedTabIndex(val: number) {
-    if (val >= this.tabs.length) {
-      return;
-    }
-    this._selectedTabIndex = val;
-    this.alignSlidePosition();
-    this.pageTitle = this.tabs[this.selectedTabIndex].title;
-  }
-
-  get selectedTabIndex(): number {
-    return this._selectedTabIndex;
-  }
 
   /**
    * The parent page NavController.
@@ -85,11 +49,44 @@ export class SuperTabsComponent implements OnDestroy, AfterViewInit {
     this.rnd.setElementStyle(this.el.nativeElement, 'height', val);
   }
 
+  /**
+   * The initial selected tab index
+   * @param val {number} tab index
+   */
+  @Input()
+  set selectedTabIndex(val: number) {
+    if (val >= this.tabs.length) {
+      return;
+    }
+    this._selectedTabIndex = val;
+    this.alignSlidePosition();
+  }
+
+  get selectedTabIndex(): number {
+    return this._selectedTabIndex;
+  }
+
+  @ContentChildren(SuperTabComponent) superTabs: QueryList<SuperTabComponent>;
+
+  /**
+   * The different tabs we have
+   * @type {Array<SuperTabComponent>}
+   */
+  tabs: SuperTabComponent[] = [];
+
+  @ViewChild(Slides) slides: Slides;
+
+  @ViewChild('toolbar') toolbar: Toolbar;
+
+  @ViewChild('slide') slider: ElementRef;
+
+  slidesHeight: number = 0;
   maxSlidePosition: number;
   slidePosition = '0';
   slideWidth = '0';
   shouldSlideEase: boolean = false;
-  pageTitle: string = '';
+
+  private _selectedTabIndex = 0;
 
   private validSliderLocations: number[] = [];
 
@@ -98,6 +95,44 @@ export class SuperTabsComponent implements OnDestroy, AfterViewInit {
   constructor( private el: ElementRef, private rnd: Renderer) {
     // re-adjust the height of the slider when the orientation changes
     this.screenOrientationWatch = Observable.fromEvent(window, 'orientationchange').subscribe(() => this.setHeights());
+  }
+
+  ngAfterViewInit() {
+    // take the tabs from the query and put them in a regular array to make life easier
+    this.superTabs.forEach(tab => {
+      tab.navParams = tab.navParams || {};
+      tab.navParams.rootNavCtrl = this.rootNavCtrl;
+      this.tabs.push(tab);
+    });
+
+    // the width of the "slide", should be equal to the width of a single `ion-segment-button`
+    // we'll just calculate it instead of querying for a segment button
+    this.slideWidth = this.el.nativeElement.offsetWidth / this.tabs.length + 'px';
+
+    // we need this to make sure the "slide" thingy doesn't move outside the screen
+    this.maxSlidePosition = this.el.nativeElement.offsetWidth - (this.el.nativeElement.offsetWidth / this.tabs.length);
+
+    // set slide speed to match slider
+    this.slides.speed = 250;
+
+    // set color of the slider
+    this.rnd.setElementClass(this.slider.nativeElement, 'button-md-' + this.sliderColor, true);
+
+    // we waiting for 100ms just to give `ion-icon` some time to decide if they want to show up or not
+    // if we check height immediately, we will get the height of the header without the icons
+    setTimeout(this.setHeights.bind(this), 100);
+
+    // lets figure out what are the possible locations for the slider thingy to be at
+    // this is needed because if the user moves the slider a bit, and that movement doesn't result in a slide change
+    // then we need to reset the location of the slider
+    const segmentButtonWidth = this.slides.renderedWidth / this.tabs.length;
+    this.validSliderLocations = [];
+    for (let i = 0; i < this.tabs.length; i++) {
+      this.validSliderLocations.push(i * segmentButtonWidth);
+    }
+
+    this.slides.ionSlideTouchEnd.subscribe(() => this.ensureSliderLocationIsValid());
+
   }
 
   ngOnDestroy() {
@@ -155,45 +190,6 @@ export class SuperTabsComponent implements OnDestroy, AfterViewInit {
     if (index <= this.tabs.length) {
       this.slides.slideTo(index);
     }
-  }
-
-  ngAfterViewInit() {
-    // take the tabs from the query and put them in a regular array to make life easier
-    this.superTabs.forEach(tab => this.tabs.push(tab));
-
-    // set page title based on the selected page
-    this.pageTitle = this.tabs[this.selectedTabIndex].title;
-
-    // the width of the "slide", should be equal to the width of a single `ion-segment-button`
-    // we'll just calculate it instead of querying for a segment button
-    this.slideWidth = this.el.nativeElement.offsetWidth / this.tabs.length + 'px';
-
-    // we need this to make sure the "slide" thingy doesn't move outside the screen
-    this.maxSlidePosition = this.el.nativeElement.offsetWidth - (this.el.nativeElement.offsetWidth / this.tabs.length);
-
-    // set slide speed to match slider
-    this.slides.speed = 250;
-
-    // set color of the slider
-    this.rnd.setElementClass(this.slider.nativeElement, 'button-md-' + this.sliderColor, true);
-
-    // we waiting for 100ms just to give `ion-icon` some time to decide if they want to show up or not
-    // if we check height immediately, we will get the height of the header without the icons
-    setTimeout(this.setHeights.bind(this), 100);
-
-    // lets figure out what are the possible locations for the slider thingy to be at
-    // this is needed because if the user moves the slider a bit, and that movement doesn't result in a slide change
-    // then we need to reset the location of the slider
-    const segmentButtonWidth = this.slides.renderedWidth / this.tabs.length;
-    this.validSliderLocations = [];
-    for (let i = 0; i < this.tabs.length; i++) {
-      this.validSliderLocations.push(i * segmentButtonWidth);
-    }
-
-    this.slides.ionSlideTouchEnd.subscribe(() => this.ensureSliderLocationIsValid());
-
-
-
   }
 
   private ensureSliderLocationIsValid() {
