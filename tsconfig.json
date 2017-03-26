@@ -4,6 +4,7 @@
     "target": "es5",
     "moduleResolution": "node",
     "sourceMap": true,
+    "inlineSources": true,
     "declaration": true,
     "noImplicitAny": false,
     "experimentalDecorators": true,

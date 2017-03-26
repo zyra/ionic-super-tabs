@@ -6,7 +6,9 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "rm -rf aot dist && ngc",
-    "copy:scss": "cd src && copyfiles '**/*.scss' ../dist"
+    "postbuild": "npm run copy:scss",
+    "copy:scss": "cp src/components/super-tabs/super-tabs.scss dist/components/super-tabs/",
+    "build:dev": "npm run build && cp -r dist src ../super-tabs/node_modules/ionic2-super-tabs/"
   },
   "author": "Ibby Hadeed <i.hadeed@zyra.ca>",
   "license": "MIT",

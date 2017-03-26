@@ -15,8 +15,4 @@ export class SuperTabComponent {
   @Input()
   icon: string;
 
-  constructor() {
-    console.log('Hello SuperTab Component');
-  }
-
 }
