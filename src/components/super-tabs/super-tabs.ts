@@ -1,6 +1,6 @@
-import {Component, ContentChildren, Input, QueryList, ViewChild} from '@angular/core';
+import {Component, ContentChildren, ElementRef, Input, QueryList, Renderer, ViewChild} from '@angular/core';
 import {SuperTabComponent} from "../super-tab/super-tab";
-import {Header, NavController, Platform, Slides} from "ionic-angular";
+import {Header, NavController, Platform, Slides, Toolbar} from "ionic-angular";
 
 /*
   Generated class for the SuperTabs component.
@@ -11,21 +11,16 @@ import {Header, NavController, Platform, Slides} from "ionic-angular";
 @Component({
   selector: 'super-tabs',
   template: `
-      <ion-header>
-          <ion-navbar color="dark">
-              <ion-title>{{title || pageTitle}}</ion-title>
-          </ion-navbar>
-          <ion-toolbar color="dark">
-              <ion-segment color="light" [(ngModel)]="selectedTabIndex">
-                  <ion-segment-button *ngFor="let tab of tabs; let i = index" [value]="i" (ionSelect)="onTabSelect(i)">
-                      <ion-icon *ngIf="tab.icon" [name]="tab.icon"></ion-icon>
-                      {{tab.title}}
-                  </ion-segment-button>
-              </ion-segment>
-              <div class="slide" #slide [style.left]="slidePosition" [class.ease]="shouldSlideEase" [style.width]="slideWidth"></div>
-          </ion-toolbar>
-      </ion-header>
-      <ion-slides [style.margin-top]="headerHeight + 'px'" [style.height]="slidesHeight + 'px'" (ionSlideDrag)="onDrag($event)" (ionSlideWillChange)="onSlideWillChange()" (ionSlideDidChange)="onSlideDidChange()" [initialSlide]="selectedTabIndex">
+      <ion-toolbar [color]="toolbarColor" #toolbar>
+          <ion-segment [color]="tabsColor" [(ngModel)]="selectedTabIndex">
+              <ion-segment-button *ngFor="let tab of tabs; let i = index" [value]="i" (ionSelect)="onTabSelect(i)">
+                  <ion-icon *ngIf="tab.icon" [name]="tab.icon"></ion-icon>
+                  {{tab.title}}
+              </ion-segment-button>
+          </ion-segment>
+          <div class="slide" #slide [style.left]="slidePosition" [class.ease]="shouldSlideEase" [style.width]="slideWidth"></div>
+      </ion-toolbar>
+      <ion-slides [style.height]="slidesHeight + 'px'" (ionSlideDrag)="onDrag($event)" (ionSlideWillChange)="onSlideWillChange()" (ionSlideDidChange)="onSlideDidChange()" [initialSlide]="selectedTabIndex">
           <ion-slide *ngFor="let tab of tabs">
               <ion-nav [root]="tab.tabRoot" [rootParams]="{ rootNavCtrl: rootNavCtrl }"></ion-nav>
           </ion-slide>
@@ -44,8 +39,10 @@ export class SuperTabsComponent {
 
   @ViewChild(Slides) slides: Slides;
 
-  @ViewChild(Header) header: Header;
-  headerHeight: number = 0;
+  @ViewChild('toolbar') toolbar: Toolbar;
+
+  @ViewChild('slide') slider: ElementRef;
+
   slidesHeight: number = 0;
 
   private _selectedTabIndex = 0;
@@ -76,7 +73,18 @@ export class SuperTabsComponent {
   rootNavCtrl: NavController;
 
   @Input()
-  title: string;
+  toolbarColor: string;
+
+  @Input()
+  tabsColor: string;
+
+  @Input()
+  sliderColor: string = 'primary';
+
+  @Input()
+  set height(val: string) {
+    this.rnd.setElementStyle(this.el.nativeElement, 'height', val);
+  }
 
   maxSlidePosition: number;
   slidePosition = '0';
@@ -86,7 +94,7 @@ export class SuperTabsComponent {
 
   private validSliderLocations: number[] = [];
 
-  constructor(private platform: Platform) {}
+  constructor(private platform: Platform, private el: ElementRef, private rnd: Renderer) {}
 
   /**
    * We listen to drag events to move the "slide" thingy along with the slides
@@ -156,6 +164,9 @@ export class SuperTabsComponent {
     // set slide speed to match slider
     this.slides.speed = 250;
 
+    // set color of the slider
+    this.rnd.setElementClass(this.slider.nativeElement, 'button-md-' + this.sliderColor, true);
+
     // we waiting for 100ms just to give `ion-icon` some time to decide if they want to show up or not
     // if we check height immediately, we will get the height of the header without the icons
     setTimeout(this.setHeights.bind(this), 100);
@@ -194,8 +205,7 @@ export class SuperTabsComponent {
    * Sets the height of ion-slides and it's position from the top of the page
    */
   private setHeights() {
-    this.headerHeight = this.header.getNativeElement().offsetHeight;
-    this.slidesHeight = this.platform.height() - this.headerHeight;
+    this.slidesHeight = this.el.nativeElement.offsetHeight - this.toolbar.getNativeElement().offsetHeight;
   }
 
 

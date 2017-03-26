@@ -1,5 +1,7 @@
 super-tabs {
 
+  display: block;
+
   ion-segment.segment.segment-md {
     ion-segment-button {
       border-bottom: 0;
@@ -14,7 +16,6 @@ super-tabs {
       position: absolute;
       z-index: 2;
       height: 2px;
-      background: map_get($colors, light);
       &.ease {
         transition: left .25s ease-in;
       }
