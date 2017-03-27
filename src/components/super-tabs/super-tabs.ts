@@ -55,9 +55,6 @@ export class SuperTabsComponent implements OnDestroy, AfterViewInit {
    */
   @Input()
   set selectedTabIndex(val: number) {
-    if (val >= this.tabs.length) {
-      return;
-    }
     this._selectedTabIndex = val;
     this.alignSlidePosition();
   }
