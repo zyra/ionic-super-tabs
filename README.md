@@ -5,6 +5,16 @@ To see this in action, checkout the [example project here](https://github.com/zy
 
 ![Example](https://github.com/zyramedia/ionic2-super-tabs-example/blob/master/example.gif?raw=true)
 
+- [Quick Example](#quick-example)
+- [How it works](#how-it-works)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [`super-tabs` Component Inputs](#super-tabs-inputs)
+  - [`super-tab` Component Inputs](#super-tab-inputs)
+- [Examples](#examples)
+- [Colors](#colors)
+- [Project goals](#project-goals)
+
 <br><br><br>
 
 # Quick Example
@@ -77,6 +87,9 @@ The height of `super-tabs` component. Set this to `100%` to fill the whole page,
 ### tabRoot
 The root page for this tab
 
+### navParams
+_(optional)_ An object containing the params you would like to pass to this tab's root page
+
 ### title
 _(optional)_ The title of the tab to display in the `ion-segment-button`.
 
@@ -142,3 +155,15 @@ export class MyPage {
 
 ### Colors
 All color inputs takes color names like any other Ionic 2 component. Your color name must be defined in the `$colors` map in your `variables.scss` file. 
+
+
+<br><br><br>
+
+## Project goals
+The main goal of this project is to provide a swipeable tabs component for Ionic 2 apps. The tabs must look and feel like the native material design tabs. The project has successfully achieved this goal, but there are a few improvements in mind:
+- Disallow "over-swiping" at the begining/end of the tabs. Example: if you are on the first tab and you swipe to the right, the page will move and you will see a blank white area. This is default behaviour of the `ion-slides` component (Swiper by iDangero.us).
+- Allow tab swiping. This is useful if you want to have a large number of tabs and there isn't enough room to have all the `ion-segment-button`s to show up at the same time.
+- Experiment with using Angular 2 animations instead of pure CSS. (might provide better performance)
+- Add a `mode` option that will be passed to the `ion-segment`. Currently the `mode` is set to `md` to provide consistent experience over all platforms. Some might want to have `ios` segment buttons instead.
+
+Suggestions and/or Pull Requests are welcome!
