@@ -3,7 +3,11 @@ Swipeable tabs that can be your main navigation, or just a part of your page.
 
 To see this in action, checkout the [example project here](https://github.com/zyramedia/ionic2-super-tabs-example).
 
+<br><br>
+
 ![Example](https://github.com/zyramedia/ionic2-super-tabs-example/blob/master/example.gif?raw=true)
+
+<br><br>
 
 - [Quick Example](#quick-example)
 - [How it works](#how-it-works)
