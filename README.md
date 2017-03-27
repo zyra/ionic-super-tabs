@@ -15,8 +15,8 @@ To see this in action, checkout the [example project here](https://github.com/zy
 - [Usage](#usage)
   - [`super-tabs` Component Inputs](#super-tabs-inputs)
   - [`super-tab` Component Inputs](#super-tab-inputs)
+  - [Colors](#colors)
 - [Examples](#examples)
-- [Colors](#colors)
 - [Project goals](#project-goals)
 
 <br><br><br>
@@ -100,6 +100,11 @@ _(optional)_ The title of the tab to display in the `ion-segment-button`.
 ### icon
 _(optional)_ The name of the icon to display in the `ion-segment-button`. This has to be a valid `ion-icon` name.
 
+<br><br>
+
+## Colors
+All color inputs takes color names like any other Ionic 2 component. Your color name must be defined in the `$colors` map in your `variables.scss` file. 
+
 <br><br><br>
 
 # Examples
@@ -154,11 +159,6 @@ export class MyPage {
   <super-tab [tabRoot]="page3" title="Third page" icon="heart"></super-tab>
 </super-tabs>
 ```
-
-<br><br><br>
-
-### Colors
-All color inputs takes color names like any other Ionic 2 component. Your color name must be defined in the `$colors` map in your `variables.scss` file. 
 
 
 <br><br><br>
