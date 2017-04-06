@@ -35,15 +35,27 @@ export class SuperTabsComponent implements OnDestroy, AfterViewInit {
   @Input()
   rootNavCtrl: NavController;
 
+  /**
+   * Color of the toolbar behind the tab buttons
+   */
   @Input()
   toolbarColor: string;
 
+  /**
+   * Color of the tab buttons' text and/or icon
+   */
   @Input()
   tabsColor: string;
 
+  /**
+   * Color of the slider that moves based on what tab is selected
+   */
   @Input()
   sliderColor: string = 'primary';
 
+  /**
+   * Height of the tabs
+   */
   @Input()
   set height(val: string) {
     this.rnd.setElementStyle(this.el.nativeElement, 'height', val);
@@ -63,24 +75,42 @@ export class SuperTabsComponent implements OnDestroy, AfterViewInit {
     return this._selectedTabIndex;
   }
 
-  @ContentChildren(SuperTabComponent) superTabs: QueryList<SuperTabComponent>;
+  @ContentChildren(SuperTabComponent)
+  private superTabs: QueryList<SuperTabComponent>;
 
   /**
-   * The different tabs we have
-   * @type {Array<SuperTabComponent>}
+   * The tabs
    */
   tabs: SuperTabComponent[] = [];
 
-  @ViewChild(Slides) slides: Slides;
+  @ViewChild(Slides)
+  private slides: Slides;
 
-  @ViewChild('toolbar') toolbar: Toolbar;
+  @ViewChild('toolbar')
+  private toolbar: Toolbar;
 
-  @ViewChild('slide') slider: ElementRef;
+  @ViewChild('slide')
+  private slider: ElementRef;
 
+  /**
+   * @private
+   */
   slidesHeight: number = 0;
+  /**
+   * @private
+   */
   maxSlidePosition: number;
+  /**
+   * @private
+   */
   slidePosition = '0';
+  /**
+   * @private
+   */
   slideWidth = '0';
+  /**
+   * @private
+   */
   shouldSlideEase: boolean = false;
 
   private _selectedTabIndex = 0;
