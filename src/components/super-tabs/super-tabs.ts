@@ -3,7 +3,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { SuperTabComponent } from "../super-tab/super-tab";
-import { NavController, Platform, Slides, Toolbar } from "ionic-angular";
+import { NavController, Slides, Toolbar } from "ionic-angular";
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
 
