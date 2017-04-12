@@ -17,7 +17,7 @@ super-tabs {
       z-index: 2;
       height: 2px;
       &.ease {
-        transition: left .25s ease-in;
+        transition: left .25s ease-out;
       }
     }
 
