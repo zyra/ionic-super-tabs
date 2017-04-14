@@ -7,8 +7,8 @@ import { NavController, Slides, Platform } from "ionic-angular";
 import { Observable } from 'rxjs/Observable';
 import { SuperTabsToolbar } from '../super-tabs-toolbar/super-tabs-toolbar';
 import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/skipWhile';
+// import 'rxjs/add/operator/debounceTime';
+// import 'rxjs/add/operator/skipWhile';
 
 
 @Component({
@@ -120,6 +120,8 @@ export class SuperTabs implements AfterContentInit, AfterViewInit, OnDestroy {
 
   private isTouchingSlides: boolean = false;
 
+  private lastTranslate: number = 0;
+
   constructor(
     private el: ElementRef,
     private rnd: Renderer,
@@ -183,14 +185,14 @@ export class SuperTabs implements AfterContentInit, AfterViewInit, OnDestroy {
       // this.slides.touchMoveStopPropagation = false;
       // this.slides.iOSEdgeSwipeDetection = true;
 
-      this.slides.ionSlideDidChange
-        .debounceTime(100)
-        .skipWhile(() => this.isTouchingSlides)
-        .subscribe(ev => {
-          if (!this.isTouchingSlides) {
-            this.validateSlideLocation(ev);
-          }
-        });
+      // this.slides.ionSlideDidChange
+      //   .debounceTime(100)
+      //   .skipWhile(() => this.isTouchingSlides)
+      //   .subscribe(ev => {
+      //     if (!this.isTouchingSlides) {
+      //       this.validateSlideLocation(ev);
+      //     }
+      //   });
 
     }, 100);
 
@@ -318,9 +320,13 @@ export class SuperTabs implements AfterContentInit, AfterViewInit, OnDestroy {
 
   setIsTouchingSlides(val: boolean) {
     this.isTouchingSlides = val;
-
     if (val === false) {
       this.alignIndicatorPosition(true);
+      if (this.lastTranslate !== this.slides._translate) {
+        this.validateSlideLocation(this.slides);
+      }
+    } else {
+      this.lastTranslate = this.slides._translate;
     }
   }
 
@@ -336,12 +342,22 @@ export class SuperTabs implements AfterContentInit, AfterViewInit, OnDestroy {
     const translate = Math.abs(ev._translate);
     if (this.validSlideLocations.indexOf(translate) === -1) {
       // invalid location, lets fix it!
-      const tabIndex = Math.round(translate / this.slides.renderedWidth);
+      let tabIndex = Math.round(translate / this.slides.renderedWidth);
+
+      // TODO simplify
+      if (tabIndex > this.tabs.length - 1) {
+        tabIndex = this.tabs.length - 1;
+      } else if (tabIndex < 0) {
+        tabIndex = 0;
+      }
+
+      // TODO simplify
       if (tabIndex === 0) {
         this.slides.slideTo(tabIndex + 1);
       } else {
         this.slides.slideTo(tabIndex - 1);
       }
+
       this.slides.slideTo(tabIndex);
     }
   }
