@@ -1,0 +1,83 @@
+super-tabs-toolbar {
+
+  width: 100%;
+  display: block;
+
+  &:not([no-shadow]) {
+    > ion-toolbar.toolbar {
+      @extend .header-md;
+      z-index: 100000 !important;
+      contain: inherit;
+      display: block;
+      overflow: visible;
+    }
+  }
+
+  > ion-toolbar.toolbar {
+
+    padding: 4px 0 0 0;
+
+
+    &.ease {
+      .tab-buttons-container .indicator {
+        transition: all .25s linear;
+      }
+
+      &.scroll-tabs {
+        .tab-buttons-container ion-segment {
+          transition: all .25s linear;
+        }
+      }
+    }
+
+    min-height: 0;
+
+    .tab-buttons-container {
+      overflow: hidden;
+
+      ion-segment.segment.segment-md {
+        ion-segment-button {
+          border-bottom: 0;
+          height: inherit;
+          ion-icon {
+            display: block;
+          }
+        }
+      }
+
+      .indicator {
+        bottom: 0;
+        position: absolute;
+        z-index: 2;
+        height: 2px;
+      }
+
+    }
+
+    &.scroll-tabs {
+      .tab-buttons-container {
+        //overflow-x: scroll;
+        //position: relative;
+        //overflow-x: visible;
+        ion-segment.segment.segment-md {
+          position: relative;
+          justify-content: flex-start;
+          ion-segment-button {
+            min-width: 50px;
+            max-width: 100%;
+            width: auto;
+            display: inline-table;
+            overflow: visible;
+            margin: 0 5px;
+          }
+        }
+
+        .indicator {
+          position: relative;
+          margin-top: -2px;
+        }
+      }
+    }
+
+  }
+}

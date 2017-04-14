@@ -1,11 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { NavParams } from 'ionic-angular';
 
 @Component({
   selector: 'super-tab',
   template: ''
 })
-export class SuperTabComponent {
+export class SuperTab {
 
   @Input()
   tabRoot: any;
