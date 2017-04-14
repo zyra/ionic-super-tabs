@@ -41,15 +41,6 @@ export class SuperTabsToolbar {
 
   indicatorWidth: number = 0;
 
-  /**
-   * @hidden
-   */
-  iOSEdgeSwipeDetection: boolean;
-  /**
-   * @hidden
-   */
-  iOSEdgeSwipeThreshold: number;
-
   @Input()
   set indicatorColor(val: string) {
     this.setIndicatorColor(val);
