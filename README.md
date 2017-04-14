@@ -46,7 +46,7 @@ This module combines `ion-segment`, `ion-slides` and some magic to give you swip
 
 # Installation
 ## Install the module via NPM
-```
+```shell
 npm i --save ionic2-super-tabs@next
 ```
 
@@ -54,7 +54,7 @@ npm i --save ionic2-super-tabs@next
 
 Import `SuperTabsModule.forRoot()` in your app's main module
 
-```
+```ts
 import { SuperTabsModule } from 'ionic2-super-tabs';
 
 @NgModule({
@@ -69,7 +69,7 @@ export class AppModule {}
 ```
 
 If your app uses lazy loading, you need to import `SuperTabsModule` in your shared module or child modules:
-```
+```ts
 import { SuperTabsModule } from 'ionic2-super-tabs';
 
 @NgModule({
