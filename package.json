@@ -12,6 +12,7 @@
   },
   "author": "Ibby Hadeed <i.hadeed@zyra.ca>",
   "license": "MIT",
+  "repository": "https://github.com/zyra/ionic2-super-tabs",
   "devDependencies": {
     "@angular/common": "2.4.8",
     "@angular/compiler": "2.4.8",
