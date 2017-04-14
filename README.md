@@ -1,4 +1,10 @@
 # Swipeable tabs for Ionic 2
+
+---
+# DISCLAIMER
+This branch is for the upcoming v2.0 of this module. To install this from NPM, you need to add the `@next` tag. Please note that there will be breaking changes in the upcoming alpha releases, so make sure you use `--save-exact` when installing this version, and check here for any updates before updating to a later alpha version.
+---
+
 Swipeable tabs that can be your main navigation, or just a part of your page.
 
 To see this in action, checkout the [example project here](https://github.com/zyramedia/ionic2-super-tabs-example).
@@ -41,10 +47,28 @@ This module combines `ion-segment`, `ion-slides` and some magic to give you swip
 # Installation
 ## Install the module via NPM
 ```
-npm i --save ionic2-super-tabs
+npm i --save ionic2-super-tabs@next
 ```
 
-## Import it in your `@NgModule`
+## Import it in your app's module(s)
+
+Import `SuperTabsModule.forRoot()` in your app's main module
+
+```
+import { SuperTabsModule } from 'ionic2-super-tabs';
+
+@NgModule({
+    ...
+    imports: [
+      ...
+      SuperTabsModule.forRoot()
+      ],
+    ...
+})
+export class AppModule {}
+```
+
+If your app uses lazy loading, you need to import `SuperTabsModule` in your shared module or child modules:
 ```
 import { SuperTabsModule } from 'ionic2-super-tabs';
 
@@ -56,6 +80,7 @@ import { SuperTabsModule } from 'ionic2-super-tabs';
       ],
     ...
 })
+export class SharedModule {}
 ```
 
 <br><br><br>
@@ -77,8 +102,8 @@ _(optional)_ The color of the toolbar that contains the `ion-segment`. See [colo
 ### tabsColor
 _(optional)_ The color of the `ion-segment` component. See [colors](#colors) for more information.
 
-### sliderColor
-_(optional)_ The color of the slider. The slider is the line below the `ion-segment` that moves according to what tab is selected. See [colors](#colors) for more information. Defaults to `primary`.
+### indicatorColor
+_(optional)_ The color of the tab indicator. The indicator is the line below the `ion-segment` that moves according to what tab is selected. See [colors](#colors) for more information. Defaults to `primary`.
 
 ### height
 The height of `super-tabs` component. Set this to `100%` to fill the whole page, or any other value.
@@ -153,21 +178,9 @@ export class MyPage {
 }
 ```
 ```html
-<super-tabs height="100%" selectedTabIndex="1" [rootNavCtrl]="navCtrl" tabsColor="light" toolbarColor="dark" sliderColor="light">
+<super-tabs height="100%" selectedTabIndex="1" [rootNavCtrl]="navCtrl" tabsColor="light" toolbarColor="dark" indicatorColor="light">
   <super-tab [tabRoot]="page1" title="First page" icon="home"></super-tab>
   <super-tab [tabRoot]="page2" title="Second page" icon="pin"></super-tab>
   <super-tab [tabRoot]="page3" title="Third page" icon="heart"></super-tab>
 </super-tabs>
 ```
-
-
-<br><br><br>
-
-## Project goals
-The main goal of this project is to provide a swipeable tabs component for Ionic 2 apps. The tabs must look and feel like the native material design tabs. The project has successfully achieved this goal, but there are a few improvements in mind:
-- Disallow "over-swiping" at the begining/end of the tabs. Example: if you are on the first tab and you swipe to the right, the page will move and you will see a blank white area. This is default behaviour of the `ion-slides` component (Swiper by iDangero.us).
-- Allow tab swiping. This is useful if you want to have a large number of tabs and there isn't enough room to have all the `ion-segment-button`s to show up at the same time.
-- Experiment with using Angular 2 animations instead of pure CSS. (might provide better performance)
-- Add a `mode` option that will be passed to the `ion-segment`. Currently the `mode` is set to `md` to provide consistent experience over all platforms. Some might want to have `ios` segment buttons instead.
-
-Suggestions and/or Pull Requests are welcome!
