@@ -7,9 +7,7 @@
   "scripts": {
     "build": "rm -rf aot dist && ngc",
     "postbuild": "npm run copy:scss",
-    "copy:scss": "cp src/components/super-tabs/super-tabs.scss dist/components/super-tabs/ && cp src/components/super-tabs-toolbar/super-tabs-toolbar.scss dist/components/super-tabs-toolbar/",
-    "build:dev": "npm run build && cp -r dist src ../super-tabs/node_modules/ionic2-super-tabs/",
-    "dev": "tsc && tsc -w"
+    "copy:scss": "cp src/components/super-tabs/super-tabs.scss dist/components/super-tabs/ && cp src/components/super-tabs-toolbar/super-tabs-toolbar.scss dist/components/super-tabs-toolbar/"
   },
   "author": "Ibby Hadeed <i.hadeed@zyra.ca>",
   "license": "MIT",
