@@ -170,7 +170,7 @@ export class SuperTabs implements AfterContentInit, AfterViewInit, OnDestroy {
     this.maxIndicatorPosition = this.el.nativeElement.offsetWidth - (this.el.nativeElement.offsetWidth / this.tabs.length);
 
     // set slide speed to match slider
-    this.slides.speed = 250;
+    this.slides.speed = 150;
 
     this.plt.timeout(() => {
       // Ion-Slides has an issue where sometimes swiping causes the slides to be stuck in the middle of two slides
@@ -379,21 +379,25 @@ export class SuperTabs implements AfterContentInit, AfterViewInit, OnDestroy {
   private alignTabButtonsContainer() {
 
     let mw: number = this.el.nativeElement.offsetWidth,
-      sw: number = this.toolbar.indicatorWidth,
+      iw: number = this.toolbar.indicatorWidth,
       iPos: number = this.toolbar.indicatorPosition,
       sPos: number = this.toolbar.segmentPosition;
 
     let cVisibleStart = sPos;
     let cVisibleEnd = mw + sPos;
 
-    if (iPos + sw + 5 > cVisibleEnd) {
+    if (iPos + iw + (mw / 2 - iw / 2) > cVisibleEnd) {
 
-      let delta = (iPos + sw + 5) - cVisibleEnd;
-      this.toolbar.setSegmentPosition(sPos + delta);
+      let delta = (iPos + iw +  (mw / 2 - iw / 2)) - cVisibleEnd;
+      let pos = sPos + delta;
+      let max = this.toolbar.segmentWidth - mw;
+      pos = pos < max? pos : max;
 
-    } else if (iPos - 5 < cVisibleStart) {
+      this.toolbar.setSegmentPosition(pos);
 
-      let pos = iPos - 5;
+    } else if (iPos -  (mw / 2 - iw / 2) < cVisibleStart) {
+
+      let pos = iPos -  (mw / 2 - iw / 2);
       pos = pos >= 0 ? pos : 0;
       this.toolbar.setSegmentPosition(pos);
 

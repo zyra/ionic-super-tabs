@@ -191,7 +191,7 @@ export class SuperTabsToolbar {
 
   private toggleEase() {
     this.ease = true;
-    setTimeout(() => this.ease = false, 250);
+    setTimeout(() => this.ease = false, 150);
   }
 
   /**

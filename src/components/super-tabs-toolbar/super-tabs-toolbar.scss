@@ -1,5 +1,7 @@
 super-tabs-toolbar {
 
+  $super-tabs-transition: all 150ms ease-in-out;
+
   width: 100%;
   display: block;
 
@@ -20,12 +22,12 @@ super-tabs-toolbar {
 
     &.ease {
       .tab-buttons-container .indicator {
-        transition: all .25s linear;
+        transition: $super-tabs-transition;
       }
 
       &.scroll-tabs {
         .tab-buttons-container ion-segment {
-          transition: all .25s linear;
+          transition: $super-tabs-transition;
         }
       }
     }
@@ -39,6 +41,7 @@ super-tabs-toolbar {
         ion-segment-button {
           border-bottom: 0;
           height: inherit;
+          font-size: 14px;
           ion-icon {
             display: block;
           }
