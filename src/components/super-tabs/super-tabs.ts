@@ -1,6 +1,6 @@
 import {
   AfterViewInit, Component, ContentChildren, ElementRef, Input, OnDestroy, QueryList, Renderer,
-  ViewChild, AfterContentInit
+  ViewChild, AfterContentInit, Output, EventEmitter
 } from '@angular/core';
 import { SuperTab } from "../super-tab/super-tab";
 import { NavController, Slides, Platform } from "ionic-angular";
@@ -14,7 +14,7 @@ import 'rxjs/add/observable/fromEvent';
 @Component({
   selector: 'super-tabs',
   template: `
-    <super-tabs-toolbar [color]="toolbarColor" [tabsColor]="tabsColor" [indicatorColor]="indicatorColor"
+    <super-tabs-toolbar [color]="toolbarColor" [tabsColor]="tabsColor" [indicatorColor]="indicatorColor" [badgeColor]="badgeColor"
                         [scrollTabs]="scrollTabs"
                         [selectedTab]="selectedTabIndex"
                         (tabSelect)="onTabSelect($event)"></super-tabs-toolbar>
@@ -55,6 +55,12 @@ export class SuperTabs implements AfterContentInit, AfterViewInit, OnDestroy {
   indicatorColor: string = 'primary';
 
   /**
+   * Badge color
+   */
+  @Input()
+  badgeColor: string = 'primary';
+
+  /**
    * Height of the tabs
    */
   @Input()
@@ -77,8 +83,6 @@ export class SuperTabs implements AfterContentInit, AfterViewInit, OnDestroy {
     return this._selectedTabIndex;
   }
 
-  private _scrollTabs: boolean = false;
-
   @Input()
   set scrollTabs(val: boolean) {
     this._scrollTabs = typeof val !== 'boolean' || val === true;
@@ -87,6 +91,9 @@ export class SuperTabs implements AfterContentInit, AfterViewInit, OnDestroy {
   get scrollTabs() {
     return this._scrollTabs;
   }
+
+  @Output()
+  tabSelect: EventEmitter<any> = new EventEmitter<any>();
 
   @ContentChildren(SuperTab)
   private superTabs: QueryList<SuperTab>;
@@ -107,6 +114,7 @@ export class SuperTabs implements AfterContentInit, AfterViewInit, OnDestroy {
    */
   maxIndicatorPosition: number;
 
+  private _scrollTabs: boolean = false;
 
   private _selectedTabIndex: number = 0;
 
@@ -305,6 +313,7 @@ export class SuperTabs implements AfterContentInit, AfterViewInit, OnDestroy {
    * Any further movement should happen instantly as the user swipes through the tabs
    */
   onSlideDidChange(ev: any) {
+    this.tabSelect.emit(this.selectedTabIndex);
     // this.shouldIndicatorEase = false;
   }
 
@@ -439,15 +448,11 @@ export class SuperTabs implements AfterContentInit, AfterViewInit, OnDestroy {
    * Aligns slide position with selected tab
    */
   private alignIndicatorPosition(ease: boolean = false) {
-    let position: number;
     if (this.scrollTabs) {
-      position = this.getRelativeIndicatorPosition();
-      this.toolbar.setIndicatorWidth(this.getSegmentButtonWidth(), ease);
-      this.toolbar.setIndicatorProperties(position, this.getSegmentButtonWidth(), ease);
+      this.toolbar.setIndicatorProperties(this.getRelativeIndicatorPosition(), this.getSegmentButtonWidth(), ease);
       this.alignTabButtonsContainer();
     } else {
-      position = this.getAbsoluteIndicatorPosition();
-      this.toolbar.setIndicatorPosition(position, ease);
+      this.toolbar.setIndicatorPosition(this.getAbsoluteIndicatorPosition(), ease);
     }
   }
 

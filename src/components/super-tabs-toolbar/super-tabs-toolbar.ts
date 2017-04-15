@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ViewChildren, QueryList, Renderer } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { Segment, SegmentButton, Platform } from 'ionic-angular';
 
 @Component({
@@ -8,14 +8,15 @@ import { Segment, SegmentButton, Platform } from 'ionic-angular';
       <div class="tab-buttons-container" #tabButtonsContainer
            (touchstart)="onTabButtonsContainerTouch('touchstart', $event)"
            (touchmove)="onTabButtonsContainerTouch('touchmove', $event)">
-        <ion-segment [color]="tabsColor" [(ngModel)]="selectedTab" mode="md">
+        <ion-segment [color]="tabsColor" [(ngModel)]="selectedTab" mode="md" [style.transform]="'translate3d('+ (-1 * segmentPosition) +'px, 0, 0)'">
           <ion-segment-button text-wrap *ngFor="let tab of tabs; let i = index" [value]="i"
                               (ionSelect)="onTabSelect(i)">
             <ion-icon *ngIf="tab.icon" [name]="tab.icon"></ion-icon>
             {{tab.title}}
+            <span class="badge {{ 'badge-md-' + badgeColor }}">15</span>
           </ion-segment-button>
         </ion-segment>
-        <div class="indicator" 
+        <div class="indicator {{ 'button-md-' + indicatorColor }}" 
              [style.width]="indicatorWidth + 'px'"
              [style.transform]="'translate3d(' + (indicatorPosition - segmentPosition) + 'px, 0, 0)'"
              #indicator></div>
@@ -33,6 +34,9 @@ export class SuperTabsToolbar {
   tabsColor: string = '';
 
   @Input()
+  badgeColor: string = '';
+
+  @Input()
   scrollTabs: boolean = false;
 
   ease: boolean = false;
@@ -42,13 +46,7 @@ export class SuperTabsToolbar {
   indicatorWidth: number = 0;
 
   @Input()
-  set indicatorColor(val: string) {
-    this.setIndicatorColor(val);
-  }
-
-  get indicatorColor(): string {
-    return this._indicatorColor;
-  }
+  indicatorColor: string = '';
 
   @Input()
   selectedTab: number = 0;
@@ -59,18 +57,10 @@ export class SuperTabsToolbar {
   @Output()
   tabSelect: EventEmitter<any> = new EventEmitter<any>();
 
-
   // View children
 
   @ViewChildren(SegmentButton)
   private segmentButtons: QueryList<SegmentButton>;
-
-  @ViewChild(Segment)
-  private segment: Segment;
-
-  @ViewChild('indicator')
-  private indicator: ElementRef;
-
 
   // View bindings
 
@@ -96,8 +86,6 @@ export class SuperTabsToolbar {
 
   // Private values for tracking, calculations ...etc
 
-  private _indicatorColor: string;
-
   /**
    * Used to handle manual tab buttons container scrolling. Tracks the last touch position to determine how much to scroll by.
    */
@@ -111,7 +99,6 @@ export class SuperTabsToolbar {
 
   // Initialization methods
   constructor(
-    private rnd: Renderer,
     private el: ElementRef,
     private plt: Platform
   ) {}
@@ -125,8 +112,6 @@ export class SuperTabsToolbar {
         this.indexSegmentButtonWidths();
       }, 10);
     }
-
-    this.setIndicatorColor(this.indicatorColor);
   }
 
   initToolbar() {
@@ -183,7 +168,6 @@ export class SuperTabsToolbar {
 
   setSegmentPosition(position: number) {
     this.segmentPosition = position;
-    this.rnd.setElementStyle(this.segment.getNativeElement(), 'transform', `translate3d(${-1 * position}px, 0, 0)`);
   }
 
 
@@ -198,35 +182,15 @@ export class SuperTabsToolbar {
    * Indexes the segment button widths
    */
   private indexSegmentButtonWidths() {
-    const index = [];
-    let total = 0;
+    let index = [], total = 0;
+
     this.segmentButtons.forEach((btn: SegmentButton, i: number) => {
-      const el = <ElementRef>(<any>btn)._elementRef;
-      index[i] = el.nativeElement.offsetWidth;
-      // total += index[i] + 12;
+      index[i] = <ElementRef>(<any>btn)._elementRef.nativeElement.offsetWidth;
+      total += index[i] + 10;
     });
-
-    total = index.reduce((a,b) => a+b+10, 0);
-
-    console.log(index);
-    console.log(total);
 
     this.segmentButtonWidths = index;
     this.segmentWidth = total;
-  }
-
-  /**
-   * Sets the color of the indicator
-   */
-  private setIndicatorColor(color: string) {
-    if (!this.init) {
-      this._indicatorColor = color;
-      return;
-    } else {
-      this.rnd.setElementClass(this.indicator.nativeElement, `button-md-${this._indicatorColor}`, false);
-      this.rnd.setElementClass(this.indicator.nativeElement, `button-md-${color}`, true);
-      this._indicatorColor = color;
-    }
   }
 
 }

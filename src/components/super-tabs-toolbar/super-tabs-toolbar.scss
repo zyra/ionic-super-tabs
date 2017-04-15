@@ -45,6 +45,19 @@ super-tabs-toolbar {
           ion-icon {
             display: block;
           }
+
+          .badge {
+            min-width: 20px;
+            height: 20px;
+            display: block;
+            line-height: 14px;
+            padding: 3px;
+            border-radius: 500rem;
+            position: absolute;
+            top: 4px;
+            right: 4px;
+          }
+
         }
       }
 
