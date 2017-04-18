@@ -1,29 +1,30 @@
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { Segment, SegmentButton, Platform } from 'ionic-angular';
+import {
+  Component, Input, Output, EventEmitter, ElementRef, ViewChildren, QueryList,
+  ViewEncapsulation, ViewChild, Renderer2, AfterViewInit, OnDestroy
+} from '@angular/core';
+import { SegmentButton, Platform, Segment } from 'ionic-angular';
+import { SuperTabsPanGesture } from '../../super-tabs-pan-gesture';
+import { SuperTabsConfig } from '../super-tabs/super-tabs';
 
 @Component({
   selector: 'super-tabs-toolbar',
   template: `
-    <ion-toolbar [color]="color" mode="md" [class.scroll-tabs]="scrollTabs" [class.ease]="ease">
-      <div class="tab-buttons-container" #tabButtonsContainer
-           (touchstart)="onTabButtonsContainerTouch('touchstart', $event)"
-           (touchmove)="onTabButtonsContainerTouch('touchmove', $event)">
-        <ion-segment [color]="tabsColor" [(ngModel)]="selectedTab" mode="md" [style.transform]="'translate3d('+ (-1 * segmentPosition) +'px, 0, 0)'">
-          <ion-segment-button text-wrap *ngFor="let tab of tabs; let i = index" [value]="i"
-                              (ionSelect)="onTabSelect(i)">
+    <ion-toolbar [color]="color" mode="md" [class.scroll-tabs]="scrollTabs">
+      <div class="tab-buttons-container" #tabButtonsContainer>
+        <div *ngIf="tabsPlacement === 'bottom'" class="indicator {{ 'button-md-' + indicatorColor }}" #indicator></div>
+        <ion-segment [color]="tabsColor" [(ngModel)]="selectedTab" mode="md">
+          <ion-segment-button text-wrap *ngFor="let tab of tabs; let i = index" [value]="i" (ionSelect)="selectedTab !== i && onTabSelect(i)">
             <ion-icon *ngIf="tab.icon" [name]="tab.icon"></ion-icon>
             {{tab.title}}
-            <span class="badge {{ 'badge-md-' + badgeColor }}">15</span>
+            <span [hidden]="tab.badge <= 0" class="badge {{ 'badge-md-' + badgeColor }}">{{tab.badge}}</span>
           </ion-segment-button>
         </ion-segment>
-        <div class="indicator {{ 'button-md-' + indicatorColor }}" 
-             [style.width]="indicatorWidth + 'px'"
-             [style.transform]="'translate3d(' + (indicatorPosition - segmentPosition) + 'px, 0, 0)'"
-             #indicator></div>
+        <div *ngIf="tabsPlacement === 'top'" class="indicator {{ 'button-md-' + indicatorColor }}" #indicator></div>
       </div>
-    </ion-toolbar>`
+    </ion-toolbar>`,
+  encapsulation: ViewEncapsulation.None
 })
-export class SuperTabsToolbar {
+export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
 
   // Inputs
 
@@ -39,18 +40,21 @@ export class SuperTabsToolbar {
   @Input()
   scrollTabs: boolean = false;
 
-  ease: boolean = false;
-
-  indicatorPosition: number = 0;
-
-  indicatorWidth: number = 0;
-
   @Input()
   indicatorColor: string = '';
 
   @Input()
   selectedTab: number = 0;
 
+  @Input()
+  config: SuperTabsConfig;
+
+  @Input()
+  tabsPlacement: string;
+
+  indicatorPosition: number = 0;
+
+  indicatorWidth: number = 0;
 
   // Outputs
 
@@ -61,6 +65,15 @@ export class SuperTabsToolbar {
 
   @ViewChildren(SegmentButton)
   private segmentButtons: QueryList<SegmentButton>;
+
+  @ViewChild('tabButtonsContainer')
+  private tabButtonsContainer: ElementRef;
+
+  @ViewChild('indicator')
+  private indicator: ElementRef;
+
+  @ViewChild(Segment)
+  private segment: Segment;
 
   // View bindings
 
@@ -87,25 +100,35 @@ export class SuperTabsToolbar {
   // Private values for tracking, calculations ...etc
 
   /**
-   * Used to handle manual tab buttons container scrolling. Tracks the last touch position to determine how much to scroll by.
-   */
-  private lastTouchPositionX: number;
-
-  /**
    * Indicates whether this component is initialized
    */
   private init: boolean = false;
 
+  private gesture: SuperTabsPanGesture;
 
   // Initialization methods
   constructor(
     private el: ElementRef,
-    private plt: Platform
+    private plt: Platform,
+    private rnd: Renderer2
   ) {}
 
   ngAfterViewInit() {
     // this.segment.writeValue(this.selectedTab);
     this.init = true;
+
+    this.gesture = new SuperTabsPanGesture(this.plt, this.tabButtonsContainer.nativeElement, this.config, this.rnd);
+    this.gesture.onMove = (delta: number) => {
+
+      let newCPos = this.segmentPosition + delta;
+
+      let mw: number = this.el.nativeElement.offsetWidth,
+        cw: number = this.segmentWidth;
+
+      newCPos = Math.max(0, Math.min(newCPos, cw - mw));
+      this.setSegmentPosition(newCPos);
+
+    };
 
     if (this.scrollTabs) {
       this.plt.timeout(() => {
@@ -114,68 +137,57 @@ export class SuperTabsToolbar {
     }
   }
 
-  initToolbar() {
-
-  }
-
-  // Event handlers
-  onTabButtonsContainerTouch(name: string, ev: any) {
-    if (!this.scrollTabs) return;
-    switch(name) {
-      case 'touchstart':
-        this.lastTouchPositionX = ev.touches[0].clientX;
-        break;
-
-      case 'touchmove':
-        let newPos = ev.touches[0].clientX;
-        let delta = this.lastTouchPositionX - newPos;
-        this.lastTouchPositionX = newPos;
-        let newCPos = this.segmentPosition + delta;
-
-        let mw: number = this.el.nativeElement.offsetWidth,
-          cw: number = this.segmentWidth;
-
-        let min = 0, max = cw - mw;
-
-        if (newCPos < min) newCPos = min;
-        if (newCPos > max) newCPos = max;
-        this.setSegmentPosition(newCPos);
-        break;
-    }
+  ngOnDestroy() {
+    this.gesture && this.gesture.destroy();
   }
 
   onTabSelect(index: number) {
     this.tabSelect.emit(index);
   }
 
-
-  // Public methods
-  setIndicatorProperties(position: number, width: number, shouldEase: boolean = false) {
-    shouldEase && this.toggleEase();
-    this.setIndicatorPosition(position, false);
-    this.setIndicatorWidth(width, false);
+  alignIndicator(position: number, width: number, animate?: boolean) {
+    this.toggleAnimation(this.indicator.nativeElement, animate);
+    this.setIndicatorWidth(width, animate);
+    this.setIndicatorPosition(position, animate);
   }
 
-  setIndicatorPosition(position?: number, shouldEase: boolean = false) {
-    shouldEase && this.toggleEase();
+  setIndicatorPosition(position: number, animate?: boolean) {
     this.indicatorPosition = position;
+    this.toggleAnimation(this.indicator.nativeElement, animate);
+    this.rnd.setStyle(this.indicator.nativeElement, this.plt.Css.transform, 'translate3d(' + (position - this.segmentPosition) + 'px, 0, 0)');
   }
 
-  setIndicatorWidth(width: number, shouldEase: boolean = false) {
-    shouldEase && this.toggleEase();
+  setIndicatorWidth(width: number, animate?: boolean) {
     this.indicatorWidth = width;
+    this.toggleAnimation(this.indicator.nativeElement, animate);
+    this.rnd.setStyle(this.indicator.nativeElement, 'width', width + 'px');
   }
 
-  setSegmentPosition(position: number) {
+  setSegmentPosition(position: number, animate?: boolean) {
     this.segmentPosition = position;
+    this.toggleAnimation(this.segment.getNativeElement(), animate);
+    this.rnd.setStyle(this.segment.getNativeElement(), this.plt.Css.transform, `translate3d(${-1 * position}px,0,0)`);
+    this.setIndicatorPosition(this.indicatorPosition, animate);
   }
 
+  /**
+   * Enables/disables animation
+   * @param el
+   * @param animate
+   */
+  private toggleAnimation(el: HTMLElement, animate: boolean) {
 
-  // Private methods
+    if (!this.config || this.config.transitionDuration === 0)
+      return;
 
-  private toggleEase() {
-    this.ease = true;
-    setTimeout(() => this.ease = false, 150);
+    if (animate) {
+      // ease isn't enabled and needs to be enabled
+      this.rnd.setStyle(el, this.plt.Css.transition, `all ${this.config.transitionDuration}ms ${this.config.transitionEase}`);
+    } else {
+      // ease is already enabled and needs to be disabled
+      this.rnd.setStyle(el, this.plt.Css.transition, 'initial');
+    }
+
   }
 
   /**

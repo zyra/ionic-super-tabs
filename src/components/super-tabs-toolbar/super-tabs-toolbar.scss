@@ -1,36 +1,12 @@
 super-tabs-toolbar {
 
-  $super-tabs-transition: all 150ms ease-in-out;
-
+  z-index: 2;
   width: 100%;
   display: block;
-
-  &:not([no-shadow]) {
-    > ion-toolbar.toolbar {
-      @extend .header-md;
-      z-index: 100000 !important;
-      contain: inherit;
-      display: block;
-      overflow: visible;
-    }
-  }
 
   > ion-toolbar.toolbar {
 
     padding: 4px 0 0 0;
-
-
-    &.ease {
-      .tab-buttons-container .indicator {
-        transition: $super-tabs-transition;
-      }
-
-      &.scroll-tabs {
-        .tab-buttons-container ion-segment {
-          transition: $super-tabs-transition;
-        }
-      }
-    }
 
     min-height: 0;
 
@@ -54,7 +30,7 @@ super-tabs-toolbar {
             padding: 3px;
             border-radius: 500rem;
             position: absolute;
-            top: 4px;
+            top: 0;
             right: 4px;
           }
 
@@ -72,9 +48,6 @@ super-tabs-toolbar {
 
     &.scroll-tabs {
       .tab-buttons-container {
-        //overflow-x: scroll;
-        //position: relative;
-        //overflow-x: visible;
         ion-segment.segment.segment-md {
           position: relative;
           justify-content: flex-start;
@@ -96,4 +69,5 @@ super-tabs-toolbar {
     }
 
   }
+
 }

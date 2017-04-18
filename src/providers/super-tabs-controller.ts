@@ -1,40 +1,79 @@
 import { Injectable } from '@angular/core';
+import {SuperTabs} from "../components/super-tabs/super-tabs";
 
 @Injectable()
 export class SuperTabsController {
 
-  setBadge(tabId: string, value: number) {
+  private instances: SuperTabs[] = [];
 
+  setBadge(tabId: string, value: number, tabsId?: string) {
+    const instance = this.getInstance(tabsId);
+    instance && instance.setBadge(tabId, value);
   }
 
-  clearBadge(tabId: string) {
-
+  clearBadge(tabId: string, tabsId?: string) {
+    const instance = this.getInstance(tabsId);
+    instance && instance.clearBadge(tabId);
   }
 
-  increaseBadge(tabId: string, increaseBy: number = 1) {
-
+  increaseBadge(tabId: string, increaseBy: number = 1, tabsId?: string) {
+    const instance = this.getInstance(tabsId);
+    instance && instance.increaseBadge(tabId, increaseBy);
   }
 
-  decreaseBadge(tabId: string, decreaseBy: number = 1) {
-
-  }
-
-  enableSwipe(tabsId: string, enable: boolean) {
-
-  }
-
-  enableSwipePerTab(tabsId: string, tabId: string, enable: boolean) {
-
+  decreaseBadge(tabId: string, decreaseBy: number = 1, tabsId?: string) {
+    const instance = this.getInstance(tabsId);
+    instance && instance.decreaseBadge(tabId, decreaseBy);
   }
 
   /**
-   * Enable or disable a tab. This will add/remove the tab from DOM.
-   * @param tabsId
+   * Enables/disables swiping on a specific tabs instance
+   * @param enable
+   * @param [tabsId]
+   */
+  enableTabsSwipe(enable: boolean, tabsId?: string) {
+    const instance = this.getInstance(tabsId);
+    instance && instance.enableTabsSwipe(enable);
+  }
+
+  /**
+   * Enables/disables swiping when this tab is active
    * @param tabId
    * @param enable
+   * @param [tabsId]
    */
-  enableTab(tabsId: string, tabId: string, enable: boolean) {
+  enableTabSwipe(tabId: string, enable: boolean, tabsId?: string) {
+    const instance = this.getInstance(tabsId);
+    instance && instance.enableTabSwipe(tabId, enable);
+  }
 
+  showToolbar(show: boolean, tabsId?: string) {
+    const instance = this.getInstance(tabsId);
+    instance && instance.showToolbar(show);
+  }
+
+  /**
+   * @private
+   */
+  registerInstance(instance: SuperTabs) {
+    this.instances.push(instance);
+  }
+
+  /**
+   * @private
+   */
+  unregisterInstance(id: string) {
+    const instanceIndex = this.getInstanceIndex(id);
+    if (instanceIndex > -1)
+      this.instances.splice(instanceIndex, 1);
+  }
+
+  private getInstanceIndex(id: string): number {
+    return this.instances.findIndex((instance: SuperTabs) => instance.id === id);
+  }
+
+  private getInstance(id?: string): SuperTabs {
+    return (!!id && this.instances[this.getInstanceIndex(id)]) || this.instances[0];
   }
 
 }
