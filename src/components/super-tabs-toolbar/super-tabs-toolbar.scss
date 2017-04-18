@@ -1,0 +1,73 @@
+super-tabs-toolbar {
+
+  z-index: 2;
+  width: 100%;
+  display: block;
+
+  > ion-toolbar.toolbar {
+
+    padding: 4px 0 0 0;
+
+    min-height: 0;
+
+    .tab-buttons-container {
+      overflow: hidden;
+
+      ion-segment.segment.segment-md {
+        ion-segment-button {
+          border-bottom: 0;
+          height: inherit;
+          font-size: 14px;
+          ion-icon {
+            display: block;
+          }
+
+          .badge {
+            min-width: 20px;
+            height: 20px;
+            display: block;
+            line-height: 14px;
+            padding: 3px;
+            border-radius: 500rem;
+            position: absolute;
+            top: 0;
+            right: 4px;
+          }
+
+        }
+      }
+
+      .indicator {
+        bottom: 0;
+        position: absolute;
+        z-index: 2;
+        height: 2px;
+      }
+
+    }
+
+    &.scroll-tabs {
+      .tab-buttons-container {
+        ion-segment.segment.segment-md {
+          position: relative;
+          justify-content: flex-start;
+          ion-segment-button {
+            min-width: 50px;
+            max-width: 100%;
+            width: auto;
+            display: inline-table;
+            overflow: visible;
+            margin: 0 5px;
+          }
+        }
+
+        .indicator {
+          position: relative;
+          margin-top: -2px;
+        }
+      }
+    }
+
+  }
+
+}
