@@ -1,17 +1,12 @@
 # Swipeable tabs for Ionic 2
 
----
-# DISCLAIMER
-This branch is for the upcoming v2.0 of this module. To install this from NPM, you need to add the `@next` tag. Please note that there will be breaking changes in the upcoming alpha releases, so make sure you use `--save-exact` when installing this version, and check here for any updates before updating to a later alpha version.
----
-
 Swipeable tabs that can be your main navigation, or just a part of your page.
 
-To see this in action, checkout the [example project here](https://github.com/zyramedia/ionic2-super-tabs-example).
+To see this in action, checkout the [example project here](https://github.com/zyra/ionic2-super-tabs-example).
 
 <br><br>
 
-![Example](https://github.com/zyramedia/ionic2-super-tabs-example/blob/master/example.gif?raw=true)
+![Example](https://github.com/zyra/ionic2-super-tabs-example/blob/master/example.gif?raw=true)
 
 <br><br>
 
@@ -19,8 +14,9 @@ To see this in action, checkout the [example project here](https://github.com/zy
 - [How it works](#how-it-works)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [`super-tabs` Component Inputs](#super-tabs-inputs)
-  - [`super-tab` Component Inputs](#super-tab-inputs)
+  - [`super-tabs` Component](#super-tabs-component)
+  - [`super-tab` Component](#super-tab-component)
+  - [`SuperTabsController` Provider](#super-tabs-controller-provider)
   - [Colors](#colors)
 - [Examples](#examples)
 - [Project goals](#project-goals)
@@ -29,10 +25,10 @@ To see this in action, checkout the [example project here](https://github.com/zy
 
 # Quick Example
 ```html
-<super-tabs height="100%">
-  <super-tab [tabRoot]="page1" title="First page"></super-tab>
-  <super-tab [tabRoot]="page2" title="Second page"></super-tab>
-  <super-tab [tabRoot]="page3" title="Third page"></super-tab>
+<super-tabs>
+  <super-tab [root]="page1" title="First page"></super-tab>
+  <super-tab [root]="page2" title="Second page"></super-tab>
+  <super-tab [root]="page3" title="Third page"></super-tab>
 </super-tabs>
 ```
 
@@ -47,7 +43,7 @@ This module combines `ion-segment`, `ion-slides` and some magic to give you swip
 # Installation
 ## Install the module via NPM
 ```shell
-npm i --save ionic2-super-tabs@next
+npm i --save ionic2-super-tabs
 ```
 
 ## Import it in your app's module(s)
@@ -88,42 +84,140 @@ export class SharedModule {}
 # Usage
 
 
-## `super-tabs` Inputs
+## `super-tabs` Component
 
-### selectedTabIndex
+### Inputs
+
+#### selectedTabIndex
 _(optional)_ The index of the tab that is selected when the component is initialized. Defaults to `0`.
 
-### rootNavCtrl
-_(optional)_ The `NavController` of the parent page. This is helpful if you want to push new views to the parent page instead of the child page.
+#### toolbarBackground
+_(optional)_ The background color of the toolbar that contains the tab buttons. See [colors](#colors) for more information.
 
-### toolbarColor
-_(optional)_ The color of the toolbar that contains the `ion-segment`. See [colors](#colors) for more information.
+#### toolbarColor
+_(optional)_ The color of the text and icons inside the toolbar. See [colors](#colors) for more information.
 
-### tabsColor
-_(optional)_ The color of the `ion-segment` component. See [colors](#colors) for more information.
+#### indicatorColor
+_(optional)_ The color of the tab indicator. See [colors](#colors) for more information. Defaults to `primary`.
 
-### indicatorColor
-_(optional)_ The color of the tab indicator. The indicator is the line below the `ion-segment` that moves according to what tab is selected. See [colors](#colors) for more information. Defaults to `primary`.
+#### badgeColor
+_(optional)_ The color of the badge. See [colors](#colors) for more information. Defaults to `primary`.
 
-### height
-The height of `super-tabs` component. Set this to `100%` to fill the whole page, or any other value.
+#### tabsPlacement
+_(optional)_ Placement of the tabs buttons. Defaults to `top`.
+
+#### scrollTabs
+_(optional)_ Set to `true` to enable tab bar swiping. Useful if you have lots of tabs.
+
+#### id
+_(optional)_ Unique instance ID. You will need this if you wish to use the `SuperTabsController` provider.
+
+#### config
+_(optional)_ Advanced configuration.
+
+Param | Description | Default
+--- | --- | ---
+`dragThreshold` | The number of pixels that the user must swipe through before the drag event triggers. | `20`
+`maxDragAngle` | The maximum angle that the user can drag at for the drag event to trigger. | `40`
+`transitionEase` | The transition timing function to use in animations. | `'cubic-bezier(0.35, 0, 0.25, 1)'`
+`transitionDuration` | The duration of animations in milliseconds. | `300`
+`sideMenu` | Specify if there is a side menu in the parent view. This value can be set to `'left'`, `'right'`, or `'both'`. | N/A
+`sideMenuThreshold` | The number of pixels from right/left where the side menu events are captured. Drag even will not trigger if the swipe started from these areas. | `50`
+`shortSwipeDuration` | The user has to swipe faster than the duration specified here for a short swipe event to trigger. Short swipes are quick swipes to change the tabs quickly. Set to `0` to disable this. | `300`
+
+### Outputs
+
+#### `tabSelect`
+Listen to this event to be notified when the user selects a tab. This event emits an object containing the index of the tab, as well as it's unique ID. [See example](#example-with-all-options) below for more details.
+
+<br><br>
+
+## `super-tab` Component
+
+### Inputs
+#### root
+The root page for this tab
+
+#### rootParams
+_(optional)_ An object containing the params you would like to pass to this tab's root page
+
+#### title
+_(optional)_ The title of the tab to display in the `ion-segment-button`.
+
+#### icon
+_(optional)_ The name of the icon to display in the `ion-segment-button`. This has to be a valid `ion-icon` name.
+
+#### badge
+_(optional)_ The initial badge value. The number can be changed through the `SuperTabsController` provider.
+
+#### id
+_(optional)_ A unique ID to be used if you wish to use the `SuperTabaController` provider to modify this tab.
 
 
 <br><br>
 
-## `super-tab` Inputs
+## `SuperTabsController` Provider
 
-### tabRoot
-The root page for this tab
+### setBadge
+```ts
+setBadge(tabId: string, value: number, tabsId?: string): void
+```
+Set the badge value for a tab.
+- **tabId**: the unique ID of the tab
+- **value**: the new value for the badge
+- **tabsId**: the unique ID for parent `SuperTabs`. Defaults to the first instance registered in memory.
 
-### navParams
-_(optional)_ An object containing the params you would like to pass to this tab's root page
 
-### title
-_(optional)_ The title of the tab to display in the `ion-segment-button`.
+### clearBadge
+```ts
+clearBadge(tabId: string, tabsId?: string): void
+```
+Clears the badge value for a tab.
+- **tabId**: the unique ID of the tab
+- **tabsId**: the unique ID for parent `SuperTabs`. Defaults to the first instance registered in memory.
 
-### icon
-_(optional)_ The name of the icon to display in the `ion-segment-button`. This has to be a valid `ion-icon` name.
+### increaseBadge
+```ts
+increaseBadge(tabId: string, increaseBy: number = 1, tabsId?: string): void
+```
+Increase the badge for a tab by a value.
+- **tabId**: the unique ID of the tab
+- **increaseBy**: the value to increase by. Defaults to `1`.
+- **tabsId**: the unique ID for parent `SuperTabs`. Defaults to the first instance registered in memory.
+
+### decreaseBadge
+```ts
+decreaseBadge(tabId: string, increaseBy: number = 1, tabsId?: string): void
+```
+Decrease the badge for a tab by a value.
+- **tabId**: the unique ID of the tab
+- **decreaseBy**: the value to decrease by. Defaults to `1`.
+- **tabsId**: the unique ID for parent `SuperTabs`. Defaults to the first instance registered in memory.
+
+### enableTabsSwipe
+```ts
+enableTabsSwipe(enable: boolean, tabsId?: string): void
+```
+Enable/disable swiping.
+- **enable**: boolean that indicates whether to enable swiping
+- **tabsId**: the unique ID for parent `SuperTabs`. Defaults to the first instance registered in memory.
+
+### enableTabSwipe
+```ts
+enableTabSwipe(enable: boolean, tabId: string, tabsId?: string): void
+```
+Enable/disable swiping when the specified tab is the current active one.
+- **enable**: boolean that indicates whether to enable swiping
+- **tabId**: the unique ID of the tab
+- **tabsId**: the unique ID for parent `SuperTabs`. Defaults to the first instance registered in memory.
+
+### showToolbar
+```ts
+showToolbar(show: boolean, tabsId?: string): void
+```
+Show/hide toolbar
+- **show**: boolean that indicates whether to show the toolbar
+- **tabsId**: the unique ID for parent `SuperTabs`. Defaults to the first instance registered in memory.
 
 <br><br>
 
@@ -145,10 +239,10 @@ export class MyPage {
 }
 ```
 ```html
-<super-tabs height="100%">
-  <super-tab [tabRoot]="page1" title="First page"></super-tab>
-  <super-tab [tabRoot]="page2" title="Second page"></super-tab>
-  <super-tab [tabRoot]="page3" title="Third page"></super-tab>
+<super-tabs>
+  <super-tab [root]="page1" title="First page"></super-tab>
+  <super-tab [root]="page2" title="Second page"></super-tab>
+  <super-tab [root]="page3" title="Third page"></super-tab>
 </super-tabs>
 ```
 
@@ -156,10 +250,10 @@ export class MyPage {
 
 ## Example with icons
 ```html
-<super-tabs height="100%">
-  <super-tab [tabRoot]="page1" title="First page" icon="home"></super-tab>
-  <super-tab [tabRoot]="page2" title="Second page" icon="pin"></super-tab>
-  <super-tab [tabRoot]="page3" title="Third page" icon="heart"></super-tab>
+<super-tabs>
+  <super-tab [root]="page1" title="First page" icon="home"></super-tab>
+  <super-tab [root]="page2" title="Second page" icon="pin"></super-tab>
+  <super-tab [root]="page3" title="Third page" icon="heart"></super-tab>
 </super-tabs>
 ```
 
@@ -173,14 +267,33 @@ export class MyPage {
   page2: any = Page2Page;
   page3: any = Page3Page;
   
-  constructor(public navCtrl: NavController){}
+  constructor(private superTabsCtrl: SuperTabsController) { }
+  
+  ngAfterViewInit() {
+  
+    // must wait for AfterViewInit if you want to modify the tabs instantly
+    this.superTabsCtrl.setBadge('homeTab', 5);
+  
+  }
+  
+  hideToolbar() {
+    this.superTabsCtrl.showToolbar(false);
+  }
+  
+  showToolbar() {
+    this.superTabsCtrl.showToolbar(true);
+  }
+  
+  onTabSelect(ev: any) {
+    console.log('Tab selected', 'Index: ' + ev.index, 'Unique ID: ' + ev.id);
+  }
   
 }
 ```
 ```html
-<super-tabs height="100%" selectedTabIndex="1" [rootNavCtrl]="navCtrl" tabsColor="light" toolbarColor="dark" indicatorColor="light">
-  <super-tab [tabRoot]="page1" title="First page" icon="home"></super-tab>
-  <super-tab [tabRoot]="page2" title="Second page" icon="pin"></super-tab>
-  <super-tab [tabRoot]="page3" title="Third page" icon="heart"></super-tab>
+<super-tabs id="mainTabs" selectedTabIndex="1" toolbarColor="light" toolbarBackground="dark" indicatorColor="light" badgeColor="light" [config]="{ sideMenu: 'left' }" (tabSelect)="onTabSelect($event)">
+  <super-tab [root]="page1" title="First page" icon="home" id="homeTab"></super-tab>
+  <super-tab [root]="page2" title="Second page" icon="pin" id="locationTab"></super-tab>
+  <super-tab [root]="page3" title="Third page" icon="heart" id="favouritesTab"></super-tab>
 </super-tabs>
 ```
