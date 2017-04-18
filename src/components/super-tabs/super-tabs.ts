@@ -3,7 +3,7 @@ import {
   ViewChild, AfterContentInit, Output, EventEmitter, ViewEncapsulation, forwardRef, Optional
 } from '@angular/core';
 import { SuperTab } from '../super-tab/super-tab';
-import { NavController, RootNode, NavControllerBase, ViewController, App, Config } from 'ionic-angular';
+import { NavController, RootNode, NavControllerBase, ViewController, App } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { SuperTabsToolbar } from '../super-tabs-toolbar/super-tabs-toolbar';

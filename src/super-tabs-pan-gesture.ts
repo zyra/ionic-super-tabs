@@ -1,4 +1,4 @@
-import { DomController, Platform } from 'ionic-angular';
+import { Platform } from 'ionic-angular';
 import { pointerCoord, PointerCoordinates } from 'ionic-angular/util/dom';
 import { SuperTabsConfig } from './components/super-tabs/super-tabs';
 import { Renderer2 } from '@angular/core';
