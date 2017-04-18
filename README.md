@@ -130,6 +130,26 @@ Param | Description | Default
 #### `tabSelect`
 Listen to this event to be notified when the user selects a tab. This event emits an object containing the index of the tab, as well as it's unique ID. [See example](#example-with-all-options) below for more details.
 
+### Methods
+
+All methods documented below under `SuperTabsController` can be applied directly to an instance. Here's an example:
+```ts
+export class MyPage {
+
+  @ViewChild(SuperTabs) superTabs: SuperTabs;
+  
+  slideToIndex(index: number) {
+    this.superTabs.slideTo(index);
+  }
+  
+  hideToolbar() {
+    this.superTabs.showToolbar(false);
+  }
+  
+}
+```
+
+
 <br><br>
 
 ## `super-tab` Component
@@ -217,6 +237,14 @@ showToolbar(show: boolean, tabsId?: string): void
 ```
 Show/hide toolbar
 - **show**: boolean that indicates whether to show the toolbar
+- **tabsId**: the unique ID for parent `SuperTabs`. Defaults to the first instance registered in memory.
+
+### slideTo
+```ts
+slideTo(tabIndexOrId: string | number, tabsId?: string): void
+```
+Slide to a tab.
+- **tabIndexOrId**: the index or the unique ID of the tab
 - **tabsId**: the unique ID for parent `SuperTabs`. Defaults to the first instance registered in memory.
 
 <br><br>

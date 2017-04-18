@@ -52,6 +52,11 @@ export class SuperTabsController {
     instance && instance.showToolbar(show);
   }
 
+  slideTo(tabIndexOrId: string | number, tabsId?: string) {
+    const instance = this.getInstance(tabsId);
+    instance && instance.slideTo(tabIndexOrId);
+  }
+
   /**
    * @private
    */

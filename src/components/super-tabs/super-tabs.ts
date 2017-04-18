@@ -312,6 +312,15 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this.refreshContainerHeight();
   }
 
+  slideTo(indexOrId: string | number) {
+    if (typeof indexOrId === 'string') {
+      indexOrId = this.getTabIndexById(indexOrId);
+    }
+
+    this.selectedTabIndex = indexOrId;
+    this.tabsContainer.slideTo(indexOrId);
+  }
+
   getActiveChildNav() {
     return this.tabs[this.selectedTabIndex];
   }
