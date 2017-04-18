@@ -28,6 +28,6 @@
     "zone.js": "^0.8.5"
   },
   "peerDependencies": {
-    "ionic-angular": "^2.2.0 || >=3.0.0"
+    "ionic-angular": "^3.0.0"
   }
 }
