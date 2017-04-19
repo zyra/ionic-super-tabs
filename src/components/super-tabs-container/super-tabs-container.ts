@@ -148,8 +148,8 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
     this.rnd.setStyle(this.container.nativeElement, 'width', this.containerWidth + 'px');
   }
 
-  slideTo(index: number): void {
-    this.moveContainer(true, index * this.tabWidth);
+  slideTo(index: number, animate: boolean = true): void {
+    this.moveContainer(animate, index * this.tabWidth);
   }
 
   private moveContainer(animate: boolean = false, positionX?: number, callback: Function = () => {}) {
