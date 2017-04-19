@@ -118,7 +118,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   @Input()
   set selectedTabIndex(val: number) {
     this._selectedTabIndex = Number(val);
-    this.alignIndicatorPosition(true);
+    this.init && this.alignIndicatorPosition(true);
   }
 
   get selectedTabIndex(): number {
@@ -165,6 +165,8 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   private hasIcons: boolean = false;
 
   private hasTitles: boolean = false;
+
+  private init: boolean = false;
 
   parent: NavControllerBase;
 
@@ -272,6 +274,8 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     setTimeout(() => this.alignIndicatorPosition(), 100);
 
     this.refreshContainerHeight();
+
+    this.init = true;
 
   }
 
@@ -492,7 +496,6 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     } else if (ip -  (mw / 2 - iw / 2) < sp) {
 
       // we need to move the segment container to the right
-
       pos = ip -  (mw / 2 - iw / 2);
       pos = pos >= 0 ? pos : 0;
 
