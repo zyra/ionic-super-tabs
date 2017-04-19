@@ -1,8 +1,8 @@
 import {
   Component, Renderer2, ElementRef, Input, Output, EventEmitter, ViewChild, ViewEncapsulation,
-  AfterViewInit, OnDestroy
+  AfterViewInit, OnDestroy, NgZone
 } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import {DomController, Platform} from 'ionic-angular';
 import { SuperTabsPanGesture } from '../../super-tabs-pan-gesture';
 import { SuperTabsConfig } from '../super-tabs/super-tabs';
 
@@ -23,7 +23,7 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
   selectedTabIndex: number;
 
   @Output()
-  tabSelect: EventEmitter<number> = new EventEmitter<number>();
+  tabSelect: EventEmitter<{ index: number; changed: boolean; }> = new EventEmitter<{ index: number; changed: boolean; }>();
 
   @Output()
   tabWillChange: EventEmitter<any> = new EventEmitter<any>();
@@ -48,10 +48,6 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
 
   // Animation stuff
 
-  leftThreshold: number = 50;
-
-  rightThreshold: number = 0;
-
   private minPosX: number;
 
   private maxPosX: number;
@@ -65,7 +61,9 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
   constructor(
     private el: ElementRef,
     private rnd: Renderer2,
-    private plt: Platform
+    private plt: Platform,
+    private domCtrl: DomController,
+    private ngZone: NgZone
   ) {}
 
   ngAfterViewInit() {
@@ -125,19 +123,16 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
 
       tabIndex = position / this.tabWidth;
 
-      // set selected tab
-      this.setSelectedTab(tabIndex);
-
       // move container if we changed position
       if (position !== this.containerPosition) {
-        this.moveContainer(true, position);
-      }
+        this.moveContainer(true, position, () => this.ngZone.run(() => this.setSelectedTab(tabIndex)));
+      } else this.setSelectedTab(tabIndex);
 
     };
   }
 
   private setSelectedTab(index: number) {
-    index !== this.selectedTabIndex && this.tabSelect.emit(index);
+    this.tabSelect.emit({index, changed: index !== this.selectedTabIndex});
     this.selectedTabIndex = index;
   }
 
@@ -157,34 +152,47 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
     this.moveContainer(true, index * this.tabWidth);
   }
 
-  private moveContainer(animate: boolean = false, positionX?: number) {
+  private moveContainer(animate: boolean = false, positionX?: number, callback: Function = () => {}) {
 
-    const el: HTMLElement = this.container.nativeElement;
+    this.domCtrl.read(() => {
+      const el: HTMLElement = this.container.nativeElement;
 
-    if (animate) {
+      if (animate) {
 
-      if (el.style[this.plt.Css.transform].indexOf('all') === -1) {
-        this.rnd.setStyle(el, this.plt.Css.transition, `all ${this.config.transitionDuration}ms ${this.config.transitionEase}`);
-      }
-      this.rnd.setStyle(el, this.plt.Css.transform, `translate3d(${-1 * positionX}px, 0, 0)`);
+        if (el.style[this.plt.Css.transform].indexOf('all') === -1) {
+          this.domCtrl.write(() => {
+            this.rnd.setStyle(el, this.plt.Css.transition, `all ${this.config.transitionDuration}ms ${this.config.transitionEase}`);
+          });
+        }
 
-      this.containerPosition = positionX;
+        this.domCtrl.write(() => {
+          this.rnd.setStyle(el, this.plt.Css.transform, `translate3d(${-1 * positionX}px, 0, 0)`);
+        });
 
-    } else {
-
-      if (positionX) {
         this.containerPosition = positionX;
+
+      } else {
+
+        if (positionX) {
+          this.containerPosition = positionX;
+        }
+
+        if (el.style[this.plt.Css.transform] !== 'initial') {
+          this.domCtrl.write(() => {
+            this.rnd.setStyle(el, this.plt.Css.transition, 'initial');
+          });
+        }
+
+        this.containerPosition = Math.max(this.minPosX, Math.min(this.maxPosX, this.containerPosition));
+
+        this.domCtrl.write(() => {
+          this.rnd.setStyle(el, this.plt.Css.transform, `translate3d(${-1 * this.containerPosition}px, 0, 0)`);
+        });
+
       }
 
-      if (el.style[this.plt.Css.transform] !== 'initial') {
-        this.rnd.setStyle(el, this.plt.Css.transition, 'initial');
-      }
-
-      this.containerPosition = Math.max(this.minPosX, Math.min(this.maxPosX, this.containerPosition));
-
-      this.rnd.setStyle(el, this.plt.Css.transform, `translate3d(${-1 * this.containerPosition}px, 0, 0)`);
-
-    }
+      callback();
+    });
 
   }
 

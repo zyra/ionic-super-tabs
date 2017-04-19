@@ -3,7 +3,7 @@ import {
   ViewChild, AfterContentInit, Output, EventEmitter, ViewEncapsulation, forwardRef, Optional
 } from '@angular/core';
 import { SuperTab } from '../super-tab/super-tab';
-import { NavController, RootNode, NavControllerBase, ViewController, App } from 'ionic-angular';
+import {NavController, RootNode, NavControllerBase, ViewController, App, DeepLinker} from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { SuperTabsToolbar } from '../super-tabs-toolbar/super-tabs-toolbar';
@@ -52,9 +52,9 @@ export interface SuperTabsConfig {
                         [tabsColor]="toolbarColor" [indicatorColor]="indicatorColor" [badgeColor]="badgeColor"
                         [scrollTabs]="scrollTabs"
                         [selectedTab]="selectedTabIndex"
-                        (tabSelect)="onTabSelect($event)"></super-tabs-toolbar>
+                        (tabSelect)="onToolbarTabSelect($event)"></super-tabs-toolbar>
     <super-tabs-container [config]="config" [tabsCount]="tabs.length" [selectedTabIndex]="selectedTabIndex"
-                          (tabSelect)="onTabEnter($event)" (onDrag)="onDrag($event)" (tabDidChange)="onSlideDidChange($event)">
+                          (tabSelect)="onContainerTabSelect($event)" (onDrag)="onDrag($event)" (tabDidChange)="onSlideDidChange($event)">
       <ng-content></ng-content>
     </super-tabs-container>
   `,
@@ -174,18 +174,22 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     private _app: App,
     private el: ElementRef,
     private rnd: Renderer2,
-    private superTabsCtrl: SuperTabsController
+    private superTabsCtrl: SuperTabsController,
+    private linker: DeepLinker
   ) {
 
     this.parent = <NavControllerBase>parent;
 
     if (this.parent) {
+      console.log('haz root nav controller');
       this.parent.registerChildNav(this);
     } else if(viewCtrl && viewCtrl.getNav()) {
+      console.log('in modal');
       this.parent = <any>viewCtrl.getNav();
       this.parent.registerChildNav(this);
-    } else if (_app) {
-      _app._setRootNav(this);
+    } else if (this._app) {
+      console.log('root nav');
+      this._app._setRootNav(this);
     }
 
     if (viewCtrl) {
@@ -248,6 +252,14 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
   ngAfterViewInit() {
 
+    const tabsSegment = this.linker.initNav(this);
+
+    if (tabsSegment && !tabsSegment.component) {
+      this.selectedTabIndex = this.tabs.findIndex((tab: SuperTab) => tab.root === tabsSegment.name);
+    }
+
+    this.linker.navChange('switch');
+
     if (!this.hasTitles && !this.hasIcons) this.isToolbarVisible = false;
 
     this.tabsContainer.slideTo(this.selectedTabIndex);
@@ -257,17 +269,9 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     // we need this to make sure the "slide" thingy doesn't move outside the screen
     this.maxIndicatorPosition = this.el.nativeElement.offsetWidth - (this.el.nativeElement.offsetWidth / this.tabs.length);
 
-    setTimeout(() => {
-      this.alignIndicatorPosition();
-    }, 100);
+    setTimeout(() => this.alignIndicatorPosition(), 100);
 
     this.refreshContainerHeight();
-
-    this.watches.push(Observable.merge(this.toolbar.tabSelect, this.tabsContainer.tabSelect)
-      .subscribe((index: number) => this.tabSelect.emit({
-        index,
-        id: this.tabs[index].tabId
-      })));
 
   }
 
@@ -348,9 +352,8 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
   /**
    * We listen to drag events to move the "slide" thingy along with the slides
-   * @param ev
    */
-  onDrag(ev: TouchEvent) {
+  onDrag() {
 
     if (!this.isToolbarVisible) return;
 
@@ -419,15 +422,32 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
    * Runs when the user clicks on a segment button
    * @param index
    */
-  onTabSelect(index: number) {
+  onTabChange(index: number) {
     if (index <= this.tabs.length) {
-      this.tabsContainer.slideTo(index);
+      this.tabs[this.selectedTabIndex].getActive()._didLeave();
+      this.tabs[index].getActive()._didEnter();
       this.selectedTabIndex = index;
+
+      this.linker.navChange('switch');
+
+      this.tabSelect.emit({
+        index,
+        id: this.tabs[index].tabId
+      });
+
     }
   }
 
-  onTabEnter(index: number) {
-    this.selectedTabIndex = index;
+  onToolbarTabSelect(index: number) {
+    this.tabsContainer.slideTo(index);
+    this.onTabChange(index);
+  }
+
+  onContainerTabSelect(ev: {index: number; changed: boolean}) {
+    if (ev.changed) {
+      this.onTabChange(ev.index);
+    }
+    this.alignIndicatorPosition(true);
   }
 
   private updateTabWidth() {
@@ -527,21 +547,21 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     }
   }
 
-  private getTabIndexById(tabId: string): number {
+  getTabIndexById(tabId: string): number {
     return this.tabs.findIndex((tab: SuperTab) => tab.tabId === tabId);
   }
 
-  private getTabById(tabId: string): SuperTab {
+  getTabById(tabId: string): SuperTab {
     return this.tabs.find((tab: SuperTab) => tab.tabId === tabId);
   }
-
-  // RootNode stuff
 
   getElementRef() { return this.el; }
 
   initPane() { return true; }
 
   paneChanged() {}
+
+  getSelected() {}
 
 }
 

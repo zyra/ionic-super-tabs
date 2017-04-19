@@ -2,7 +2,7 @@ import {
   Component, Input, Output, EventEmitter, ElementRef, ViewChildren, QueryList,
   ViewEncapsulation, ViewChild, Renderer2, AfterViewInit, OnDestroy
 } from '@angular/core';
-import { SegmentButton, Platform, Segment } from 'ionic-angular';
+import {SegmentButton, Platform, Segment, DomController} from 'ionic-angular';
 import { SuperTabsPanGesture } from '../../super-tabs-pan-gesture';
 import { SuperTabsConfig } from '../super-tabs/super-tabs';
 
@@ -25,8 +25,6 @@ import { SuperTabsConfig } from '../super-tabs/super-tabs';
   encapsulation: ViewEncapsulation.None
 })
 export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
-
-  // Inputs
 
   @Input()
   color: string = '';
@@ -56,12 +54,8 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
 
   indicatorWidth: number = 0;
 
-  // Outputs
-
   @Output()
   tabSelect: EventEmitter<any> = new EventEmitter<any>();
-
-  // View children
 
   @ViewChildren(SegmentButton)
   private segmentButtons: QueryList<SegmentButton>;
@@ -75,14 +69,10 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
   @ViewChild(Segment)
   private segment: Segment;
 
-  // View bindings
-
   /**
    * @private
    */
   segmentPosition: number = 0;
-
-  // Public values to be accessed by parent SuperTabs component
 
   /**
    * The width of each button
@@ -96,27 +86,16 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
 
   tabs: any[] = [];
 
-
-  // Private values for tracking, calculations ...etc
-
-  /**
-   * Indicates whether this component is initialized
-   */
-  private init: boolean = false;
-
   private gesture: SuperTabsPanGesture;
 
-  // Initialization methods
   constructor(
     private el: ElementRef,
     private plt: Platform,
-    private rnd: Renderer2
+    private rnd: Renderer2,
+    private domCtrl: DomController
   ) {}
 
   ngAfterViewInit() {
-    // this.segment.writeValue(this.selectedTab);
-    this.init = true;
-
     this.gesture = new SuperTabsPanGesture(this.plt, this.tabButtonsContainer.nativeElement, this.config, this.rnd);
     this.gesture.onMove = (delta: number) => {
 
@@ -146,27 +125,33 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
   }
 
   alignIndicator(position: number, width: number, animate?: boolean) {
-    this.toggleAnimation(this.indicator.nativeElement, animate);
+    this.toggleAnimation(this.indicator, animate);
     this.setIndicatorWidth(width, animate);
     this.setIndicatorPosition(position, animate);
   }
 
   setIndicatorPosition(position: number, animate?: boolean) {
     this.indicatorPosition = position;
-    this.toggleAnimation(this.indicator.nativeElement, animate);
-    this.rnd.setStyle(this.indicator.nativeElement, this.plt.Css.transform, 'translate3d(' + (position - this.segmentPosition) + 'px, 0, 0)');
+    this.toggleAnimation(this.indicator, animate);
+    this.domCtrl.write(() => {
+      this.rnd.setStyle(this.indicator.nativeElement, this.plt.Css.transform, 'translate3d(' + (position - this.segmentPosition) + 'px, 0, 0)');
+    });
   }
 
   setIndicatorWidth(width: number, animate?: boolean) {
     this.indicatorWidth = width;
-    this.toggleAnimation(this.indicator.nativeElement, animate);
-    this.rnd.setStyle(this.indicator.nativeElement, 'width', width + 'px');
+    this.toggleAnimation(this.indicator, animate);
+    this.domCtrl.write(() => {
+      this.rnd.setStyle(this.indicator.nativeElement, 'width', width + 'px');
+    });
   }
 
   setSegmentPosition(position: number, animate?: boolean) {
     this.segmentPosition = position;
-    this.toggleAnimation(this.segment.getNativeElement(), animate);
-    this.rnd.setStyle(this.segment.getNativeElement(), this.plt.Css.transform, `translate3d(${-1 * position}px,0,0)`);
+    this.toggleAnimation(this.segment.getElementRef(), animate);
+    this.domCtrl.write(() => {
+      this.rnd.setStyle(this.segment.getNativeElement(), this.plt.Css.transform, `translate3d(${-1 * position}px,0,0)`);
+    });
     this.setIndicatorPosition(this.indicatorPosition, animate);
   }
 
@@ -175,18 +160,24 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
    * @param el
    * @param animate
    */
-  private toggleAnimation(el: HTMLElement, animate: boolean) {
+  private toggleAnimation(el: ElementRef, animate: boolean) {
 
     if (!this.config || this.config.transitionDuration === 0)
       return;
 
-    if (animate) {
-      // ease isn't enabled and needs to be enabled
-      this.rnd.setStyle(el, this.plt.Css.transition, `all ${this.config.transitionDuration}ms ${this.config.transitionEase}`);
-    } else {
-      // ease is already enabled and needs to be disabled
-      this.rnd.setStyle(el, this.plt.Css.transition, 'initial');
-    }
+    this.domCtrl.read(() => {
+      const _el: HTMLElement = el.nativeElement;
+
+      this.domCtrl.write(() => {
+        if (animate) {
+          // ease isn't enabled and needs to be enabled
+          this.rnd.setStyle(_el, this.plt.Css.transition, `all ${this.config.transitionDuration}ms ${this.config.transitionEase}`);
+        } else {
+          // ease is already enabled and needs to be disabled
+          this.rnd.setStyle(_el, this.plt.Css.transition, 'initial');
+        }
+      })
+    })
 
   }
 
