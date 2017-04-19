@@ -183,14 +183,11 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this.parent = <NavControllerBase>parent;
 
     if (this.parent) {
-      console.log('haz root nav controller');
       this.parent.registerChildNav(this);
     } else if(viewCtrl && viewCtrl.getNav()) {
-      console.log('in modal');
       this.parent = <any>viewCtrl.getNav();
       this.parent.registerChildNav(this);
     } else if (this._app) {
-      console.log('root nav');
       this._app._setRootNav(this);
     }
 
