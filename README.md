@@ -4,6 +4,11 @@ Swipeable tabs that can be your main navigation, or just a part of your page.
 
 To see this in action, checkout the [example project here](https://github.com/zyra/ionic2-super-tabs-example).
 
+
+[![NPM](https://nodei.co/npm/ionic2-super-tabs.png?stars&downloads)](https://nodei.co/npm/ionic2-super-tabs/)
+[![NPM](https://nodei.co/npm-dl/ionic2-super-tabs.png?months=6&height=2)](https://nodei.co/npm/ionic2-super-tabs/)
+
+
 <br><br>
 
 ![Example](https://github.com/zyra/ionic2-super-tabs-example/blob/master/example.gif?raw=true)
