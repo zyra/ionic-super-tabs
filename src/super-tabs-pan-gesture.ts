@@ -68,7 +68,6 @@ export class SuperTabsPanGesture {
     if (this.config.shortSwipeDuration > 0) this.initialTimestamp = Date.now();
     this.lastPosX = coords.x;
 
-
   }
 
   private _onMove(ev: TouchEvent) {
@@ -78,12 +77,12 @@ export class SuperTabsPanGesture {
     if (!this.isDragging) {
 
       if (typeof this.shouldCapture !== 'boolean')
-        // we haven't decided yet if we want to capture this gesture
+      // we haven't decided yet if we want to capture this gesture
         this.checkGesture(coords);
 
 
       if (this.shouldCapture === true)
-        // gesture is good, let's capture all next onTouchMove events
+      // gesture is good, let's capture all next onTouchMove events
         this.isDragging = true;
       else
         return;
@@ -107,7 +106,6 @@ export class SuperTabsPanGesture {
   }
 
   private _onEnd(ev: TouchEvent) {
-
     const coords: PointerCoordinates = pointerCoord(ev);
 
     if (this.shouldCapture === true) {

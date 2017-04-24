@@ -15,6 +15,10 @@ super-tabs-container {
     z-index: 1;
     display: flex;
     box-sizing: content-box;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 
   }
 

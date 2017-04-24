@@ -1,6 +1,6 @@
 import {
   Component, Input, Renderer, ElementRef, ViewEncapsulation, Optional, ComponentFactoryResolver,
-  NgZone, ViewContainerRef, ViewChild, OnInit, AfterViewInit, OnDestroy
+  NgZone, ViewContainerRef, ViewChild, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef
 } from '@angular/core';
 import { NavControllerBase, App, Config, Platform, Keyboard, GestureController, DeepLinker, DomController } from 'ionic-angular';
 import { TransitionController } from 'ionic-angular/transitions/transition-controller';
@@ -55,6 +55,8 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
     this.setViewport(val);
   }
 
+  private active: boolean = false;
+
   constructor(
     parent: SuperTabs,
     app: App,
@@ -68,7 +70,8 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
     gestureCtrl: GestureController,
     transCtrl: TransitionController,
     @Optional() private linker: DeepLinker,
-    private _dom: DomController
+    private _dom: DomController,
+    private cd: ChangeDetectorRef
   ) {
     super(parent, app, config, plt, keyboard, el, zone, rnd, cfr, gestureCtrl, transCtrl, linker, _dom);
   }
@@ -83,6 +86,16 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
 
   ngOnDestroy() {
     this.destroy();
+  }
+
+  setActive(active: boolean) {
+    if (active && !this.active) {
+      this.cd.reattach();
+      // TODO check if you need to detect changes manually
+      // this.cd.detectChanges();
+    } else if (!active && this.active) {
+      this.cd.detach();
+    }
   }
 
   setBadge(value: number) {

@@ -88,6 +88,11 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
 
   private gesture: SuperTabsPanGesture;
 
+  private animationState = {
+    indicator: false,
+    segment: false
+  };
+
   constructor(
     private el: ElementRef,
     private plt: Platform,
@@ -125,59 +130,52 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
   }
 
   alignIndicator(position: number, width: number, animate?: boolean) {
-    this.toggleAnimation(this.indicator, animate);
-    this.setIndicatorWidth(width, animate);
-    this.setIndicatorPosition(position, animate);
+    this.setIndicatorProperties(width, position, animate);
   }
 
   setIndicatorPosition(position: number, animate?: boolean) {
-    this.indicatorPosition = position;
-    this.toggleAnimation(this.indicator, animate);
-    this.domCtrl.write(() => {
-      this.rnd.setStyle(this.indicator.nativeElement, this.plt.Css.transform, 'translate3d(' + (position - this.segmentPosition) + 'px, 0, 0)');
-    });
+    this.setIndicatorProperties(this.indicatorWidth, position, animate);
   }
 
   setIndicatorWidth(width: number, animate?: boolean) {
+    this.setIndicatorProperties(width, this.indicatorPosition, animate);
+  }
+
+  setIndicatorProperties(width: number, position: number, animate?: boolean) {
     this.indicatorWidth = width;
-    this.toggleAnimation(this.indicator, animate);
-    this.domCtrl.write(() => {
-      this.rnd.setStyle(this.indicator.nativeElement, 'width', width + 'px');
-    });
+    this.indicatorPosition = position;
+    const scale = width / 100;
+    this.toggleAnimation('indicator', animate);
+    this.rnd.setStyle(this.indicator.nativeElement, this.plt.Css.transform,  'translate3d(' + (position - this.segmentPosition) + 'px, 0, 0) scale3d(' + scale + ', 1, 1)')
   }
 
   setSegmentPosition(position: number, animate?: boolean) {
     this.segmentPosition = position;
-    this.toggleAnimation(this.segment.getElementRef(), animate);
-    this.domCtrl.write(() => {
-      this.rnd.setStyle(this.segment.getNativeElement(), this.plt.Css.transform, `translate3d(${-1 * position}px,0,0)`);
-    });
+    this.toggleAnimation('segment', animate);
+    this.rnd.setStyle(this.segment.getNativeElement(), this.plt.Css.transform, `translate3d(${-1 * position}px,0,0)`);
     this.setIndicatorPosition(this.indicatorPosition, animate);
   }
+
 
   /**
    * Enables/disables animation
    * @param el
    * @param animate
    */
-  private toggleAnimation(el: ElementRef, animate: boolean) {
+  private toggleAnimation(el: 'indicator' | 'segment', animate: boolean) {
 
     if (!this.config || this.config.transitionDuration === 0)
       return;
 
-    this.domCtrl.read(() => {
-      const _el: HTMLElement = el.nativeElement;
+    // only change style if the value changed
+    if (this.animationState[el] === animate) return;
 
-      this.domCtrl.write(() => {
-        if (animate) {
-          // ease isn't enabled and needs to be enabled
-          this.rnd.setStyle(_el, this.plt.Css.transition, `all ${this.config.transitionDuration}ms ${this.config.transitionEase}`);
-        } else {
-          // ease is already enabled and needs to be disabled
-          this.rnd.setStyle(_el, this.plt.Css.transition, 'initial');
-        }
-      })
-    })
+    this.animationState[el] = animate;
+
+    const _el: HTMLElement = el === 'indicator'? this.indicator.nativeElement : this.segment.getNativeElement();
+    const value: string = animate? `all ${this.config.transitionDuration}ms ${this.config.transitionEase}` : 'initial';
+
+    this.rnd.setStyle(_el, this.plt.Css.transition, value);
 
   }
 

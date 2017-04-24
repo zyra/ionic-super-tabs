@@ -11,6 +11,10 @@ super-tabs-toolbar {
     min-height: 0;
 
     .tab-buttons-container {
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-drag: none;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
       overflow: hidden;
 
       ion-segment.segment.segment-md {
@@ -42,7 +46,9 @@ super-tabs-toolbar {
         position: absolute;
         z-index: 2;
         height: 2px;
-        width: 0;
+        width: 100px;
+        transform: scaleX(0);
+        transform-origin: 0;
       }
 
     }
