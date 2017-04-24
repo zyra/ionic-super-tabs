@@ -97,7 +97,6 @@ export class SuperTabsPanGesture {
     const deltaX: number = this.lastPosX - coords.x;
 
     // emit value
-    // this.onMove && this.debouncer.write(() => this.onMove(deltaX));
     this.onMove && this.onMove(deltaX);
 
     // update last X value
