@@ -65,7 +65,7 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
     this.setViewport(val);
   }
 
-  private active: boolean = false;
+  private active: boolean = true;
 
   constructor(
     parent: SuperTabs,
