@@ -570,6 +570,8 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
   getSelected() {}
 
+  setTabbarPosition() {}
+
 }
 
 let superTabsIds = -1;
