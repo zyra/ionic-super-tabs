@@ -138,10 +138,6 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
     this.containerWidth = this.tabWidth * this.tabsCount;
   }
 
-  setHeight(height: number) {
-    this.rnd.setStyle(this.el.nativeElement, 'height', height + 'px');
-  }
-
   private setContainerWidth() {
     this.rnd.setStyle(this.container.nativeElement, 'width', this.containerWidth + 'px');
   }
