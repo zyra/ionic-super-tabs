@@ -102,8 +102,7 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
   setActive(active: boolean) {
     if (active && !this.active) {
       this.cd.reattach();
-      // TODO check if you need to detect changes manually
-      // this.cd.detectChanges();
+      this.cd.detectChanges();
     } else if (!active && this.active) {
       this.cd.detach();
     }
