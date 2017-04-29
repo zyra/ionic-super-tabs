@@ -13,7 +13,7 @@ import { SuperTabsConfig } from '../super-tabs/super-tabs';
       <div class="tab-buttons-container" #tabButtonsContainer>
         <div *ngIf="tabsPlacement === 'bottom'" class="indicator {{ 'button-md-' + indicatorColor }}" #indicator></div>
         <ion-segment [color]="tabsColor" [(ngModel)]="selectedTab" mode="md">
-          <ion-segment-button text-wrap *ngFor="let tab of tabs; let i = index" [value]="i" (ionSelect)="selectedTab !== i && onTabSelect(i)">
+          <ion-segment-button *ngFor="let tab of tabs; let i = index" [value]="i" (ionSelect)="selectedTab !== i && onTabSelect(i)">
             <ion-icon *ngIf="tab.icon" [name]="tab.icon"></ion-icon>
             {{tab.title}}
             <span [hidden]="tab.badge <= 0" class="badge {{ 'badge-md-' + badgeColor }}">{{tab.badge}}</span>
