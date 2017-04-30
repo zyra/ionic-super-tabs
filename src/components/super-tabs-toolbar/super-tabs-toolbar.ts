@@ -21,7 +21,8 @@ import { SuperTabsConfig } from '../super-tabs/super-tabs';
         </ion-segment>
         <div *ngIf="tabsPlacement === 'top'" class="indicator {{ 'button-md-' + indicatorColor }}" #indicator></div>
       </div>
-    </ion-toolbar>`,
+    </ion-toolbar>
+  `,
   encapsulation: ViewEncapsulation.None
 })
 export class SuperTabsToolbar implements AfterViewInit, OnDestroy {

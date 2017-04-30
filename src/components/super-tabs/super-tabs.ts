@@ -488,6 +488,8 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
       ip: number = this.toolbar.indicatorPosition, // indicatorPosition
       sp: number = this.toolbar.segmentPosition; // segment position
 
+    if (this.toolbar.segmentWidth <= mw) return;
+
     let pos;
 
     if (ip + iw + (mw / 2 - iw / 2) > mw + sp) {
