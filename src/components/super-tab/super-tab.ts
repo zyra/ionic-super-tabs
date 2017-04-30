@@ -65,6 +65,10 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
     this.setViewport(val);
   }
 
+  private loaded: boolean = false;
+  private init: Promise<any>;
+  private initResolve: Function;
+
   constructor(
     parent: SuperTabs,
     app: App,
@@ -83,6 +87,7 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
     private cd: ChangeDetectorRef
   ) {
     super(parent, app, config, plt, keyboard, el, zone, rnd, cfr, gestureCtrl, transCtrl, linker, _dom, errorHandler);
+    this.init = new Promise<void>(resolve => this.initResolve = resolve);
   }
 
   ngOnInit() {
@@ -90,7 +95,7 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
   }
 
   ngAfterViewInit() {
-    this.push(this.root, this.rootParams, { animate: false });
+    this.initResolve();
   }
 
   ngOnDestroy() {
@@ -103,6 +108,15 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
       this.cd.detectChanges();
     } else if (!active) {
       this.cd.detach();
+    }
+  }
+
+  load(load: boolean) {
+    if (load && !this.loaded) {
+      this.init.then(() => {
+        this.push(this.root, this.rootParams, { animate: false });
+        this.loaded = true;
+      });
     }
   }
 
