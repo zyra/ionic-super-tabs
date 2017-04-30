@@ -1,3 +1,13 @@
+<a name="2.4.1"></a>
+## [2.4.1](https://github.com/zyra/ionic2-super-tabs/compare/v2.4.0...v2.4.1) (2017-04-30)
+
+
+### Bug Fixes
+
+* **super-tabs:** remove margin when using module inside ion-tabs ([6921c75](https://github.com/zyra/ionic2-super-tabs/commit/6921c75)), closes [#32](https://github.com/zyra/ionic2-super-tabs/issues/32)
+
+
+
 <a name="2.4.0"></a>
 # [2.4.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.3.3...v2.4.0) (2017-04-30)
 
