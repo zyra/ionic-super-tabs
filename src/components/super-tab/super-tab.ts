@@ -65,8 +65,6 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
     this.setViewport(val);
   }
 
-  private active: boolean = true;
-
   constructor(
     parent: SuperTabs,
     app: App,
@@ -100,10 +98,10 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
   }
 
   setActive(active: boolean) {
-    if (active && !this.active) {
+    if (active) {
       this.cd.reattach();
       this.cd.detectChanges();
-    } else if (!active && this.active) {
+    } else if (!active) {
       this.cd.detach();
     }
   }
