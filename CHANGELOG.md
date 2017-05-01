@@ -1,3 +1,13 @@
+<a name="2.4.2"></a>
+## [2.4.2](https://github.com/zyra/ionic2-super-tabs/compare/v2.4.1...v2.4.2) (2017-05-01)
+
+
+### Bug Fixes
+
+* **super-tabs:** don't fire view events to fix change detection ([444f324](https://github.com/zyra/ionic2-super-tabs/commit/444f324)), closes [#30](https://github.com/zyra/ionic2-super-tabs/issues/30)
+
+
+
 <a name="2.4.1"></a>
 ## [2.4.1](https://github.com/zyra/ionic2-super-tabs/compare/v2.4.0...v2.4.1) (2017-04-30)
 
