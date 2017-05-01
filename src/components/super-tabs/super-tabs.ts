@@ -426,12 +426,24 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
    */
   onTabChange(index: number) {
     if (index <= this._tabs.length) {
+      const currentTab: SuperTab = this.getActiveTab();
+      let activeView: ViewController = currentTab.getActive();
+
+      activeView._willLeave(false);
+      activeView._didLeave();
 
       this.selectedTabIndex = index;
 
       this.linker.navChange('switch');
 
       this.refreshTabStates();
+
+      activeView = this.getActiveTab().getActive();
+
+      if (activeView) {
+        activeView._willEnter();
+        activeView._didEnter();
+      }
 
       this.tabSelect.emit({
         index,
@@ -564,6 +576,10 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
   getTabById(tabId: string): SuperTab {
     return this._tabs.find((tab: SuperTab) => tab.tabId === tabId);
+  }
+
+  getActiveTab(): SuperTab {
+    return this._tabs[this.selectedTabIndex];
   }
 
   getElementRef() { return this.el; }
