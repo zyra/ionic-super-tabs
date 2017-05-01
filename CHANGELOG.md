@@ -1,3 +1,13 @@
+<a name="2.5.0"></a>
+# [2.5.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.4.2...v2.5.0) (2017-05-01)
+
+
+### Features
+
+* **super-tabs:** fire view events ([78b7bc7](https://github.com/zyra/ionic2-super-tabs/commit/78b7bc7))
+
+
+
 <a name="2.4.2"></a>
 ## [2.4.2](https://github.com/zyra/ionic2-super-tabs/compare/v2.4.1...v2.4.2) (2017-05-01)
 
