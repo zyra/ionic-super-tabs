@@ -1,3 +1,13 @@
+<a name="2.5.1"></a>
+## [2.5.1](https://github.com/zyra/ionic2-super-tabs/compare/v2.5.0...v2.5.1) (2017-05-02)
+
+
+### Bug Fixes
+
+* check dimensions on parent view enter ([438b1f3](https://github.com/zyra/ionic2-super-tabs/commit/438b1f3))
+
+
+
 <a name="2.5.0"></a>
 # [2.5.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.4.2...v2.5.0) (2017-05-01)
 
