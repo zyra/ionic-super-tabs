@@ -1,3 +1,13 @@
+<a name="2.5.2"></a>
+## [2.5.2](https://github.com/zyra/ionic2-super-tabs/compare/v2.5.1...v2.5.2) (2017-05-02)
+
+
+### Bug Fixes
+
+* **toolbar:** align buttons propertly when enlarging window ([3e4eda1](https://github.com/zyra/ionic2-super-tabs/commit/3e4eda1)), closes [#40](https://github.com/zyra/ionic2-super-tabs/issues/40)
+
+
+
 <a name="2.5.1"></a>
 ## [2.5.1](https://github.com/zyra/ionic2-super-tabs/compare/v2.5.0...v2.5.1) (2017-05-02)
 
