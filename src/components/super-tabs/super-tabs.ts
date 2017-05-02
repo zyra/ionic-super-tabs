@@ -198,13 +198,19 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
       this._app._setRootNav(this);
     }
 
+    let obsToMerge: Observable<any>[] = [
+      Observable.fromEvent(window, 'orientationchange'),
+      Observable.fromEvent(window, 'resize')
+    ];
+
     if (viewCtrl) {
       viewCtrl._setContent(this);
       viewCtrl._setContentRef(el);
+      obsToMerge.push(viewCtrl.didEnter);
     }
 
     // re-adjust the height of the slider when the orientation changes
-    this.watches.push(Observable.merge(Observable.fromEvent(window, 'orientationchange'), Observable.fromEvent(window, 'resize'))
+    this.watches.push(Observable.merge.apply(this, obsToMerge)
       .debounceTime(10)
       .subscribe(() => {
 
