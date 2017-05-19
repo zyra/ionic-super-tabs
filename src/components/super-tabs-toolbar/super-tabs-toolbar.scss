@@ -87,18 +87,9 @@ super-tabs-toolbar {
           }
 
           .badge {
-            min-width: 20px;
-            height: 20px;
-            display: block;
-            line-height: 14px;
-            padding: 3px;
-            border-radius: 500rem;
             position: absolute;
             top: 0;
             right: 4px;
-            &:empty {
-              display: none;
-            }
           }
 
         }
