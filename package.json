@@ -12,7 +12,7 @@
     "postchangelog": "git commit -am \"chore(): update changelog\"",
     "shipit": "npm run changelog && npm run build && git push && npm publish"
   },
-  "author": "Ibby Hadeed <i.hadeed@zyra.ca>",
+  "author": "Ibby Hadeed <ibby@zyra.ca>",
   "license": "MIT",
   "repository": "https://github.com/zyra/ionic2-super-tabs",
   "devDependencies": {
