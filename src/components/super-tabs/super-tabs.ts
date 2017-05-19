@@ -51,7 +51,7 @@ export interface SuperTabsConfig {
 @Component({
   selector: 'super-tabs',
   template: `
-    <super-tabs-toolbar [tabsPlacement]="tabsPlacement" [hidden]="!isToolbarVisible" [config]="config"
+    <super-tabs-toolbar [tabsPlacement]="tabsPlacement" [hidden]="!_isToolbarVisible" [config]="config"
                         [color]="toolbarBackground"
                         [tabsColor]="toolbarColor" [indicatorColor]="indicatorColor" [badgeColor]="badgeColor"
                         [scrollTabs]="scrollTabs"
@@ -63,7 +63,12 @@ export interface SuperTabsConfig {
     </super-tabs-container>
   `,
   encapsulation: ViewEncapsulation.None,
-  providers: [{provide: RootNode, useExisting: forwardRef(() => SuperTabs) }]
+  providers: [
+    {
+      provide: RootNode,
+      useExisting: forwardRef(() => SuperTabs)
+    }
+  ]
 })
 export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDestroy, RootNode {
 
@@ -129,6 +134,10 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     return this._selectedTabIndex;
   }
 
+  /**
+   * Set to true to enable tab buttons scrolling
+   * @param val
+   */
   @Input()
   set scrollTabs(val: boolean) {
     this._scrollTabs = typeof val !== 'boolean' || val === true;
@@ -138,16 +147,25 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     return this._scrollTabs;
   }
 
+  /**
+   * Tab buttons placement. Can be `top` or `bottom`.
+   * @type {string}
+   */
   @Input()
   tabsPlacement: string = 'top';
 
+  /**
+   * Emits the tab index when the selected tab changes
+   * @type {EventEmitter<any>}
+   */
   @Output()
   tabSelect: EventEmitter<any> = new EventEmitter<any>();
 
   /**
+   * Indicates whether the toolbar is visible
    * @private
    */
-  isToolbarVisible: boolean = true;
+  _isToolbarVisible: boolean = true;
 
   /**
    * @private
@@ -162,18 +180,52 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
   private maxIndicatorPosition: number;
 
+  /**
+   * Indicates whether the tab buttons should scroll
+   * @type {boolean}
+   * @private
+   */
   private _scrollTabs: boolean = false;
 
+  /**
+   * Selected tab index
+   * @type {number}
+   * @private
+   */
   private _selectedTabIndex: number = 0;
 
+  /**
+   * Any observable subscriptions that we should unsubscribe from when destroying this component
+   * @type {Array<Subscription>}
+   * @private
+   */
   private watches: Subscription[] = [];
 
+  /**
+   * Indicates whether any of the tabs has an icon
+   * @type {boolean}
+   * @private
+   */
   private hasIcons: boolean = false;
 
+  /**
+   * Indicates whether any of the tabs has a title
+   * @type {boolean}
+   * @private
+   */
   private hasTitles: boolean = false;
 
+  /**
+   * Indicates whether the component has finished initializing
+   * @type {boolean}
+   * @private
+   */
   private init: boolean = false;
 
+  /**
+   * Parent NavController
+   * @type {NavControllerBase}
+   */
   parent: NavControllerBase;
 
   constructor(
@@ -271,7 +323,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
     this.linker.navChange('switch');
 
-    if (!this.hasTitles && !this.hasIcons) this.isToolbarVisible = false;
+    if (!this.hasTitles && !this.hasIcons) this._isToolbarVisible = false;
 
     this.tabsContainer.slideTo(this.selectedTabIndex, false);
     this.refreshTabStates();
@@ -326,7 +378,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   }
 
   showToolbar(show: boolean) {
-    this.isToolbarVisible = show;
+    this._isToolbarVisible = show;
     this.refreshContainerHeight();
   }
 
@@ -369,7 +421,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
    */
   onDrag() {
 
-    if (!this.isToolbarVisible) return;
+    if (!this._isToolbarVisible) return;
 
     this.domCtrl.write(() => {
 
@@ -485,7 +537,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   private refreshContainerHeight() {
     let heightOffset: number = 0;
 
-    if (this.isToolbarVisible) {
+    if (this._isToolbarVisible) {
       heightOffset -= 4;
       this.hasTitles && (heightOffset += 40);
       this.hasIcons && (heightOffset += 40);
@@ -556,12 +608,12 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
    * Gets the width of a tab button when `scrollTabs` is set to `true`
    */
   private getSegmentButtonWidth(index: number = this.selectedTabIndex): number {
-    if (!this.isToolbarVisible) return;
+    if (!this._isToolbarVisible) return;
     return this.toolbar.segmentButtonWidths[index];
   }
 
   private setFixedIndicatorWidth() {
-    if (this.scrollTabs || !this.isToolbarVisible) return;
+    if (this.scrollTabs || !this._isToolbarVisible) return;
     // the width of the "slide", should be equal to the width of a single `ion-segment-button`
     // we'll just calculate it instead of querying for a segment button
     this.toolbar.setIndicatorWidth(this.el.nativeElement.offsetWidth / this._tabs.length, false);
@@ -571,7 +623,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
    * Aligns slide position with selected tab
    */
   private alignIndicatorPosition(animate: boolean = false) {
-    if (!this.isToolbarVisible) return;
+    if (!this._isToolbarVisible) return;
 
     if (this.scrollTabs) {
       this.toolbar.alignIndicator(this.getRelativeIndicatorPosition(), this.getSegmentButtonWidth(), animate);
