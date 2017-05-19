@@ -2,9 +2,10 @@ import {
   Component, Input, Output, EventEmitter, ElementRef, ViewChildren, QueryList,
   ViewEncapsulation, ViewChild, Renderer2, AfterViewInit, OnDestroy
 } from '@angular/core';
-import {SegmentButton, Platform, Segment, DomController} from 'ionic-angular';
+import { Platform, DomController } from 'ionic-angular';
 import { SuperTabsPanGesture } from '../../super-tabs-pan-gesture';
 import { SuperTabsConfig } from '../super-tabs/super-tabs';
+import { SuperTabButton } from "../super-tab-button/super-tab-button";
 
 @Component({
   selector: 'super-tabs-toolbar',
@@ -12,8 +13,8 @@ import { SuperTabsConfig } from '../super-tabs/super-tabs';
     <ion-toolbar [color]="color" mode="md" [class.scroll-tabs]="scrollTabs">
       <div class="tab-buttons-container" #tabButtonsContainer>
         <div *ngIf="tabsPlacement === 'bottom'" class="indicator {{ 'button-md-' + indicatorColor }}" #indicator></div>
-        <div class="tab-buttons">
-          <super-tab-button *ngFor="let tab of tabs; let i = index" (select)="selectedTab !== i && onTabSelect(i)" [title]="tab.title" [icon]="tab.icon" [badge]="tab.badge" [selected]="selectedTab === i"></super-tab-button>
+        <div class="tab-buttons" #tabButtons>
+          <super-tab-button *ngFor="let tab of tabs; let i = index" (select)="selectedTab !== i && onTabSelect(i)" [title]="tab.title" [icon]="tab.icon" [badge]="tab.badge" [selected]="selectedTab === i" [color]="tabsColor" [badgeColor]="badgeColor"></super-tab-button>
         </div>
         <!--<ion-segment [color]="tabsColor" [(ngModel)]="selectedTab" mode="md">-->
           <!--<ion-segment-button *ngFor="let tab of tabs; let i = index" [value]="i" (ionSelect)="selectedTab !== i && onTabSelect(i)">-->
@@ -61,8 +62,8 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
   @Output()
   tabSelect: EventEmitter<any> = new EventEmitter<any>();
 
-  @ViewChildren(SegmentButton)
-  private segmentButtons: QueryList<SegmentButton>;
+  @ViewChildren(SuperTabButton)
+  private tabButtons: QueryList<SuperTabButton>;
 
   @ViewChild('tabButtonsContainer')
   private tabButtonsContainer: ElementRef;
@@ -70,8 +71,8 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
   @ViewChild('indicator')
   private indicator: ElementRef;
 
-  @ViewChild(Segment)
-  private segment: Segment;
+  @ViewChild('tabButtons')
+  private tabButtonsBar: ElementRef;
 
   /**
    * @private
@@ -156,7 +157,7 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
   setSegmentPosition(position: number, animate?: boolean) {
     this.segmentPosition = position;
     this.toggleAnimation('segment', animate);
-    this.rnd.setStyle(this.segment.getNativeElement(), this.plt.Css.transform, `translate3d(${-1 * position}px,0,0)`);
+    this.rnd.setStyle(this.tabButtonsBar.nativeElement, this.plt.Css.transform, `translate3d(${-1 * position}px,0,0)`);
     this.setIndicatorPosition(this.indicatorPosition, animate);
   }
 
@@ -176,7 +177,7 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
 
     this.animationState[el] = animate;
 
-    const _el: HTMLElement = el === 'indicator'? this.indicator.nativeElement : this.segment.getNativeElement();
+    const _el: HTMLElement = el === 'indicator'? this.indicator.nativeElement : this.tabButtonsBar.nativeElement;
     const value: string = animate? `all ${this.config.transitionDuration}ms ${this.config.transitionEase}` : 'initial';
 
     this.rnd.setStyle(_el, this.plt.Css.transition, value);
@@ -189,9 +190,9 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
   private indexSegmentButtonWidths() {
     let index = [], total = 0;
 
-    this.segmentButtons.forEach((btn: SegmentButton, i: number) => {
+    this.tabButtons.forEach((btn: SuperTabButton, i: number) => {
       console.log(btn);
-      index[i] = <ElementRef>(<any>btn)._elementRef.nativeElement.offsetWidth;
+      index[i] = btn.getNativeElement().offsetWidth;
       total += index[i] + 10;
     });
 
