@@ -501,8 +501,10 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
       const currentTab: SuperTab = this.getActiveTab();
       let activeView: ViewController = currentTab.getActive();
 
-      activeView._willLeave(false);
-      activeView._didLeave();
+      if (activeView) {
+        activeView._willLeave(false);
+        activeView._didLeave();
+      }
 
       this.selectedTabIndex = index;
 
