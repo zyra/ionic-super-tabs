@@ -93,7 +93,6 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
     private el: ElementRef,
     private rnd: Renderer2,
     private plt: Platform,
-    private domCtrl: DomController,
     private ngZone: NgZone
   ) {}
 
