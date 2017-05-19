@@ -552,9 +552,11 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     let heightOffset: number = 0;
 
     if (this._isToolbarVisible) {
-      heightOffset -= 4;
-      this.hasTitles && (heightOffset += 40);
-      this.hasIcons && (heightOffset += 40);
+      if (this.hasTitles && this.hasIcons) {
+        heightOffset = 72;
+      } else if (this.hasTitles || this.hasIcons) {
+        heightOffset = 48;
+      }
     }
 
     this.rnd.setStyle(this.tabsContainer.getNativeElement(), 'height', `calc(100% - ${heightOffset}px)`);
