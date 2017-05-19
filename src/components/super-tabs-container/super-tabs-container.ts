@@ -2,7 +2,7 @@ import {
   Component, Renderer2, ElementRef, Input, Output, EventEmitter, ViewChild, ViewEncapsulation,
   AfterViewInit, OnDestroy, NgZone
 } from '@angular/core';
-import {DomController, Platform} from 'ionic-angular';
+import { Platform } from 'ionic-angular';
 import { SuperTabsPanGesture } from '../../super-tabs-pan-gesture';
 import { SuperTabsConfig } from '../super-tabs/super-tabs';
 
