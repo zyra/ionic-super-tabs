@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SuperTabs } from '../components/super-tabs/super-tabs';
+import { SuperTabs } from '../components/super-tabs';
 
 @Injectable()
 export class SuperTabsController {

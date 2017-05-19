@@ -1,6 +1,6 @@
 import { Platform } from 'ionic-angular';
 import { pointerCoord, PointerCoordinates } from 'ionic-angular/util/dom';
-import { SuperTabsConfig } from './components/super-tabs/super-tabs';
+import { SuperTabsConfig } from './components/super-tabs';
 import { Renderer2 } from '@angular/core';
 
 export class SuperTabsPanGesture {

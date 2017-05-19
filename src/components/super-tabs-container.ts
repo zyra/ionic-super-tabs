@@ -3,8 +3,8 @@ import {
   AfterViewInit, OnDestroy, NgZone
 } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { SuperTabsPanGesture } from '../../super-tabs-pan-gesture';
-import { SuperTabsConfig } from '../super-tabs/super-tabs';
+import { SuperTabsPanGesture } from '../super-tabs-pan-gesture';
+import { SuperTabsConfig } from './super-tabs';
 
 @Component({
   selector: 'super-tabs-container',

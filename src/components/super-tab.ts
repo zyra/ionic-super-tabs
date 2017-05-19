@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { NavControllerBase, App, Config, Platform, Keyboard, GestureController, DeepLinker, DomController } from 'ionic-angular';
 import { TransitionController } from 'ionic-angular/transitions/transition-controller';
-import { SuperTabs } from '../super-tabs/super-tabs';
+import { SuperTabs } from './super-tabs';
 
 @Component({
   selector: 'super-tab',

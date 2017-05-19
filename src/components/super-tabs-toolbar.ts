@@ -3,9 +3,9 @@ import {
   ViewEncapsulation, ViewChild, Renderer2, AfterViewInit, OnDestroy
 } from '@angular/core';
 import { Platform, DomController } from 'ionic-angular';
-import { SuperTabsPanGesture } from '../../super-tabs-pan-gesture';
-import { SuperTabsConfig } from '../super-tabs/super-tabs';
-import { SuperTabButton } from "../super-tab-button/super-tab-button";
+import { SuperTabsPanGesture } from '../super-tabs-pan-gesture';
+import { SuperTabsConfig } from './super-tabs';
+import { SuperTabButton } from "./super-tab-button";
 
 @Component({
   selector: 'super-tabs-toolbar',

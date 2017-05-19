@@ -2,16 +2,16 @@ import {
   AfterViewInit, Component, ElementRef, Input, OnInit, OnDestroy, Renderer2,
   ViewChild, AfterContentInit, Output, EventEmitter, ViewEncapsulation, forwardRef, Optional
 } from '@angular/core';
-import { SuperTab } from '../super-tab/super-tab';
+import { SuperTab } from './super-tab';
 import {
   NavController, RootNode, NavControllerBase, ViewController, App, DeepLinker,
   DomController
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { SuperTabsToolbar } from '../super-tabs-toolbar/super-tabs-toolbar';
-import { SuperTabsContainer } from '../super-tabs-container/super-tabs-container';
-import { SuperTabsController } from '../../providers/super-tabs-controller';
+import { SuperTabsToolbar } from './super-tabs-toolbar';
+import { SuperTabsContainer } from './super-tabs-container';
+import { SuperTabsController } from '../providers/super-tabs-controller';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/debounceTime';

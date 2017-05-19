@@ -1,0 +1,305 @@
+//
+// SuperTabs styles
+//
+
+super-tabs {
+
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1;
+
+  > div.container {
+
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    z-index: 1;
+
+
+    > div.inner-container {
+
+      position: relative;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: flex;
+      box-sizing: content-box;
+
+    }
+
+
+  }
+
+  &:not([no-shadow]) {
+
+    &.tabs-placement-bottom {
+      > super-tabs-toolbar > ion-toolbar.toolbar::before {
+        top: -2px;
+        bottom: auto;
+        height: 2px;
+        background-position: 0 0;
+        content: '';
+      }
+    }
+
+    > super-tabs-toolbar > ion-toolbar.toolbar {
+      &::after, &::before {
+        position: absolute;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAHBAMAAADzDtBxAAAAD1BMVEUAAAAAAAAAAAAAAAAAAABPDueNAAAABXRSTlMUCS0gBIh/TXEAAAAaSURBVAjXYxCEAgY4UIICBmMogMsgFLtAAQCNSwXZKOdPxgAAAABJRU5ErkJggg==);
+        background-repeat: repeat-x;
+        width: 100%;
+        left: 0;
+      }
+      &::after {
+        content: '';
+        height: 5px;
+        background-position: 0 -2px;
+        bottom: -5px;
+      }
+      contain: inherit;
+      display: block;
+      overflow: visible;
+    }
+
+  }
+
+}
+
+super-tabs.tabs-placement-bottom {
+
+  flex-direction: column-reverse;
+
+  > super-tabs-toolbar > ion-toolbar.toolbar {
+
+    padding: 0;
+
+    .tab-buttons-container {
+      .indicator {
+        top: 0;
+        bottom: auto;
+      }
+
+      ion-segment.segment.segment-md {
+        padding-top: 4px;
+      }
+    }
+
+    &.scroll-tabs .tab-buttons-container .indicator {
+      margin-top: 0;
+      margin-bottom: -2px;
+    }
+
+  }
+
+}
+
+ion-tabs super-tabs ion-content {
+  .scroll-content, .fixed-content {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+
+
+
+
+//
+// SuperTab styles
+//
+
+super-tab {
+
+  height: 100%;
+
+  box-sizing: border-box;
+  display: block;
+
+  overflow: hidden;
+  z-index: 1;
+
+  flex-shrink: 0;
+  position: relative;
+
+}
+
+
+
+
+
+//
+// SuperTabsContainer styles
+//
+
+super-tabs-container {
+
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  z-index: 1;
+
+  > div {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    box-sizing: content-box;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+  }
+
+}
+
+
+
+
+
+//
+// SuperTabsToolbar styles
+//
+
+super-tabs-toolbar {
+
+  z-index: 2;
+  width: 100%;
+  display: block;
+
+  > ion-toolbar.toolbar {
+
+    padding: 0;
+    min-height: 0;
+
+    .tab-buttons-container {
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-drag: none;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+      overflow: hidden;
+
+      .tab-buttons {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+
+        super-tab-button {
+
+          &:not(.selected) {
+            ion-icon, span:not(.badge) {
+              opacity: 0.7;
+            }
+          }
+
+          text-align: center;
+
+          flex: 1;
+          width: 0;
+          height: 48px;
+          font-weight: 500;
+          font-size: 14px;
+          text-transform: uppercase;
+
+          margin-left: 0;
+          margin-right: 0;
+
+          position: relative;
+          display: block;
+          overflow: hidden;
+
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          cursor: pointer;
+
+          align-items: flex-end;
+          align-content: flex-end;
+
+          padding: 0 12px;
+
+          &.title-only {
+            .title {
+              line-height: 48px;
+            }
+          }
+
+          &.icon-only {
+            ion-icon {
+              line-height: 48px;
+            }
+          }
+
+          &.title-and-icon {
+            height: 72px;
+            padding-top: 8px;
+            ion-icon {
+              margin-bottom: 10px;
+            }
+          }
+
+          ion-icon {
+            font-size: 24px;
+          }
+
+          .title {
+            vertical-align: middle;
+            display: block;
+          }
+
+          .badge {
+            position: absolute;
+            top: 0;
+            right: 4px;
+          }
+
+        }
+
+      }
+
+      .indicator {
+        bottom: 0;
+        position: absolute;
+        z-index: 2;
+        height: 2px;
+        width: 100px;
+        transform: scaleX(0);
+        transform-origin: 0;
+      }
+
+    }
+
+    &.scroll-tabs {
+      .tab-buttons-container {
+        //padding-left: 60px;
+
+        .tab-buttons {
+          position: relative;
+          justify-content: flex-start;
+          super-tab-button {
+            min-width: 50px;
+            max-width: 100%;
+            width: auto;
+            display: inline-table;
+            overflow: visible;
+
+          }
+        }
+
+        .indicator {
+          position: relative;
+          margin-top: -2px;
+        }
+
+      }
+    }
+
+  }
+
+}

@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rm -rf aot dist && ngc",
     "postbuild": "npm run copy:scss",
-    "copy:scss": "cp src/components/super-tabs/super-tabs.scss dist/components/super-tabs/ && cp src/components/super-tabs-toolbar/super-tabs-toolbar.scss dist/components/super-tabs-toolbar/ && cp src/components/super-tab/super-tab.scss dist/components/super-tab/ && cp src/components/super-tabs-container/super-tabs-container.scss dist/components/super-tabs-container/",
+    "copy:scss": "cp src/components/super-tabs.scss dist/components/",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "postchangelog": "git commit -am \"chore(): update changelog\"",
     "shipit": "npm run changelog && npm run build && git push && npm publish"
