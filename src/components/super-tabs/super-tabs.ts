@@ -540,10 +540,10 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     let position: number = 0;
     for (let i: number = 0; i < this.toolbar.segmentButtonWidths.length; i++) {
       if (index > Number(i)) {
-        position += this.toolbar.segmentButtonWidths[i] + 5;
+        position += this.toolbar.segmentButtonWidths[i];
       }
     }
-    position += 5 * (index + 1);
+    // position += 12 * (index + 1);
     return position;
   }
 

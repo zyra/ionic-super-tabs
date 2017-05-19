@@ -55,6 +55,8 @@ super-tabs-toolbar {
           align-items: flex-end;
           align-content: flex-end;
 
+          padding: 0 12px;
+
           &.title-only {
             .title {
               line-height: 48px;
@@ -117,6 +119,7 @@ super-tabs-toolbar {
 
     &.scroll-tabs {
       .tab-buttons-container {
+        //padding-left: 60px;
 
         .tab-buttons {
           position: relative;
@@ -127,7 +130,7 @@ super-tabs-toolbar {
             width: auto;
             display: inline-table;
             overflow: visible;
-            margin: 0 5px;
+
           }
         }
 
