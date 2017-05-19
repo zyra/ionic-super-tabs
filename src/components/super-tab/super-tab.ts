@@ -13,6 +13,9 @@ import { SuperTabs } from '../super-tabs/super-tabs';
 })
 export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit, OnDestroy {
 
+  /**
+   * Title of the tab
+   */
   @Input()
   title: string;
 
@@ -24,6 +27,9 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
     return this.parent.getTabIndexById(this.tabId);
   }
 
+  /**
+   * Name of the ionicon to use
+   */
   @Input()
   icon: string;
 
@@ -44,10 +50,18 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
     return this.tabId;
   }
 
+  /**
+   * Badge value
+   * @type {Number}
+   */
   @Input()
   badge: number;
 
 
+  /**
+   * Enable/disable swipe to go back for iOS
+   * @return {boolean}
+   */
   @Input()
   get swipeBackEnabled(): boolean {
     return this._sbEnabled;
@@ -65,8 +79,20 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
     this.setViewport(val);
   }
 
+  /**
+   * Indicates whether the tab has been loaded
+   * @type {boolean}
+   */
   private loaded: boolean = false;
+
+  /**
+   * A promise that resolves when the component has initialized
+   */
   private init: Promise<any>;
+
+  /**
+   * Function to call to resolve the init promise
+   */
   private initResolve: Function;
 
   constructor(
@@ -125,14 +151,14 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
   }
 
   clearBadge() {
-    this.badge = 0;
+    delete this.badge;
   }
 
-  increaseBadge(increaseBy: number) {
+  increaseBadge(increaseBy: number = 1) {
     this.badge += increaseBy;
   }
 
-  decreaseBadge(decreaseBy: number) {
+  decreaseBadge(decreaseBy: number = 1) {
     this.badge = Math.max(0, this.badge - decreaseBy);
   }
 

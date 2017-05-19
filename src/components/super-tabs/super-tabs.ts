@@ -353,14 +353,28 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
   }
 
+  /**
+   * Sets the badge number for a specific tab
+   * @param tabId {string} tab ID
+   * @param value {number} badge number
+   */
   setBadge(tabId: string, value: number) {
     this.getTabById(tabId).setBadge(value);
   }
 
+  /**
+   * Clears the badge for a specific tab
+   * @param tabId {string} tab ID
+   */
   clearBadge(tabId: string) {
     this.getTabById(tabId).clearBadge();
   }
 
+  /**
+   * Increases the badge value for a specific tab
+   * @param tabId {string} tab ID
+   * @param increaseBy {number} the number to increase by
+   */
   increaseBadge(tabId: string, increaseBy: number) {
     this.getTabById(tabId).increaseBadge(increaseBy);
   }

@@ -13,30 +13,67 @@ import { SuperTabsConfig } from '../super-tabs/super-tabs';
 })
 export class SuperTabsContainer implements AfterViewInit, OnDestroy {
 
+  /**
+   * Component configuration
+   * @type {SuperTabsConfig}
+   */
   @Input()
   config: SuperTabsConfig;
 
+  /**
+   * Number of tabs
+   * @type {number}
+   */
   @Input()
   tabsCount: number = 0;
 
+  /**
+   * Selected tab index
+   * @type {number}
+   */
   @Input()
   selectedTabIndex: number;
 
+  /**
+   * Notifies when a tab is selected
+   * @type {EventEmitter<Object>}
+   */
   @Output()
   tabSelect: EventEmitter<{ index: number; changed: boolean; }> = new EventEmitter<{ index: number; changed: boolean; }>();
 
+  /**
+   * Notifies when the container is being dragged
+   * @type {EventEmitter<TouchEvent>}
+   */
   @Output()
   onDrag: EventEmitter<TouchEvent> = new EventEmitter<TouchEvent>();
 
   // View bindings
+
+  /**
+   * Container position
+   * @type {number}
+   */
   containerPosition: number = 0;
 
   // View children
+
+  /**
+   * The container wrapping all the tabs
+   */
   @ViewChild('container')
   container: ElementRef;
 
+  /**
+   * Single tab width
+   * @type {number}
+   */
   tabWidth: number = 0;
 
+  /**
+   * Container width (sum of tab widths)
+   * @type {number}
+   */
   containerWidth: number = 0;
 
 
