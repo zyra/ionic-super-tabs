@@ -50,6 +50,10 @@ export class SuperTabButton {
     private _el: ElementRef
   ) {}
 
+  ngOnInit() {
+    console.log(this.title, this.icon);
+  }
+
   getNativeElement(): HTMLElement {
     return this._el.nativeElement;
   }
