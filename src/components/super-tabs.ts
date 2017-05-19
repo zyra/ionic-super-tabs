@@ -156,7 +156,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
   /**
    * Emits the tab index when the selected tab changes
-   * @type {EventEmitter<any>}
+   * @type {EventEmitter<Object>}
    */
   @Output()
   tabSelect: EventEmitter<any> = new EventEmitter<any>();
