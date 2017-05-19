@@ -1,0 +1,10 @@
+super-tab-button {
+
+  line-height: 48px;
+  vertical-align: middle;
+
+  ion-icon, span:not(.badge) {
+    display: block;
+  }
+
+}
