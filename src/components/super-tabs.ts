@@ -268,10 +268,10 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
         this.updateTabWidth();
         this.setFixedIndicatorWidth();
+        this.refreshTabWidths();
         this.tabsContainer.refreshDimensions();
         this.tabsContainer.slideTo(this.selectedTabIndex);
         this.alignIndicatorPosition();
-        this.refreshTabWidths();
         this.refreshContainerHeight();
 
       }));
