@@ -1,3 +1,14 @@
+<a name="2.6.0"></a>
+# [2.6.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.5.2...v2.6.0) (2017-05-19)
+
+
+### Bug Fixes
+
+* fix height calculation to match new tab button dimensions ([015c237](https://github.com/zyra/ionic2-super-tabs/commit/015c237))
+* fix issues caused when resizing view ([3cb2ebc](https://github.com/zyra/ionic2-super-tabs/commit/3cb2ebc)), closes [#53](https://github.com/zyra/ionic2-super-tabs/issues/53)
+
+
+
 <a name="2.5.2"></a>
 ## [2.5.2](https://github.com/zyra/ionic2-super-tabs/compare/v2.5.1...v2.5.2) (2017-05-02)
 
