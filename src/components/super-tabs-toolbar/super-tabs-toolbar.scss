@@ -36,6 +36,9 @@ super-tabs-toolbar {
             position: absolute;
             top: 0;
             right: 4px;
+            &:empty {
+              display: none;
+            }
           }
 
         }

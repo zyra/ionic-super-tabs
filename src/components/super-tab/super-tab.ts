@@ -45,7 +45,7 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
   }
 
   @Input()
-  badge: number = 0;
+  badge: number;
 
 
   @Input()

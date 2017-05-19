@@ -5,13 +5,15 @@ import { SuperTabs } from './components/super-tabs/super-tabs';
 import { SuperTabsController } from './providers/super-tabs-controller';
 import { SuperTabsToolbar } from './components/super-tabs-toolbar/super-tabs-toolbar';
 import { SuperTabsContainer } from './components/super-tabs-container/super-tabs-container';
+import { SuperTabButton } from './components/super-tab-button/super-tab-button';
 
 @NgModule({
   declarations: [
     SuperTab,
     SuperTabs,
     SuperTabsToolbar,
-    SuperTabsContainer
+    SuperTabsContainer,
+    SuperTabButton
   ],
   imports: [
     IonicModule
