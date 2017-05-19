@@ -659,14 +659,19 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     return this._tabs[this.selectedTabIndex];
   }
 
+  // needed since we're implementing RootNode
   getElementRef() { return this.el; }
 
+  // needed since we're implementing RootNode
   initPane() { return true; }
 
+  // needed since we're implementing RootNode
   paneChanged() {}
 
+  // needed to make Ionic Framework think this is a tabs component... needed for Deeplinking
   getSelected() {}
 
+  // needed to make Ionic Framework think this is a tabs component... needed for Deeplinking
   setTabbarPosition() {}
 
 }
