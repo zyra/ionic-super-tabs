@@ -1,3 +1,13 @@
+<a name="2.6.1"></a>
+## [2.6.1](https://github.com/zyra/ionic2-super-tabs/compare/v2.6.0...v2.6.1) (2017-05-19)
+
+
+### Bug Fixes
+
+* **super-tabs:** check if view exists before firing events ([9e7c3a7](https://github.com/zyra/ionic2-super-tabs/commit/9e7c3a7))
+
+
+
 <a name="2.6.0"></a>
 # [2.6.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.5.2...v2.6.0) (2017-05-19)
 
