@@ -266,6 +266,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
       .debounceTime(10)
       .subscribe(() => {
 
+        this.setMaxIndicatorPosition();
         this.updateTabWidth();
         this.setFixedIndicatorWidth();
         this.refreshTabWidths();
@@ -331,7 +332,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this.setFixedIndicatorWidth();
 
     // we need this to make sure the "slide" thingy doesn't move outside the screen
-    this.maxIndicatorPosition = this.el.nativeElement.offsetWidth - (this.el.nativeElement.offsetWidth / this._tabs.length);
+    this.setMaxIndicatorPosition();
 
     setTimeout(() => this.alignIndicatorPosition(), 100);
 
@@ -627,6 +628,12 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   private getSegmentButtonWidth(index: number = this.selectedTabIndex): number {
     if (!this._isToolbarVisible) return;
     return this.toolbar.segmentButtonWidths[index];
+  }
+
+  private setMaxIndicatorPosition() {
+    if (this.el && this.el.nativeElement) {
+      this.maxIndicatorPosition = this.el.nativeElement.offsetWidth - (this.el.nativeElement.offsetWidth / this._tabs.length);
+    }
   }
 
   private setFixedIndicatorWidth() {
