@@ -37,12 +37,6 @@ To see this in action, checkout the [example project here](https://github.com/zy
 </super-tabs>
 ```
 
-
-<br><br><br>
-
-# How it works
-This module combines `ion-segment`, `ion-slides` and some magic to give you swipeable tabs. Each tab has it's own `ion-nav`, which means they each have their own state, controller ...etc.
-
 <br><br><br>
 
 # Installation
