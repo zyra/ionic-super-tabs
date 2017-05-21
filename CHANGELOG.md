@@ -1,3 +1,13 @@
+<a name="2.6.2"></a>
+## [2.6.2](https://github.com/zyra/ionic2-super-tabs/compare/v2.6.1...v2.6.2) (2017-05-21)
+
+
+### Bug Fixes
+
+* set max indicator position on orientation change and resize events ([cf0eb01](https://github.com/zyra/ionic2-super-tabs/commit/cf0eb01))
+
+
+
 <a name="2.6.1"></a>
 ## [2.6.1](https://github.com/zyra/ionic2-super-tabs/compare/v2.6.0...v2.6.1) (2017-05-19)
 
