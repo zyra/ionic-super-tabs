@@ -10,7 +10,7 @@
     "copy:scss": "cp src/components/super-tabs.scss dist/components/",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "postchangelog": "git commit -am \"chore(): update changelog\"",
-    "shipit": "npm run changelog && npm run build && git push && npm publish"
+    "shipit": "npm run build && npm publish"
   },
   "author": "Ibby Hadeed <ibby@zyra.ca>",
   "license": "MIT",
