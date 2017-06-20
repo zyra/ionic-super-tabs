@@ -184,7 +184,6 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
     let index = [], total = 0;
 
     this.tabButtons.forEach((btn: SuperTabButton, i: number) => {
-      console.log(btn);
       index[i] = btn.getNativeElement().offsetWidth;
       total += index[i];
     });
