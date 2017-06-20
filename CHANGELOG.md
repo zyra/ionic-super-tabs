@@ -1,41 +1,24 @@
+<a name="2.6.3"></a>
+## [2.6.3](https://github.com/zyra/ionic2-super-tabs/compare/v2.6.2...v2.6.3) (2017-06-20)
+
+
+### Bug Fixes
+
+* remove keyboard from super call (#84) ([a00cb75](https://github.com/zyra/ionic2-super-tabs/commit/a00cb75))
+
+
+
 <a name="2.6.2"></a>
 ## [2.6.2](https://github.com/zyra/ionic2-super-tabs/compare/v2.6.1...v2.6.2) (2017-05-21)
 
 
 ### Bug Fixes
 
-* set max indicator position on orientation change and resize events ([cf0eb01](https://github.com/zyra/ionic2-super-tabs/commit/cf0eb01))
-
-
-
-<a name="2.6.1"></a>
-## [2.6.1](https://github.com/zyra/ionic2-super-tabs/compare/v2.6.0...v2.6.1) (2017-05-19)
-
-
-### Bug Fixes
-
-* **super-tabs:** check if view exists before firing events ([9e7c3a7](https://github.com/zyra/ionic2-super-tabs/commit/9e7c3a7))
-
-
-
-<a name="2.6.0"></a>
-# [2.6.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.5.2...v2.6.0) (2017-05-19)
-
-
-### Bug Fixes
-
 * fix height calculation to match new tab button dimensions ([015c237](https://github.com/zyra/ionic2-super-tabs/commit/015c237))
 * fix issues caused when resizing view ([3cb2ebc](https://github.com/zyra/ionic2-super-tabs/commit/3cb2ebc)), closes [#53](https://github.com/zyra/ionic2-super-tabs/issues/53)
-
-
-
-<a name="2.5.2"></a>
-## [2.5.2](https://github.com/zyra/ionic2-super-tabs/compare/v2.5.1...v2.5.2) (2017-05-02)
-
-
-### Bug Fixes
-
+* **super-tabs:** check if view exists before firing events ([9e7c3a7](https://github.com/zyra/ionic2-super-tabs/commit/9e7c3a7))
 * **toolbar:** align buttons propertly when enlarging window ([3e4eda1](https://github.com/zyra/ionic2-super-tabs/commit/3e4eda1)), closes [#40](https://github.com/zyra/ionic2-super-tabs/issues/40)
+* set max indicator position on orientation change and resize events ([cf0eb01](https://github.com/zyra/ionic2-super-tabs/commit/cf0eb01))
 
 
 
@@ -50,22 +33,17 @@
 
 
 <a name="2.5.0"></a>
-# [2.5.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.4.2...v2.5.0) (2017-05-01)
-
-
-### Features
-
-* **super-tabs:** fire view events ([78b7bc7](https://github.com/zyra/ionic2-super-tabs/commit/78b7bc7))
-
-
-
-<a name="2.4.2"></a>
-## [2.4.2](https://github.com/zyra/ionic2-super-tabs/compare/v2.4.1...v2.4.2) (2017-05-01)
+# [2.5.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.4.1...v2.5.0) (2017-05-01)
 
 
 ### Bug Fixes
 
 * **super-tabs:** don't fire view events to fix change detection ([444f324](https://github.com/zyra/ionic2-super-tabs/commit/444f324)), closes [#30](https://github.com/zyra/ionic2-super-tabs/issues/30)
+
+
+### Features
+
+* **super-tabs:** fire view events ([78b7bc7](https://github.com/zyra/ionic2-super-tabs/commit/78b7bc7))
 
 
 
@@ -85,43 +63,16 @@
 
 ### Bug Fixes
 
+* **super-tab:** detect changes when set to active ([809ad90](https://github.com/zyra/ionic2-super-tabs/commit/809ad90))
+* **super-tab:** fix change detection issues ([c95d480](https://github.com/zyra/ionic2-super-tabs/commit/c95d480)), closes [#36](https://github.com/zyra/ionic2-super-tabs/issues/36)
+* **super-tab:** update to match ionic 3.1 ([af5fcfd](https://github.com/zyra/ionic2-super-tabs/commit/af5fcfd))
+* **toolbar:** do not wrap text ([a1c7cd8](https://github.com/zyra/ionic2-super-tabs/commit/a1c7cd8))
 * **toolbar:** fix issue with scrollTabs option enabled ([667ea8b](https://github.com/zyra/ionic2-super-tabs/commit/667ea8b))
 
 
 ### Features
 
 * lazy load tabs ([b0eecba](https://github.com/zyra/ionic2-super-tabs/commit/b0eecba))
-
-
-
-<a name="2.3.3"></a>
-## [2.3.3](https://github.com/zyra/ionic2-super-tabs/compare/v2.3.2...v2.3.3) (2017-04-30)
-
-
-### Bug Fixes
-
-* **super-tab:** fix change detection issues ([c95d480](https://github.com/zyra/ionic2-super-tabs/commit/c95d480)), closes [#36](https://github.com/zyra/ionic2-super-tabs/issues/36)
-
-
-
-<a name="2.3.2"></a>
-## [2.3.2](https://github.com/zyra/ionic2-super-tabs/compare/v2.3.1...v2.3.2) (2017-04-29)
-
-
-### Bug Fixes
-
-* **super-tab:** detect changes when set to active ([809ad90](https://github.com/zyra/ionic2-super-tabs/commit/809ad90))
-
-
-
-<a name="2.3.1"></a>
-## [2.3.1](https://github.com/zyra/ionic2-super-tabs/compare/v2.3.0...v2.3.1) (2017-04-29)
-
-
-### Bug Fixes
-
-* **super-tab:** update to match ionic 3.1 ([af5fcfd](https://github.com/zyra/ionic2-super-tabs/commit/af5fcfd))
-* **toolbar:** do not wrap text ([a1c7cd8](https://github.com/zyra/ionic2-super-tabs/commit/a1c7cd8))
 
 
 
@@ -157,12 +108,7 @@
 
 
 <a name="2.2.1"></a>
-## [2.2.1](https://github.com/zyra/ionic2-super-tabs/compare/v2.2.0...v2.2.1) (2017-04-19)
-
-
-
-<a name="2.2.0"></a>
-# [2.2.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.1.0...v2.2.0) (2017-04-19)
+## [2.2.1](https://github.com/zyra/ionic2-super-tabs/compare/v2.1.0...v2.2.1) (2017-04-19)
 
 
 ### Bug Fixes
@@ -178,7 +124,7 @@
 
 
 <a name="2.1.0"></a>
-# [2.1.0](https://github.com/zyra/ionic2-super-tabs/compare/v1.1.1...v2.1.0) (2017-04-18)
+# [2.1.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.0.0...v2.1.0) (2017-04-18)
 
 
 ### Features
@@ -187,8 +133,8 @@
 
 
 
-<a name="1.1.1"></a>
-## [1.1.1](https://github.com/zyra/ionic2-super-tabs/compare/v1.1.0...v1.1.1) (2017-03-27)
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v0.1.0...v2.0.0) (2017-04-18)
 
 
 ### Bug Fixes
@@ -196,29 +142,9 @@
 * fix selectedTabIndex input ([0f4db70](https://github.com/zyra/ionic2-super-tabs/commit/0f4db70))
 
 
-
-<a name="1.1.0"></a>
-# [1.1.0](https://github.com/zyra/ionic2-super-tabs/compare/v1.0.0...v1.1.0) (2017-03-26)
-
-
 ### Features
 
 * ability to pass params to tabs ([9262a46](https://github.com/zyra/ionic2-super-tabs/commit/9262a46))
-
-
-
-<a name="1.0.0"></a>
-# [1.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v0.2.0...v1.0.0) (2017-03-26)
-
-
-
-<a name="0.2.0"></a>
-# [0.2.0](https://github.com/zyra/ionic2-super-tabs/compare/v0.1.1...v0.2.0) (2017-03-26)
-
-
-
-<a name="0.1.1"></a>
-## [0.1.1](https://github.com/zyra/ionic2-super-tabs/compare/v0.1.0...v0.1.1) (2017-03-26)
 
 
 
