@@ -7,6 +7,7 @@ import {
   NavController, RootNode, NavControllerBase, ViewController, App, DeepLinker,
   DomController
 } from 'ionic-angular';
+import { NavigationContainer } from 'ionic-angular/navigation/navigation-container';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { SuperTabsToolbar } from './super-tabs-toolbar';
@@ -15,6 +16,7 @@ import { SuperTabsController } from '../providers/super-tabs-controller';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/debounceTime';
+import {DIRECTION_SWITCH} from "ionic-angular/navigation/nav-util";
 
 export interface SuperTabsConfig {
   /**
@@ -70,7 +72,7 @@ export interface SuperTabsConfig {
     }
   ]
 })
-export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDestroy, RootNode {
+export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDestroy, RootNode, NavigationContainer {
 
   /**
    * Color of the toolbar behind the tab buttons
@@ -107,6 +109,17 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
    */
   @Input()
   id: string;
+
+  // TODO organize these new properties/methods
+  // This name input is for ionic-angular 3.6.0, not released/used yet
+  @Input()
+  name: string;
+
+  getType(): string { return; }
+
+  getSecondaryIdentifier(): string { return; }
+
+  // getActiveChildNav(): NavigationContainer { return; }
 
   /**
    * Height of the tabs
@@ -247,7 +260,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
       this.parent = <any>viewCtrl.getNav();
       this.parent.registerChildNav(this);
     } else if (this._app) {
-      this._app._setRootNav(this);
+      this._app.registerRootNav(this);
     }
 
     let obsToMerge: Observable<any>[] = [
@@ -316,13 +329,13 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
   ngAfterViewInit() {
 
-    const tabsSegment = this.linker.initNav(this);
+    const tabsSegment = this.linker.getSegmentByNavId(this.id);
 
-    if (tabsSegment && !tabsSegment.component) {
-      this.selectedTabIndex = this.linker.getSelectedTabIndex(<any>this, tabsSegment.name, this.selectedTabIndex);
+    if (tabsSegment) {
+      this.selectedTabIndex = this.getTabIndexById(tabsSegment.id);
     }
 
-    this.linker.navChange('switch');
+    this.linker.navChange(this.id, DIRECTION_SWITCH);
 
     if (!this.hasTitles && !this.hasIcons) this._isToolbarVisible = false;
 
@@ -509,7 +522,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
       this.selectedTabIndex = index;
 
-      this.linker.navChange('switch');
+      this.linker.navChange(this.id, DIRECTION_SWITCH);
 
       this.refreshTabStates();
 
