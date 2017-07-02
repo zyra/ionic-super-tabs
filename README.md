@@ -38,6 +38,8 @@ Due to the way this module is designed, some versions of the module might not wo
 | 3.4.x | 2.6.3 |
 | 2.x.x | 1.x.x |
 
+<br><br><br>
+
 # Quick Example
 ```html
 <super-tabs>
