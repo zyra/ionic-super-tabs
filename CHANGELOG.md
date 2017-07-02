@@ -1,3 +1,13 @@
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.6.3...v3.0.0) (2017-07-02)
+
+
+### Bug Fixes
+
+* **super-tabs:** fix tabs for ionic-framework[@3](https://github.com/3).5.0 ([5d77164](https://github.com/zyra/ionic2-super-tabs/commit/5d77164)), closes [#94](https://github.com/zyra/ionic2-super-tabs/issues/94)
+
+
+
 <a name="2.6.3"></a>
 ## [2.6.3](https://github.com/zyra/ionic2-super-tabs/compare/v2.6.2...v2.6.3) (2017-06-20)
 
