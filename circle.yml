@@ -1,0 +1,20 @@
+version: 2
+jobs:
+  build:
+      working_directory: ~/ionic2-super-tabs/
+      docker:
+        - image: node:7
+      steps:
+        - checkout
+        - restore_cache:
+           key: node_modules_{{ .Branch }}_{{ checksum "package.json" }}
+        - run:
+           name: Install node modules
+           command: npm i
+        - save_cache:
+           key: node_modules_{{ .Branch }}_{{ checksum "package.json" }}
+           paths:
+             - ~/ionic2-super-tabs/node_modules/
+        - run:
+           name: Build module
+           command: npm run build
