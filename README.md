@@ -15,6 +15,7 @@ To see this in action, checkout the [example project here](https://github.com/zy
 
 <br><br>
 
+- [Compatibility](#compatibility)
 - [Quick Example](#quick-example)
 - [How it works](#how-it-works)
 - [Installation](#installation)
@@ -27,6 +28,15 @@ To see this in action, checkout the [example project here](https://github.com/zy
 - [Project goals](#project-goals)
 
 <br><br><br>
+
+# Compatibility
+Due to the way this module is designed, some versions of the module might not work with all versios of the Ionic Framework. Refer to the following table to use the appropriate version. Also, some features in the later versions might not be available in the older versions of this module. This page only contains the latest documentation. For older documentation, look up the previous versions of the `README.md` file using Github.
+
+| Ionic Framework Version | ionic2-super-tabs version |
+| --- | --- |
+| 3.5.x | 3.0.0 |
+| 3.4.x | 2.6.3 |
+| 2.x.x | 1.x.x |
 
 # Quick Example
 ```html
