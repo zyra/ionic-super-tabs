@@ -414,9 +414,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     if (typeof indexOrId === 'string') {
       indexOrId = this.getTabIndexById(indexOrId);
     }
-
-    this.selectedTabIndex = indexOrId;
-    this.tabsContainer.slideTo(indexOrId);
+    this.onToolbarTabSelect(indexOrId);
   }
 
   getActiveChildNav() {
