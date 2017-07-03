@@ -269,8 +269,6 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     ];
 
     if (viewCtrl) {
-      viewCtrl._setContent(this);
-      viewCtrl._setContentRef(el);
       obsToMerge.push(viewCtrl.didEnter);
     }
 
