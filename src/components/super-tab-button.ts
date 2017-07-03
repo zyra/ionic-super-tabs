@@ -6,7 +6,6 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewEn
     <ion-icon *ngIf="!!icon" [name]="icon" [color]="color"></ion-icon>
     <span class="title" *ngIf="!!title" ion-text [color]="color">{{ title }}</span>
     <ion-badge mode="md" [color]="badgeColor">{{ badge }}</ion-badge>
-    <!--<span class="badge badge-md {{ 'badge-md-' + badgeColor }}">{{ badge }}</span>-->
     <div class="button-effect"></div>
   `,
   host: {
