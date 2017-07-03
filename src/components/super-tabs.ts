@@ -16,7 +16,7 @@ import { SuperTabsController } from '../providers/super-tabs-controller';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/debounceTime';
-import {DIRECTION_SWITCH} from "ionic-angular/navigation/nav-util";
+import { DIRECTION_SWITCH } from 'ionic-angular/navigation/nav-util';
 
 export interface SuperTabsConfig {
   /**
