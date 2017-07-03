@@ -1,3 +1,14 @@
+<a name="3.0.1"></a>
+## [3.0.1](https://github.com/zyra/ionic2-super-tabs/compare/v3.0.0...v3.0.1) (2017-07-03)
+
+
+### Bug Fixes
+
+* **super-tabs:** fire events when calling slideTo ([8b64bd2](https://github.com/zyra/ionic2-super-tabs/commit/8b64bd2)), closes [#100](https://github.com/zyra/ionic2-super-tabs/issues/100)
+* **super-tabs:** fix view controller issues ([3750e54](https://github.com/zyra/ionic2-super-tabs/commit/3750e54)), closes [#29](https://github.com/zyra/ionic2-super-tabs/issues/29)
+
+
+
 <a name="3.0.0"></a>
 # [3.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.6.3...v3.0.0) (2017-07-02)
 
