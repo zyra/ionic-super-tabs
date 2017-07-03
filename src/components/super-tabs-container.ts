@@ -79,14 +79,31 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
 
   // Animation stuff
 
+  /**
+   * Minimum position on x-axis that the container can be at
+   */
   private minPosX: number;
 
+  /**
+   * Maximum position on x-axis that the container can be at
+   */
   private maxPosX: number;
 
+  /**
+   * Pan gesture controller
+   */
   private gesture: SuperTabsPanGesture;
 
+  /**
+   * Boolean indicating whether swiping is globally enabled
+   * @type {boolean}
+   */
   private globalSwipeEnabled: boolean = true;
 
+  /**
+   * Set of booleans to indicate whether swiping is enabled on each tab
+   * @type {{}}
+   */
   private swipeEnabledPerTab: {[index: number]: boolean} = {};
 
   constructor(
@@ -104,10 +121,19 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
     this.gesture && this.gesture.destroy();
   }
 
+  /**
+   * Enable or disable swiping globally
+   * @param enable {boolean} set to true to enable
+   */
   enableTabsSwipe(enable: boolean) {
     this.globalSwipeEnabled = enable;
   }
 
+  /**
+   * Enable or disable swiping when a tab is selected
+   * @param tabIndex {number} tab index
+   * @param enable {boolean} set to true to enable
+   */
   enableTabSwipe(tabIndex: number, enable: boolean) {
     this.swipeEnabledPerTab[tabIndex] = enable;
   }
@@ -165,23 +191,46 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
     };
   }
 
+  /**
+   * Set the selected tab.
+   * Emits a tabSelect event with the tab index, and a boolean indicating whether the tab changed or not.
+   * @param index {number} tab index
+   */
   private setSelectedTab(index: number) {
     this.tabSelect.emit({index, changed: index !== this.selectedTabIndex});
     this.selectedTabIndex = index;
   }
 
+  /**
+   * Calculate the container's width.
+   * It's usually the number of tabs x tab width.
+   */
   private calculateContainerWidth() {
     this.containerWidth = this.tabWidth * this.tabsCount;
   }
 
+  /**
+   * Set the container's width via CSS property
+   */
   private setContainerWidth() {
     this.rnd.setStyle(this.container.nativeElement, 'width', this.containerWidth + 'px');
   }
 
+  /**
+   * Slide to a specific tab
+   * @param index {number} tab index
+   * @param [animate=true] {boolean} set to true to animate
+   */
   slideTo(index: number, animate: boolean = true): void {
     this.plt.raf(() => this.moveContainer(animate, index * this.tabWidth));
   }
 
+  /**
+   * Moves the container to a specified position
+   * @param [animate=false] {boolean} set to true to animate
+   * @param [positionX] {number} position on x-axis
+   * @param [callback] callback function to call after the container is moved
+   */
   private moveContainer(animate: boolean = false, positionX?: number, callback: Function = () => {}) {
     const el: HTMLElement = this.container.nativeElement;
 
@@ -213,6 +262,10 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
     callback();
   }
 
+  /**
+   * Refresh the min and max positions that the container can be at.
+   * The minimum position is always 0, the maximum position is the number of tabs x tab width.
+   */
   private refreshMinMax(): void {
     this.minPosX = 0;
     this.maxPosX = (this.tabsCount - 1) * this.tabWidth;
