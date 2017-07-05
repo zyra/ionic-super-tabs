@@ -2,7 +2,7 @@ import {
   Component, Input, Renderer, ElementRef, ViewEncapsulation, Optional, ComponentFactoryResolver,
   NgZone, ViewContainerRef, ViewChild, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef, ErrorHandler
 } from '@angular/core';
-import { NavControllerBase, App, Config, Platform, GestureController, DeepLinker, DomController } from 'ionic-angular';
+import { NavControllerBase, App, Config, Platform, GestureController, DeepLinker, DomController, NavOptions } from 'ionic-angular';
 import { TransitionController } from 'ionic-angular/transitions/transition-controller';
 import { SuperTabs } from './super-tabs';
 
@@ -166,6 +166,10 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
 
   setWidth(width: number) {
     this.setElementStyle('width', width + 'px');
+  }
+
+  goToRoot(opts: NavOptions): Promise<any> {
+    return this.setRoot(this.root, this.rootParams, opts);
   }
 
 }
