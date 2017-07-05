@@ -1,3 +1,13 @@
+<a name="3.0.2"></a>
+## [3.0.2](https://github.com/zyra/ionic2-super-tabs/compare/v3.0.1...v3.0.2) (2017-07-05)
+
+
+### Bug Fixes
+
+* **super-tab:** add goToRoot method ([5865c18](https://github.com/zyra/ionic2-super-tabs/commit/5865c18)), closes [#102](https://github.com/zyra/ionic2-super-tabs/issues/102)
+
+
+
 <a name="3.0.1"></a>
 ## [3.0.1](https://github.com/zyra/ionic2-super-tabs/compare/v3.0.0...v3.0.1) (2017-07-03)
 
