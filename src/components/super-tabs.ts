@@ -333,7 +333,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
       this.selectedTabIndex = this.getTabIndexById(tabsSegment.id);
     }
 
-    this.linker.navChange(this.id, DIRECTION_SWITCH);
+    this.linker.navChange(DIRECTION_SWITCH);
 
     if (!this.hasTitles && !this.hasIcons) this._isToolbarVisible = false;
 
@@ -522,7 +522,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
       this.selectedTabIndex = index;
 
-      this.linker.navChange(this.id, DIRECTION_SWITCH);
+      this.linker.navChange(DIRECTION_SWITCH);
 
       this.refreshTabStates();
 
