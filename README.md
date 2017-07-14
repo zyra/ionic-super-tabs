@@ -34,7 +34,8 @@ Due to the way this module is designed, some versions of the module might not wo
 
 | Ionic Framework Version | ionic2-super-tabs version |
 | --- | --- |
-| 3.5.x | 3.0.0 |
+| 3.5.2 | 3.0.3 |
+| 3.5.0 | 3.0.2 |
 | 3.4.x | 2.6.3 |
 | 3.0.0 - 3.3.x | 2.0.0 - 2.6.3 |
 | 2.x.x | 1.x.x |
