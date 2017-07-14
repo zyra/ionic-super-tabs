@@ -13,10 +13,10 @@ import { Subscription } from 'rxjs/Subscription';
 import { SuperTabsToolbar } from './super-tabs-toolbar';
 import { SuperTabsContainer } from './super-tabs-container';
 import { SuperTabsController } from '../providers/super-tabs-controller';
+import { DIRECTION_SWITCH } from 'ionic-angular/navigation/nav-util';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/debounceTime';
-import { DIRECTION_SWITCH } from 'ionic-angular/navigation/nav-util';
 
 export interface SuperTabsConfig {
   /**
@@ -415,8 +415,12 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this.onToolbarTabSelect(indexOrId);
   }
 
-  getActiveChildNav() {
+  getActiveChildNav(): NavigationContainer {
     return this._tabs[this.selectedTabIndex];
+  }
+
+  getActiveChildNavs(): NavigationContainer[] {
+    return [this._tabs[this.selectedTabIndex]];
   }
 
   addTab(tab: SuperTab) {
