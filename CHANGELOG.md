@@ -1,10 +1,13 @@
-<a name="3.0.2"></a>
-## [3.0.2](https://github.com/zyra/ionic2-super-tabs/compare/v3.0.1...v3.0.2) (2017-07-05)
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v3.0.1...v4.0.0) (2017-07-14)
 
 
 ### Bug Fixes
 
 * **super-tab:** add goToRoot method ([5865c18](https://github.com/zyra/ionic2-super-tabs/commit/5865c18)), closes [#102](https://github.com/zyra/ionic2-super-tabs/issues/102)
+* **super-tabs:** add getActiveChildNavs method ([a803cb9](https://github.com/zyra/ionic2-super-tabs/commit/a803cb9)), closes [#117](https://github.com/zyra/ionic2-super-tabs/issues/117)
+* **super-tabs:** remove first param from linker.navChange calls ([7c5cc0b](https://github.com/zyra/ionic2-super-tabs/commit/7c5cc0b))
+* **super-tabs:** update  to ([8338656](https://github.com/zyra/ionic2-super-tabs/commit/8338656)), closes [#115](https://github.com/zyra/ionic2-super-tabs/issues/115)
 
 
 
