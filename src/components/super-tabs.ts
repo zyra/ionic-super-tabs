@@ -111,15 +111,12 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   id: string;
 
   // TODO organize these new properties/methods
-  // This name input is for ionic-angular 3.6.0, not released/used yet
   @Input()
   name: string;
 
   getType(): string { return; }
 
   getSecondaryIdentifier(): string { return; }
-
-  // getActiveChildNav(): NavigationContainer { return; }
 
   /**
    * Height of the tabs
@@ -327,7 +324,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
   ngAfterViewInit() {
 
-    const tabsSegment = this.linker.getSegmentByNavId(this.id);
+    const tabsSegment = this.linker.getSegmentByNavIdOrName(this.id, this.name);
 
     if (tabsSegment) {
       this.selectedTabIndex = this.getTabIndexById(tabsSegment.id);
