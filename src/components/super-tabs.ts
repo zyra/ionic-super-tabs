@@ -412,10 +412,6 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this.onToolbarTabSelect(indexOrId);
   }
 
-  getActiveChildNav(): NavigationContainer {
-    return this._tabs[this.selectedTabIndex];
-  }
-
   getActiveChildNavs(): NavigationContainer[] {
     return [this._tabs[this.selectedTabIndex]];
   }
