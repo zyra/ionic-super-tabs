@@ -689,7 +689,13 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
   // needed to make Ionic Framework think this is a tabs component... needed for Deeplinking
   setTabbarPosition() {}
-
+ 
+ // update the segment button widths manually 
+  indexSegmentButtonWidths() {
+    setTimeout(() => {
+      this.toolbar.indexSegmentButtonWidths();
+    }, 1000)
+  }
 }
 
 let superTabsIds = -1;
