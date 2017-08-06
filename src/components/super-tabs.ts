@@ -118,6 +118,10 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
   getSecondaryIdentifier(): string { return; }
 
+  getAllChildNavs(): any[] {
+    return this._tabs;
+  }
+
   /**
    * Height of the tabs
    */
