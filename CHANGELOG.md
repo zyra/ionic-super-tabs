@@ -1,3 +1,13 @@
+<a name="4.0.1"></a>
+## [4.0.1](https://github.com/zyra/ionic2-super-tabs/compare/v4.0.0...v4.0.1) (2017-08-06)
+
+
+### Bug Fixes
+
+* **super-tabs:** fix support for ionic-angular[@3](https://github.com/3).6.0 ([8ef8c84](https://github.com/zyra/ionic2-super-tabs/commit/8ef8c84)), closes [#135](https://github.com/zyra/ionic2-super-tabs/issues/135)
+
+
+
 <a name="4.0.0"></a>
 # [4.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v3.0.1...v4.0.0) (2017-07-14)
 
@@ -38,7 +48,7 @@
 
 ### Bug Fixes
 
-* remove keyboard from super call (#84) ([a00cb75](https://github.com/zyra/ionic2-super-tabs/commit/a00cb75))
+* remove keyboard from super call ([#84](https://github.com/zyra/ionic2-super-tabs/issues/84)) ([a00cb75](https://github.com/zyra/ionic2-super-tabs/commit/a00cb75))
 
 
 
