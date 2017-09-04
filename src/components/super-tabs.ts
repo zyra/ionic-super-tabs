@@ -5,7 +5,7 @@ import {
 import { SuperTab } from './super-tab';
 import {
   NavController, RootNode, NavControllerBase, ViewController, App, DeepLinker,
-  DomController
+  DomController, Platform
 } from 'ionic-angular';
 import { NavigationContainer } from 'ionic-angular/navigation/navigation-container';
 import { Observable } from 'rxjs/Observable';
@@ -249,7 +249,8 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     private rnd: Renderer2,
     private superTabsCtrl: SuperTabsController,
     private linker: DeepLinker,
-    private domCtrl: DomController
+    private domCtrl: DomController,
+    private _plt: Platform
   ) {
     this.parent = <NavControllerBase>parent;
 
@@ -671,11 +672,9 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   // needed to make Ionic Framework think this is a tabs component... needed for Deeplinking
   setTabbarPosition() {}
  
- // update the segment button widths manually 
+  // update segment button widths manually
   indexSegmentButtonWidths() {
-    setTimeout(() => {
-      this.toolbar.indexSegmentButtonWidths();
-    }, 1000)
+    this._plt.raf(() => this.toolbar.indexSegmentButtonWidths());
   }
 }
 
