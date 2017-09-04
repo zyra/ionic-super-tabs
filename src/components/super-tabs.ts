@@ -73,7 +73,6 @@ export interface SuperTabsConfig {
   ]
 })
 export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDestroy, RootNode, NavigationContainer {
-
   /**
    * Color of the toolbar behind the tab buttons
    */
@@ -252,7 +251,6 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     private linker: DeepLinker,
     private domCtrl: DomController
   ) {
-
     this.parent = <NavControllerBase>parent;
 
     if (this.parent) {
@@ -277,7 +275,6 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this.watches.push(Observable.merge.apply(this, obsToMerge)
       .debounceTime(10)
       .subscribe(() => {
-
         this.setMaxIndicatorPosition();
         this.updateTabWidth();
         this.setFixedIndicatorWidth();
@@ -286,14 +283,10 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
         this.tabsContainer.slideTo(this.selectedTabIndex);
         this.alignIndicatorPosition();
         this.refreshContainerHeight();
-
       }));
-
-
   }
 
   ngOnInit() {
-
     const defaultConfig: SuperTabsConfig = {
       dragThreshold: 10,
       maxDragAngle: 40,
@@ -315,19 +308,14 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     if (this.tabsPlacement === 'bottom') {
       this.rnd.addClass(this.getElementRef().nativeElement, 'tabs-placement-bottom');
     }
-
   }
 
   ngAfterContentInit() {
-
     this.updateTabWidth();
-
     this.toolbar.tabs = this._tabs;
-
   }
 
   ngAfterViewInit() {
-
     const tabsSegment = this.linker.getSegmentByNavIdOrName(this.id, this.name);
 
     if (tabsSegment) {
@@ -351,11 +339,9 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this.refreshContainerHeight();
 
     this.init = true;
-
   }
 
   ngOnDestroy() {
-
     this.watches.forEach((watch: Subscription) => {
       watch.unsubscribe && watch.unsubscribe();
     });
@@ -363,7 +349,6 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this.parent.unregisterChildNav(this);
 
     this.superTabsCtrl.unregisterInstance(this.id);
-
   }
 
   /**
@@ -445,18 +430,15 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
    * We listen to drag events to move the "slide" thingy along with the slides
    */
   onDrag() {
-
     if (!this._isToolbarVisible) return;
 
     this.domCtrl.write(() => {
-
       const singleSlideWidth = this.tabsContainer.tabWidth,
         slidesWidth = this.tabsContainer.containerWidth;
 
       let percentage = Math.abs(this.tabsContainer.containerPosition / slidesWidth);
 
       if (this.scrollTabs) {
-
         const originalSlideStart = singleSlideWidth * this.selectedTabIndex,
           originalPosition = this.getRelativeIndicatorPosition(),
           originalWidth = this.getSegmentButtonWidth();
@@ -499,7 +481,6 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
       } else {
         this.toolbar.setIndicatorPosition(Math.min(percentage * singleSlideWidth, this.maxIndicatorPosition));
       }
-
     });
   }
 
@@ -534,7 +515,6 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
         index,
         id: this._tabs[index].tabId
       });
-
     }
   }
 
@@ -583,7 +563,6 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   }
 
   private alignTabButtonsContainer(animate?: boolean) {
-
     const mw: number = this.el.nativeElement.offsetWidth, // max width
       iw: number = this.toolbar.indicatorWidth, // indicator width
       ip: number = this.toolbar.indicatorPosition, // indicatorPosition
@@ -604,17 +583,13 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
       pos = sp + delta;
       let max = this.toolbar.segmentWidth - mw;
       pos = pos < max? pos : max;
-
     } else if (ip -  (mw / 2 - iw / 2) < sp) {
-
       // we need to move the segment container to the right
       pos = ip -  (mw / 2 - iw / 2);
       pos = pos >= 0 ? pos : 0;
-
     } else return; // no need to move the segment container
 
     this.toolbar.setSegmentPosition(pos, animate);
-
   }
 
   private getRelativeIndicatorPosition(index: number = this.selectedTabIndex): number {
