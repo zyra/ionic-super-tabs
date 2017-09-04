@@ -180,7 +180,7 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
   /**
    * Indexes the segment button widths
    */
-  private indexSegmentButtonWidths() {
+  indexSegmentButtonWidths() {
     let index = [], total = 0;
 
     this.tabButtons.forEach((btn: SuperTabButton, i: number) => {
