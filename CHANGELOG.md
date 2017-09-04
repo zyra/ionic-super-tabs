@@ -1,3 +1,19 @@
+<a name="4.1.0"></a>
+# [4.1.0](https://github.com/zyra/ionic2-super-tabs/compare/v4.0.1...v4.1.0) (2017-09-04)
+
+
+### Bug Fixes
+
+* **super-tabs:** fix issue with buttons placement when resizing ([1cf4cff](https://github.com/zyra/ionic2-super-tabs/commit/1cf4cff)), closes [#148](https://github.com/zyra/ionic2-super-tabs/issues/148)
+
+
+### Features
+
+* **super-tabs:** fire tabSelect when buttons are clicked ([611f5cd](https://github.com/zyra/ionic2-super-tabs/commit/611f5cd)), closes [#103](https://github.com/zyra/ionic2-super-tabs/issues/103)
+* **super-tabs:** support manually updating the segment button widths([#121](https://github.com/zyra/ionic2-super-tabs/issues/121)) ([8d2d678](https://github.com/zyra/ionic2-super-tabs/commit/8d2d678))
+
+
+
 <a name="4.0.1"></a>
 ## [4.0.1](https://github.com/zyra/ionic2-super-tabs/compare/v4.0.0...v4.0.1) (2017-08-06)
 
