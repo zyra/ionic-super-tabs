@@ -488,6 +488,14 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
    * @param index
    */
   onTabChange(index: number) {
+    if (index === this.selectedTabIndex) {
+      this.tabSelect.emit({
+        index,
+        id: this._tabs[index].tabId,
+        changed: false
+      });
+    }
+
     if (index <= this._tabs.length) {
       const currentTab: SuperTab = this.getActiveTab();
       let activeView: ViewController = currentTab.getActive();
@@ -512,7 +520,8 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
       this.tabSelect.emit({
         index,
-        id: this._tabs[index].tabId
+        id: this._tabs[index].tabId,
+        changed: true
       });
     }
   }
@@ -671,7 +680,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
   // needed to make Ionic Framework think this is a tabs component... needed for Deeplinking
   setTabbarPosition() {}
- 
+
   // update segment button widths manually
   indexSegmentButtonWidths() {
     this._plt.raf(() => this.toolbar.indexSegmentButtonWidths());
