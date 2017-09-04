@@ -32,6 +32,6 @@
     "zone.js": "0.8.12"
   },
   "peerDependencies": {
-    "ionic-angular": "^3.5.0"
+    "ionic-angular": "^3.6.0"
   }
 }
