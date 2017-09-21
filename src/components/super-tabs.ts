@@ -175,6 +175,18 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   tabSelect: EventEmitter<any> = new EventEmitter<any>();
 
   /**
+   * Emits event when tab dragging is activated
+   */
+  @Output()
+  tabDragStart: EventEmitter<void> = new EventEmitter<void>();
+
+  /**
+   * Emits event when tab dragging is stopped (when a user lets go)
+   */
+  @Output()
+  tabDragEnd: EventEmitter<void> = new EventEmitter<void>();
+
+  /**
    * Indicates whether the toolbar is visible
    * @private
    */
@@ -194,11 +206,24 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   private maxIndicatorPosition: number;
 
   /**
+   * The duration (ms) after the last onDrag event where the
+   * dragging state is considered 'stopped'
+   */
+  private tabDragStoppedTimeout: number = 200;
+
+  /**
    * Indicates whether the tab buttons should scroll
    * @type {boolean}
    * @private
    */
   private _scrollTabs: boolean = false;
+
+  /**
+   * We use a timeout to identify whether dragging has completed
+   * @type {number}
+   * @private
+   */
+  private _isDraggingTimeoutId: number | null = null;
 
   /**
    * Selected tab index
@@ -435,6 +460,10 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
    * We listen to drag events to move the "slide" thingy along with the slides
    */
   onDrag() {
+
+    // handle the events for start/stop dragging
+    this.tabDragStarted();
+
     if (!this._isToolbarVisible) return;
 
     this.domCtrl.write(() => {
@@ -488,6 +517,8 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
    * @param index
    */
   onTabChange(index: number) {
+    this.tabDragStopped();
+
     if (index === this.selectedTabIndex) {
       this.tabSelect.emit({
         index,
@@ -652,6 +683,26 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     } else {
       this.toolbar.setIndicatorPosition(this.getAbsoluteIndicatorPosition(), animate);
     }
+  }
+
+  private tabDragStarted() {
+    if (this._isDraggingTimeoutId == null) {
+      this.tabDragStart.emit();
+    }
+    else {
+      clearTimeout(this._isDraggingTimeoutId);
+    }
+    this._isDraggingTimeoutId = setTimeout(() => {
+      this.tabDragStopped();
+    }, this.tabDragStoppedTimeout);
+  }
+
+  private tabDragStopped() {
+    // we have no mechanism to identify when the user stops dragging
+    // so we need to use a timeout which is reset on every drag motion
+    this._isDraggingTimeoutId && clearTimeout(this._isDraggingTimeoutId);
+    this._isDraggingTimeoutId = null;
+    this.tabDragEnd.emit();
   }
 
   getTabIndexById(tabId: string): number {
