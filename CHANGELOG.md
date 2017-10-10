@@ -1,3 +1,14 @@
+<a name="4.1.1"></a>
+## [4.1.1](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.0...v4.1.1) (2017-10-10)
+
+
+### Bug Fixes
+
+* **super-tabs:** fix lifecycle events ([1a7a8ee](https://github.com/zyra/ionic2-super-tabs/commit/1a7a8ee)), closes [#175](https://github.com/zyra/ionic2-super-tabs/issues/175)
+* **super-tabs:** onTabChange firing twice if page was not changed ([2c19ab4](https://github.com/zyra/ionic2-super-tabs/commit/2c19ab4))
+
+
+
 <a name="4.1.0"></a>
 # [4.1.0](https://github.com/zyra/ionic2-super-tabs/compare/v4.0.1...v4.1.0) (2017-09-04)
 
@@ -20,7 +31,7 @@
 
 ### Bug Fixes
 
-* **super-tabs:** fix support for ionic-angular[@3](https://github.com/3).6.0 ([8ef8c84](https://github.com/zyra/ionic2-super-tabs/commit/8ef8c84)), closes [#135](https://github.com/zyra/ionic2-super-tabs/issues/135)
+* **super-tabs:** fix support for ionic-angular@3.6.0 ([8ef8c84](https://github.com/zyra/ionic2-super-tabs/commit/8ef8c84)), closes [#135](https://github.com/zyra/ionic2-super-tabs/issues/135)
 
 
 
@@ -54,7 +65,7 @@
 
 ### Bug Fixes
 
-* **super-tabs:** fix tabs for ionic-framework[@3](https://github.com/3).5.0 ([5d77164](https://github.com/zyra/ionic2-super-tabs/commit/5d77164)), closes [#94](https://github.com/zyra/ionic2-super-tabs/issues/94)
+* **super-tabs:** fix tabs for ionic-framework@3.5.0 ([5d77164](https://github.com/zyra/ionic2-super-tabs/commit/5d77164)), closes [#94](https://github.com/zyra/ionic2-super-tabs/issues/94)
 
 
 
