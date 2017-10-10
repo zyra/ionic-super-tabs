@@ -488,20 +488,16 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   onTabChange(index: number) {
     index = Number(index);
     if (index === this.selectedTabIndex) {
-      console.info('[a] ', index, this.selectedTabIndex);
-      // console.trace();
       this.tabSelect.emit({
         index,
         id: this._tabs[index].tabId,
         changed: false
       });
+      return;
     }
 
-    console.info('[b] ', index, this.selectedTabIndex);
 
     if (index <= this._tabs.length) {
-      console.info('[c] ', index, this.selectedTabIndex);
-      // console.trace();
 
       const currentTab: SuperTab = this.getActiveTab();
       let activeView: ViewController = currentTab.getActive();
@@ -533,7 +529,6 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   }
 
   onToolbarTabSelect(index: number) {
-    console.log('toolbar tab selected', index);
     if (index !== this.selectedTabIndex) {
       this.tabsContainer.slideTo(index);
     }
@@ -541,7 +536,6 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   }
 
   onContainerTabSelect(ev: { index: number; changed: boolean }) {
-    console.log('Container tab select fired! ', ev);
     if (ev.changed) {
       this.onTabChange(ev.index);
     }

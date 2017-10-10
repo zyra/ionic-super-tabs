@@ -200,7 +200,6 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
    * @param index {number} tab index
    */
   private setSelectedTab(index: number) {
-    console.log('Setting selected tab to: ' + index + ', from: ' + this.selectedTabIndex);
     this.tabSelect.emit({ index, changed: index !== this.selectedTabIndex });
     this.selectedTabIndex = index;
   }
