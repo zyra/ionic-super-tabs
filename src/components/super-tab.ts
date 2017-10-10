@@ -2,7 +2,10 @@ import {
   Component, Input, Renderer, ElementRef, ViewEncapsulation, Optional, ComponentFactoryResolver,
   NgZone, ViewContainerRef, ViewChild, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef, ErrorHandler
 } from '@angular/core';
-import { NavControllerBase, App, Config, Platform, GestureController, DeepLinker, DomController, NavOptions } from 'ionic-angular';
+import {
+  NavControllerBase, App, Config, Platform, GestureController, DeepLinker, DomController, NavOptions,
+  ViewController
+} from 'ionic-angular';
 import { TransitionController } from 'ionic-angular/transitions/transition-controller';
 import { SuperTabs } from './super-tabs';
 
@@ -118,6 +121,18 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
     this.init = new Promise<void>(resolve => this.initResolve = resolve);
   }
 
+  _didEnter(view: ViewController) {
+    if (this.loaded) {
+      super._didEnter(view);
+    }
+  }
+
+  _willEnter(view: ViewController) {
+    if (this.loaded) {
+      super._willEnter(view);
+    }
+  }
+
   ngOnInit() {
     this.parent.addTab(this);
   }
@@ -142,7 +157,7 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
   async load(load: boolean) {
     if (load && !this.loaded) {
       await this.init;
-      await this.push(this.root, this.rootParams, { animate: false })
+      await this.push(this.root, this.rootParams, { animate: false });
       this.loaded = true;
     }
   }
