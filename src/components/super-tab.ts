@@ -70,7 +70,7 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
     return this._sbEnabled;
   }
   set swipeBackEnabled(val: boolean) {
-    this._sbEnabled = !!val;
+    this._sbEnabled = Boolean(val);
     this._swipeBackCheck();
   }
 
@@ -139,12 +139,11 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
     }
   }
 
-  load(load: boolean) {
+  async load(load: boolean) {
     if (load && !this.loaded) {
-      this.init.then(() => {
-        this.push(this.root, this.rootParams, { animate: false });
-        this.loaded = true;
-      });
+      await this.init;
+      await this.push(this.root, this.rootParams, { animate: false })
+      this.loaded = true;
     }
   }
 

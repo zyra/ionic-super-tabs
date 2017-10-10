@@ -401,11 +401,9 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this.refreshContainerHeight();
   }
 
-  slideTo(indexOrId: string | number) {
-    if (typeof indexOrId === 'string') {
-      indexOrId = this.getTabIndexById(indexOrId);
-    }
-    this.onToolbarTabSelect(indexOrId);
+  slideTo(indexOrId: string | number, fireEvent: boolean = true) {
+    typeof indexOrId === 'string' && (indexOrId = this.getTabIndexById(indexOrId));
+    fireEvent && this.onToolbarTabSelect(indexOrId);
   }
 
   getActiveChildNavs(): NavigationContainer[] {
@@ -488,7 +486,10 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
    * @param index
    */
   onTabChange(index: number) {
+    index = Number(index);
     if (index === this.selectedTabIndex) {
+      console.info('[a] ', index, this.selectedTabIndex);
+      // console.trace();
       this.tabSelect.emit({
         index,
         id: this._tabs[index].tabId,
@@ -496,7 +497,12 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
       });
     }
 
+    console.info('[b] ', index, this.selectedTabIndex);
+
     if (index <= this._tabs.length) {
+      console.info('[c] ', index, this.selectedTabIndex);
+      // console.trace();
+
       const currentTab: SuperTab = this.getActiveTab();
       let activeView: ViewController = currentTab.getActive();
 
@@ -527,11 +533,15 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   }
 
   onToolbarTabSelect(index: number) {
-    this.tabsContainer.slideTo(index);
+    console.log('toolbar tab selected', index);
+    if (index !== this.selectedTabIndex) {
+      this.tabsContainer.slideTo(index);
+    }
     this.onTabChange(index);
   }
 
-  onContainerTabSelect(ev: {index: number; changed: boolean}) {
+  onContainerTabSelect(ev: { index: number; changed: boolean }) {
+    console.log('Container tab select fired! ', ev);
     if (ev.changed) {
       this.onTabChange(ev.index);
     }
