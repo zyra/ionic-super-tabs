@@ -322,7 +322,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this.toolbar.tabs = this._tabs;
   }
 
-  ngAfterViewInit() {
+  async ngAfterViewInit() {
     const tabsSegment = this.linker.getSegmentByNavIdOrName(this.id, this.name);
 
     if (tabsSegment) {
@@ -334,7 +334,8 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     if (!this.hasTitles && !this.hasIcons) this._isToolbarVisible = false;
 
     this.tabsContainer.slideTo(this.selectedTabIndex, false);
-    this.refreshTabStates();
+    await this.refreshTabStates();
+    this.fireLifecycleEvent(['willEnter', 'didEnter']);
 
     this.setFixedIndicatorWidth();
 
@@ -485,7 +486,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
    * Runs when the user clicks on a segment button
    * @param index
    */
-  onTabChange(index: number) {
+  async onTabChange(index: number) {
     index = Number(index);
     if (index === this.selectedTabIndex) {
       this.tabSelect.emit({
@@ -499,26 +500,15 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
     if (index <= this._tabs.length) {
 
-      const currentTab: SuperTab = this.getActiveTab();
-      let activeView: ViewController = currentTab.getActive();
-
-      if (activeView) {
-        activeView._willLeave(false);
-        activeView._didLeave();
-      }
+      this.fireLifecycleEvent(['willLeave', 'didLeave']);
 
       this.selectedTabIndex = index;
 
       this.linker.navChange(DIRECTION_SWITCH);
 
-      this.refreshTabStates();
+      await this.refreshTabStates();
 
-      activeView = this.getActiveTab().getActive();
-
-      if (activeView) {
-        activeView._willEnter();
-        activeView._didEnter();
-      }
+      this.fireLifecycleEvent(['willEnter', 'didEnter']);
 
       this.tabSelect.emit({
         index,
@@ -532,21 +522,41 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     if (index !== this.selectedTabIndex) {
       this.tabsContainer.slideTo(index);
     }
-    this.onTabChange(index);
+    return this.onTabChange(index);
   }
 
-  onContainerTabSelect(ev: { index: number; changed: boolean }) {
+  async onContainerTabSelect(ev: { index: number; changed: boolean }) {
     if (ev.changed) {
-      this.onTabChange(ev.index);
+      await this.onTabChange(ev.index);
     }
     this.alignIndicatorPosition(true);
   }
 
-  private refreshTabStates() {
-    this._tabs.forEach((tab, i) => {
-      tab.setActive(i === this.selectedTabIndex);
-      tab.load(Math.abs(this.selectedTabIndex - i) < 2);
+  private fireLifecycleEvent(events: string[]) {
+    const activeView = this.getActiveTab().getActive();
+    events.forEach((event: string) => {
+      switch(event) {
+        case 'willEnter':
+          activeView._willEnter();
+          break;
+        case 'didEnter':
+          activeView._didEnter();
+          break;
+        case 'willLeave':
+          activeView._willLeave(false);
+          break;
+        case 'didLeave':
+          activeView._didLeave();
+          break;
+      }
     });
+  }
+
+  private refreshTabStates() {
+    return Promise.all(this._tabs.map((tab, i) => {
+      tab.setActive(i === this.selectedTabIndex);
+      return tab.load(Math.abs(this.selectedTabIndex - i) < 2);
+    }));
   }
 
   private updateTabWidth() {
