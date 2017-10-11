@@ -1,3 +1,13 @@
+<a name="4.1.3"></a>
+## [4.1.3](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.2...v4.1.3) (2017-10-11)
+
+
+### Bug Fixes
+
+* **super-tabs:** fire lifecycle events for first tab ([bc9fd8d](https://github.com/zyra/ionic2-super-tabs/commit/bc9fd8d)), closes [#180](https://github.com/zyra/ionic2-super-tabs/issues/180)
+
+
+
 <a name="4.1.2"></a>
 ## [4.1.2](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.1...v4.1.2) (2017-10-11)
 
