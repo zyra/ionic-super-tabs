@@ -1,3 +1,8 @@
+<a name="4.1.2"></a>
+## [4.1.2](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.1...v4.1.2) (2017-10-11)
+
+
+
 <a name="4.1.1"></a>
 ## [4.1.1](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.0...v4.1.1) (2017-10-10)
 
