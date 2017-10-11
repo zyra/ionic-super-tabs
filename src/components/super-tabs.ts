@@ -499,13 +499,10 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
 
     if (index <= this._tabs.length) {
 
-      console.log('Changing tab');
-
       const currentTab: SuperTab = this.getActiveTab();
       let activeView: ViewController = currentTab.getActive();
 
       if (activeView) {
-        console.log('Firing leave events');
         activeView._willLeave(false);
         activeView._didLeave();
       }
@@ -519,7 +516,6 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
       activeView = this.getActiveTab().getActive();
 
       if (activeView) {
-        console.log('Firing enter events');
         activeView._willEnter();
         activeView._didEnter();
       }
@@ -550,7 +546,6 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this._tabs.forEach((tab, i) => {
       tab.setActive(i === this.selectedTabIndex);
       tab.load(Math.abs(this.selectedTabIndex - i) < 2);
-      console.log('Refreshing state for tab #' + i, this.selectedTabIndex, tab.getActive());
     });
   }
 
