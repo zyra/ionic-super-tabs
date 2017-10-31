@@ -1,3 +1,13 @@
+<a name="4.1.4"></a>
+## [4.1.4](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.3...v4.1.4) (2017-10-31)
+
+
+### Bug Fixes
+
+* **super-tabs:** add resize method ([#204](https://github.com/zyra/ionic2-super-tabs/issues/204)) ([ba84781](https://github.com/zyra/ionic2-super-tabs/commit/ba84781)), closes [#203](https://github.com/zyra/ionic2-super-tabs/issues/203)
+
+
+
 <a name="4.1.3"></a>
 ## [4.1.3](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.2...v4.1.3) (2017-10-11)
 
