@@ -60,7 +60,7 @@ export interface SuperTabsConfig {
                         [selectedTab]="selectedTabIndex"
                         (tabSelect)="onToolbarTabSelect($event)"></super-tabs-toolbar>
     <super-tabs-container [config]="config" [tabsCount]="_tabs.length" [selectedTabIndex]="selectedTabIndex"
-                          (tabSelect)="onContainerTabSelect($event)" (onDrag)="onDrag($event)">
+                          (tabSelect)="onContainerTabSelect($event)" (onDrag)="onDrag()">
       <ng-content></ng-content>
     </super-tabs-container>
   `,
