@@ -173,6 +173,7 @@ The root page for this tab
 
 #### rootParams
 The Parameter `rootNavCtrl` is added automatically to the NavParams, there is no need to add it manually / double.
+
 _(optional)_ An object containing the params you would like to pass to this tab's root page
 
 #### title
