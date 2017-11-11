@@ -5,3 +5,5 @@ node_modules
 tsconfig.json
 .idea
 aot
+*.ngfactory.*
+*.ngsummary.*
