@@ -186,7 +186,7 @@ _(optional)_ The name of the icon to display in the `ion-segment-button`. This h
 _(optional)_ The initial badge value. The number can be changed through the `SuperTabsController` provider.
 
 #### id
-_(optional)_ A unique ID to be used if you wish to use the `SuperTabaController` provider to modify this tab.
+_(optional)_ A unique ID to be used if you wish to use the `SuperTabsController` provider to modify this tab.
 
 
 <br><br>
