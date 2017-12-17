@@ -353,6 +353,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   }
 
   resize() {
+    if (this.el.nativeElement.offsetParent === null) return;
     this.setMaxIndicatorPosition();
     this.updateTabWidth();
     this.setFixedIndicatorWidth();
