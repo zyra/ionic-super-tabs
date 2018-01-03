@@ -306,8 +306,8 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this.config = defaultConfig;
     
     if(this.config.allowElementScroll === true){
-      if(this.config.dragThreshold < 100){
-        this.config.dragThreshold = 120; 
+      if(this.config.dragThreshold < 110){
+        this.config.dragThreshold = 110; 
       }
     }
 
