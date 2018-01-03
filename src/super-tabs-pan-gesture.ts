@@ -90,8 +90,10 @@ export class SuperTabsPanGesture {
     }
 
     // stop anything else from capturing these events, to make sure the content doesn't slide
-    ev.stopPropagation();
-    ev.preventDefault();
+    if(this.config.allowElementScroll !== true){
+      ev.stopPropagation();
+      ev.preventDefault();
+    }
 
     // get delta X
     const deltaX: number = this.lastPosX - coords.x;
