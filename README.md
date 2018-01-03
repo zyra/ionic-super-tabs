@@ -131,6 +131,7 @@ _(optional)_ Advanced configuration.
 Param | Description | Default
 --- | --- | ---
 `dragThreshold` | The number of pixels that the user must swipe through before the drag event triggers. | `20`
+`allowElementScroll` | Allow elements inside tabs to be dragged before triggering the tab swipe event. | `false`
 `maxDragAngle` | The maximum angle that the user can drag at for the drag event to trigger. | `40`
 `transitionEase` | The transition timing function to use in animations. | `'cubic-bezier(0.35, 0, 0.25, 1)'`
 `transitionDuration` | The duration of animations in milliseconds. | `300`
