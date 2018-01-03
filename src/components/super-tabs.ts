@@ -28,6 +28,10 @@ export interface SuperTabsConfig {
    */
   dragThreshold?: number;
   /**
+   * Allows elements inside tabs to be dragged, defaults to false
+   */
+  allowElementScroll?: boolean;
+  /**
    * Defaults to ease-in-out
    */
   transitionEase?: string;
@@ -287,6 +291,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   ngOnInit() {
     const defaultConfig: SuperTabsConfig = {
       dragThreshold: 10,
+      allowElementScroll: false,
       maxDragAngle: 40,
       sideMenuThreshold: 50,
       transitionDuration: 300,
@@ -299,6 +304,12 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     }
 
     this.config = defaultConfig;
+    
+    if(this.config.allowElementScroll === true){
+      if(this.config.dragThreshold < 100){
+        this.config.dragThreshold = 120; 
+      }
+    }
 
     this.id = this.id || `super-tabs-${++superTabsIds}`;
     this.superTabsCtrl.registerInstance(this);
