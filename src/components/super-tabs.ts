@@ -588,6 +588,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   private refreshTabStates() {
     return Promise.all(this._tabs.map((tab, i) => {
       tab.setActive(i === this.selectedTabIndex);
+
       return tab.load(Math.abs(this.selectedTabIndex - i) < 2);
     }));
   }

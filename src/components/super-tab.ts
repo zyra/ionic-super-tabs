@@ -187,7 +187,7 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
   async load(load: boolean) {
     if (load && !this.loaded) {
       await this.init;
-      await this.push(this.root, this.rootParams, { animate: false });
+      await this.setRoot(this.root, this.rootParams, { animate: false });
       this.loaded = true;
     }
   }
