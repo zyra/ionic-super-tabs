@@ -64,10 +64,21 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
    */
   @Input() root: any;
 
+  private _rootParams: any;
+  rootNavCtrl: NavControllerBase;
+
   /**
    * @input {object} Any nav-params to pass to the root page of this tab.
    */
-  @Input() rootParams: any;
+  @Input()
+  set rootParams(params: any) {
+    params.rootNavCtrl = this.rootNavCtrl;
+    this._rootParams = params;
+  }
+
+  get rootParams(): any {
+    return this._rootParams;
+  }
 
   @Input('id')
   tabId: string;
