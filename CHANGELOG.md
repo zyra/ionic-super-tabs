@@ -1,5 +1,24 @@
+<a name="4.2.0"></a>
+# [4.2.0](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.5...v4.2.0) (2018-01-25)
+
+
+### Bug Fixes
+
+* **ios:** slide animation bug ([#235](https://github.com/zyra/ionic2-super-tabs/issues/235)) ([a55167d](https://github.com/zyra/ionic2-super-tabs/commit/a55167d))
+* fix error with resize method ([#238](https://github.com/zyra/ionic2-super-tabs/issues/238)) ([fac0f4f](https://github.com/zyra/ionic2-super-tabs/commit/fac0f4f))
+* overlapping buttons ([dcb5217](https://github.com/zyra/ionic2-super-tabs/commit/dcb5217))
+* **super-tab:** make sure we always have rootNavParams ([192986d](https://github.com/zyra/ionic2-super-tabs/commit/192986d)), closes [#126](https://github.com/zyra/ionic2-super-tabs/issues/126)
+* **super-tab:** use setRoot when initializing ([64f100e](https://github.com/zyra/ionic2-super-tabs/commit/64f100e))
+
+
+### Features
+
+* allow elements inside tabs to be dragged/scrolled before tabs swipe event is triggered ([#243](https://github.com/zyra/ionic2-super-tabs/issues/243)) ([1953ee9](https://github.com/zyra/ionic2-super-tabs/commit/1953ee9))
+
+
+
 <a name="4.1.5"></a>
-## [4.1.5](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.4...v4.1.5) (2017-11-10)
+## [4.1.5](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.4...v4.1.5) (2017-11-11)
 
 
 
@@ -220,7 +239,7 @@
 
 ### Features
 
-* integrate deeplinking ([2941ce9](https://github.com/zyra/ionic2-super-tabs/commit/2941ce9))
+* integrate deeplinking ([2941ce9](https://github.com/zyra/ionic2-super-tabs/commit/2941ce9)), closes [#19](https://github.com/zyra/ionic2-super-tabs/issues/19)
 
 
 
