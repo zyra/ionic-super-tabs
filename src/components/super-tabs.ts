@@ -109,17 +109,8 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   @Input()
   id: string;
 
-  // TODO organize these new properties/methods
   @Input()
   name: string;
-
-  getType(): string { return; }
-
-  getSecondaryIdentifier(): string { return; }
-
-  getAllChildNavs(): any[] {
-    return this._tabs;
-  }
 
   /**
    * Height of the tabs
@@ -348,6 +339,14 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this.parent.unregisterChildNav(this);
 
     this.superTabsCtrl.unregisterInstance(this.id);
+  }
+
+  getType(): string { return; }
+
+  getSecondaryIdentifier(): string { return; }
+
+  getAllChildNavs(): any[] {
+    return this._tabs;
   }
 
   resize() {
