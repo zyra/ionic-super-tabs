@@ -1,11 +1,21 @@
 import {
-  Component, Input, Output, EventEmitter, ElementRef, ViewChildren, QueryList,
-  ViewEncapsulation, ViewChild, Renderer2, AfterViewInit, OnDestroy
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  QueryList,
+  Renderer2,
+  ViewChild,
+  ViewChildren,
+  ViewEncapsulation
 } from '@angular/core';
-import { Platform, DomController } from 'ionic-angular';
+import { DomController, Platform } from 'ionic-angular';
 import { SuperTabsPanGesture } from '../super-tabs-pan-gesture';
 import { SuperTabsConfig } from './super-tabs';
-import { SuperTabButton } from "./super-tab-button";
+import { SuperTabButton } from './super-tab-button';
 
 @Component({
   selector: 'super-tabs-toolbar',
@@ -14,7 +24,9 @@ import { SuperTabButton } from "./super-tab-button";
       <div class="tab-buttons-container" #tabButtonsContainer>
         <div *ngIf="tabsPlacement === 'bottom'" class="indicator {{ 'button-md-' + indicatorColor }}" #indicator></div>
         <div class="tab-buttons" #tabButtons>
-          <super-tab-button *ngFor="let tab of tabs; let i = index" (select)="onTabSelect(i)" [title]="tab.title" [icon]="tab.icon" [badge]="tab.badge" [selected]="selectedTab === i" [color]="tabsColor" [badgeColor]="badgeColor"></super-tab-button>
+          <super-tab-button *ngFor="let tab of tabs; let i = index" (select)="onTabSelect(i)" [title]="tab.title"
+                            [icon]="tab.icon" [badge]="tab.badge" [selected]="selectedTab === i" [color]="tabsColor"
+                            [badgeColor]="badgeColor"></super-tab-button>
         </div>
         <div *ngIf="tabsPlacement === 'top'" class="indicator {{ 'button-md-' + indicatorColor }}" #indicator></div>
       </div>
@@ -91,12 +103,11 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
     segment: false
   };
 
-  constructor(
-    private el: ElementRef,
-    private plt: Platform,
-    private rnd: Renderer2,
-    private domCtrl: DomController
-  ) {}
+  constructor(private el: ElementRef,
+              private plt: Platform,
+              private rnd: Renderer2,
+              private domCtrl: DomController) {
+  }
 
   ngAfterViewInit() {
     this.gesture = new SuperTabsPanGesture(this.plt, this.tabButtonsContainer.nativeElement, this.config, this.rnd);
@@ -144,7 +155,7 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
     this.indicatorPosition = position;
     const scale = width / 100;
     this.toggleAnimation('indicator', animate);
-    this.rnd.setStyle(this.indicator.nativeElement, this.plt.Css.transform,  'translate3d(' + (position - this.segmentPosition) + 'px, 0, 0) scale3d(' + scale + ', 1, 1)')
+    this.rnd.setStyle(this.indicator.nativeElement, this.plt.Css.transform, 'translate3d(' + (position - this.segmentPosition) + 'px, 0, 0) scale3d(' + scale + ', 1, 1)');
   }
 
   setSegmentPosition(position: number, animate?: boolean) {
@@ -170,8 +181,8 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
 
     this.animationState[el] = animate;
 
-    const _el: HTMLElement = el === 'indicator'? this.indicator.nativeElement : this.tabButtonsBar.nativeElement;
-    const value: string = animate? `all ${this.config.transitionDuration}ms ${this.config.transitionEase}` : 'initial';
+    const _el: HTMLElement = el === 'indicator' ? this.indicator.nativeElement : this.tabButtonsBar.nativeElement;
+    const value: string = animate ? `all ${this.config.transitionDuration}ms ${this.config.transitionEase}` : 'initial';
 
     this.rnd.setStyle(_el, this.plt.Css.transition, value);
 

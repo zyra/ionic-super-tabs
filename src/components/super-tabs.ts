@@ -1,11 +1,29 @@
 import {
-  AfterViewInit, Component, ElementRef, Input, OnInit, OnDestroy, Renderer2,
-  ViewChild, AfterContentInit, Output, EventEmitter, ViewEncapsulation, forwardRef, Optional
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  Optional,
+  Output,
+  Renderer2,
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import { SuperTab } from './super-tab';
 import {
-  NavController, RootNode, NavControllerBase, ViewController, App, DeepLinker,
-  DomController, Platform
+  App,
+  DeepLinker,
+  DomController,
+  NavController,
+  NavControllerBase,
+  Platform,
+  RootNode,
+  ViewController
 } from 'ionic-angular';
 import { NavigationContainer } from 'ionic-angular/navigation/navigation-container';
 import { Observable } from 'rxjs/Observable';
@@ -236,23 +254,21 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
    */
   parent: NavControllerBase;
 
-  constructor(
-    @Optional() parent: NavController,
-    @Optional() public viewCtrl: ViewController,
-    private _app: App,
-    private el: ElementRef,
-    private rnd: Renderer2,
-    private superTabsCtrl: SuperTabsController,
-    private linker: DeepLinker,
-    private domCtrl: DomController,
-    private _plt: Platform
-  ) {
+  constructor(@Optional() parent: NavController,
+              @Optional() public viewCtrl: ViewController,
+              private _app: App,
+              private el: ElementRef,
+              private rnd: Renderer2,
+              private superTabsCtrl: SuperTabsController,
+              private linker: DeepLinker,
+              private domCtrl: DomController,
+              private _plt: Platform) {
     this.parent = <NavControllerBase>parent;
 
     if (this.parent) {
       this.parent.registerChildNav(this);
 
-    } else if(viewCtrl && viewCtrl.getNav()) {
+    } else if (viewCtrl && viewCtrl.getNav()) {
       this.parent = <any>viewCtrl.getNav();
       this.parent.registerChildNav(this);
 
@@ -295,10 +311,10 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     }
 
     this.config = defaultConfig;
-    
-    if(this.config.allowElementScroll === true){
-      if(this.config.dragThreshold < 110){
-        this.config.dragThreshold = 110; 
+
+    if (this.config.allowElementScroll === true) {
+      if (this.config.dragThreshold < 110) {
+        this.config.dragThreshold = 110;
       }
     }
 
@@ -352,9 +368,13 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     this.superTabsCtrl.unregisterInstance(this.id);
   }
 
-  getType(): string { return; }
+  getType(): string {
+    return;
+  }
 
-  getSecondaryIdentifier(): string { return; }
+  getSecondaryIdentifier(): string {
+    return;
+  }
 
   getAllChildNavs(): any[] {
     return this._tabs;
@@ -548,7 +568,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   private fireLifecycleEvent(events: string[]) {
     const activeView = this.getActiveTab().getActive();
     events.forEach((event: string) => {
-      switch(event) {
+      switch (event) {
         case 'willEnter':
           activeView._willEnter();
           break;
@@ -615,16 +635,16 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     if (ip + iw + (mw / 2 - iw / 2) > mw + sp) {
       // we need to move the segment container to the left
       const
-        delta: number = (ip + iw +  (mw / 2 - iw / 2)) - mw - sp,
+        delta: number = (ip + iw + (mw / 2 - iw / 2)) - mw - sp,
         max: number = this.toolbar.segmentWidth - mw;
 
       pos = sp + delta;
-      pos = pos < max? pos : max;
-    } else if (ip -  (mw / 2 - iw / 2) < sp) {
+      pos = pos < max ? pos : max;
+    } else if (ip - (mw / 2 - iw / 2) < sp) {
       // we need to move the segment container to the right
-      pos = ip -  (mw / 2 - iw / 2);
+      pos = ip - (mw / 2 - iw / 2);
       // pos = pos >= 0? pos : 0;
-      pos = pos < 0? 0 : pos > ip ? (ip - mw + iw) : pos;
+      pos = pos < 0 ? 0 : pos > ip ? (ip - mw + iw) : pos;
       // pos = pos < 0? 0 : pos > maxPos? maxPos : pos;
     } else return; // no need to move the segment container
 
@@ -694,19 +714,26 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
   }
 
   // needed since we're implementing RootNode
-  getElementRef() { return this.el; }
+  getElementRef() {
+    return this.el;
+  }
 
   // needed since we're implementing RootNode
-  initPane() { return true; }
+  initPane() {
+    return true;
+  }
 
   // needed since we're implementing RootNode
-  paneChanged() {}
+  paneChanged() {
+  }
 
   // needed to make Ionic Framework think this is a tabs component... needed for Deeplinking
-  getSelected() {}
+  getSelected() {
+  }
 
   // needed to make Ionic Framework think this is a tabs component... needed for Deeplinking
-  setTabbarPosition() {}
+  setTabbarPosition() {
+  }
 
   // update segment button widths manually
   indexSegmentButtonWidths() {

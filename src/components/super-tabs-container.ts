@@ -1,6 +1,15 @@
 import {
-  Component, Renderer2, ElementRef, Input, Output, EventEmitter, ViewChild, ViewEncapsulation,
-  AfterViewInit, OnDestroy, NgZone
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnDestroy,
+  Output,
+  Renderer2,
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { SuperTabsPanGesture } from '../super-tabs-pan-gesture';
@@ -104,14 +113,13 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
    * Set of booleans to indicate whether swiping is enabled on each tab
    * @type {{}}
    */
-  private swipeEnabledPerTab: {[index: number]: boolean} = {};
+  private swipeEnabledPerTab: { [index: number]: boolean } = {};
 
-  constructor(
-    private el: ElementRef,
-    private rnd: Renderer2,
-    private plt: Platform,
-    private ngZone: NgZone
-  ) {}
+  constructor(private el: ElementRef,
+              private rnd: Renderer2,
+              private plt: Platform,
+              private ngZone: NgZone) {
+  }
 
   ngAfterViewInit() {
     this.init();
@@ -162,7 +170,7 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
       this.plt.raf(() => {
         this.onDrag.emit();
         this.moveContainer();
-      })
+      });
     };
 
     this.gesture.onEnd = (shortSwipe: boolean, shortSwipeDelta?: number) => {

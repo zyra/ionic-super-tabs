@@ -1,4 +1,12 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewEncapsulation, ElementRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewEncapsulation
+} from '@angular/core';
 
 @Component({
   selector: 'super-tab-button',
@@ -47,9 +55,8 @@ export class SuperTabButton {
     this.select.emit(this);
   }
 
-  constructor(
-    private _el: ElementRef
-  ) {}
+  constructor(private _el: ElementRef) {
+  }
 
   getNativeElement(): HTMLElement {
     return this._el.nativeElement;

@@ -25,12 +25,10 @@ export class SuperTabsPanGesture {
 
   private listeners: Function[] = [];
 
-  constructor(
-    private plt: Platform,
-    private el: HTMLElement,
-    private config: SuperTabsConfig,
-    private rnd: Renderer2
-  ) {
+  constructor(private plt: Platform,
+              private el: HTMLElement,
+              private config: SuperTabsConfig,
+              private rnd: Renderer2) {
 
     this.listeners.push(
       rnd.listen(el, 'touchstart', this._onStart.bind(this)),
@@ -90,7 +88,7 @@ export class SuperTabsPanGesture {
     }
 
     // stop anything else from capturing these events, to make sure the content doesn't slide
-    if(this.config.allowElementScroll !== true){
+    if (this.config.allowElementScroll !== true) {
       ev.stopPropagation();
       ev.preventDefault();
     }

@@ -1,9 +1,29 @@
 import {
-  Component, Input, Renderer, ElementRef, ViewEncapsulation, Optional, ComponentFactoryResolver,
-  NgZone, ViewContainerRef, ViewChild, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef, ErrorHandler
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  ErrorHandler,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  Optional,
+  Renderer,
+  ViewChild,
+  ViewContainerRef,
+  ViewEncapsulation
 } from '@angular/core';
 import {
-  NavControllerBase, App, Config, Platform, GestureController, DeepLinker, DomController, NavOptions,
+  App,
+  Config,
+  DeepLinker,
+  DomController,
+  GestureController,
+  NavControllerBase,
+  NavOptions,
+  Platform,
   ViewController
 } from 'ionic-angular';
 import { TransitionController } from 'ionic-angular/transitions/transition-controller';
@@ -72,6 +92,7 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
   get swipeBackEnabled(): boolean {
     return this._sbEnabled;
   }
+
   set swipeBackEnabled(val: boolean) {
     this._sbEnabled = Boolean(val);
     this._swipeBackCheck();
@@ -80,7 +101,7 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
   /**
    * @hidden
    */
-  @ViewChild('viewport', {read: ViewContainerRef})
+  @ViewChild('viewport', { read: ViewContainerRef })
   set _vp(val: ViewContainerRef) {
     this.setViewport(val);
   }
@@ -101,22 +122,20 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
    */
   private initResolve: Function;
 
-  constructor(
-    parent: SuperTabs,
-    app: App,
-    config: Config,
-    plt: Platform,
-    el: ElementRef,
-    zone: NgZone,
-    rnd: Renderer,
-    cfr: ComponentFactoryResolver,
-    gestureCtrl: GestureController,
-    transCtrl: TransitionController,
-    errorHandler: ErrorHandler,
-    @Optional() private linker: DeepLinker,
-    private _dom: DomController,
-    private cd: ChangeDetectorRef
-  ) {
+  constructor(parent: SuperTabs,
+              app: App,
+              config: Config,
+              plt: Platform,
+              el: ElementRef,
+              zone: NgZone,
+              rnd: Renderer,
+              cfr: ComponentFactoryResolver,
+              gestureCtrl: GestureController,
+              transCtrl: TransitionController,
+              errorHandler: ErrorHandler,
+              @Optional() private linker: DeepLinker,
+              private _dom: DomController,
+              private cd: ChangeDetectorRef) {
     super(parent, app, config, plt, el, zone, rnd, cfr, gestureCtrl, transCtrl, linker, _dom, errorHandler);
     this.init = new Promise<void>(resolve => this.initResolve = resolve);
   }
