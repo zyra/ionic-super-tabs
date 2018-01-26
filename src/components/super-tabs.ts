@@ -286,7 +286,7 @@ export class SuperTabs implements OnInit, AfterContentInit, AfterViewInit, OnDes
     }
 
     // re-adjust the height of the slider when the orientation changes
-    const $windowResize = Observable.merge.apply(this, obsToMerge).debounceTime(10);
+    const $windowResize = Observable.merge.apply(this, obsToMerge).debounceTime(100);
 
     const windowResizeSub = $windowResize.subscribe(() => {
       this.resize();
