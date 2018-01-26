@@ -1,3 +1,13 @@
+<a name="4.2.1"></a>
+## [4.2.1](https://github.com/zyra/ionic2-super-tabs/compare/v4.2.0...v4.2.1) (2018-01-26)
+
+
+### Bug Fixes
+
+* **super-tabs:** increase debounceTime for resize method ([125184d](https://github.com/zyra/ionic2-super-tabs/commit/125184d)), closes [#201](https://github.com/zyra/ionic2-super-tabs/issues/201)
+
+
+
 <a name="4.2.0"></a>
 # [4.2.0](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.5...v4.2.0) (2018-01-25)
 
@@ -18,7 +28,7 @@
 
 
 <a name="4.1.5"></a>
-## [4.1.5](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.4...v4.1.5) (2017-11-11)
+## [4.1.5](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.4...v4.1.5) (2017-11-10)
 
 
 
@@ -239,7 +249,7 @@
 
 ### Features
 
-* integrate deeplinking ([2941ce9](https://github.com/zyra/ionic2-super-tabs/commit/2941ce9)), closes [#19](https://github.com/zyra/ionic2-super-tabs/issues/19)
+* integrate deeplinking ([2941ce9](https://github.com/zyra/ionic2-super-tabs/commit/2941ce9))
 
 
 
