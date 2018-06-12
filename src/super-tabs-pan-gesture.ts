@@ -25,10 +25,12 @@ export class SuperTabsPanGesture {
 
   private listeners: Function[] = [];
 
-  constructor(private plt: Platform,
-              private el: HTMLElement,
-              private config: SuperTabsConfig,
-              private rnd: Renderer2) {
+  constructor(
+    private plt: Platform,
+    private el: HTMLElement,
+    private config: SuperTabsConfig,
+    private rnd: Renderer2
+  ) {
 
     this.listeners.push(
       rnd.listen(el, 'touchstart', this._onStart.bind(this)),
@@ -51,6 +53,20 @@ export class SuperTabsPanGesture {
   }
 
   private _onStart(ev: TouchEvent) {
+    // check avoid this element
+    var avoid = false;
+    var element: any = ev.target;
+    if (element) {
+      do {
+        if (element.getAttribute && element.getAttribute('avoid-super-tabs')) avoid = true;
+        element = element.parentElement;
+      } while (element && !avoid);
+    }
+    if (avoid) {
+      this.shouldCapture = false;
+      return;
+    }
+
     const coords: PointerCoordinates = pointerCoord(ev),
       vw = this.plt.width();
 
@@ -75,12 +91,12 @@ export class SuperTabsPanGesture {
     if (!this.isDragging) {
 
       if (typeof this.shouldCapture !== 'boolean')
-      // we haven't decided yet if we want to capture this gesture
+        // we haven't decided yet if we want to capture this gesture
         this.checkGesture(coords);
 
 
       if (this.shouldCapture === true)
-      // gesture is good, let's capture all next onTouchMove events
+        // gesture is good, let's capture all next onTouchMove events
         this.isDragging = true;
       else
         return;
@@ -127,6 +143,7 @@ export class SuperTabsPanGesture {
   }
 
   private checkGesture(newCoords: PointerCoordinates) {
+    if (!this.initialCoords) return;
 
     const radians = this.config.maxDragAngle * (Math.PI / 180),
       maxCosine = Math.cos(radians),
