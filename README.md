@@ -24,6 +24,7 @@ To see this in action, checkout the [example project here](https://github.com/zy
   - [`super-tab` Component](#super-tab-component)
   - [`SuperTabsController` Provider](#super-tabs-controller-provider)
   - [Colors](#colors)
+  - [Avoid swipe event](#avoid-swipe-event)
 - [Examples](#examples)
 - [Project goals](#project-goals)
 
@@ -267,6 +268,12 @@ Slide to a tab.
 
 ## Colors
 All color inputs takes color names like any other Ionic 2 component. Your color name must be defined in the `$colors` map in your `variables.scss` file. 
+
+<br><br><br>
+
+## Avoid swipe event
+Set `avoid-super-tabs="true"` attribute in HTML element for avoid swipe event.<br/>
+Example when using the horizontal scroll bar inner [`super-tab` Component](#super-tab-component)
 
 <br><br><br>
 
