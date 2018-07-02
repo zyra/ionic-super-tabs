@@ -1,3 +1,13 @@
+<a name="4.3.0"></a>
+# [4.3.0](https://github.com/zyra/ionic2-super-tabs/compare/v4.2.2...v4.3.0) (2018-07-02)
+
+
+
+<a name="4.2.2"></a>
+## [4.2.2](https://github.com/zyra/ionic2-super-tabs/compare/v4.2.1...v4.2.2) (2018-01-26)
+
+
+
 <a name="4.2.1"></a>
 ## [4.2.1](https://github.com/zyra/ionic2-super-tabs/compare/v4.2.0...v4.2.1) (2018-01-26)
 
@@ -249,7 +259,7 @@
 
 ### Features
 
-* integrate deeplinking ([2941ce9](https://github.com/zyra/ionic2-super-tabs/commit/2941ce9))
+* integrate deeplinking ([2941ce9](https://github.com/zyra/ionic2-super-tabs/commit/2941ce9)), closes [#19](https://github.com/zyra/ionic2-super-tabs/issues/19)
 
 
 
