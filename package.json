@@ -1,6 +1,6 @@
 {
   "name": "ionic2-super-tabs",
-  "version": "4.2.2",
+  "version": "4.3.0",
   "description": "Swipeable tabs module for Ionic 3 Apps",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
