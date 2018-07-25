@@ -28,7 +28,6 @@ super-tabs {
   }
 
   &:not([no-shadow]) {
-
     &.tabs-placement-bottom {
       > super-tabs-toolbar > ion-toolbar.toolbar::before {
         top: -2px;
@@ -40,7 +39,8 @@ super-tabs {
     }
 
     > super-tabs-toolbar > ion-toolbar.toolbar {
-      &::after, &::before {
+      &::after,
+      &::before {
         position: absolute;
         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAHBAMAAADzDtBxAAAAD1BMVEUAAAAAAAAAAAAAAAAAAABPDueNAAAABXRSTlMUCS0gBIh/TXEAAAAaSURBVAjXYxCEAgY4UIICBmMogMsgFLtAAQCNSwXZKOdPxgAAAABJRU5ErkJggg==);
         background-repeat: repeat-x;
@@ -57,9 +57,7 @@ super-tabs {
       display: block;
       overflow: visible;
     }
-
   }
-
 }
 
 super-tabs.tabs-placement-bottom {
@@ -85,7 +83,8 @@ super-tabs.tabs-placement-bottom {
 }
 
 ion-tabs super-tabs ion-content {
-  .scroll-content, .fixed-content {
+  .scroll-content,
+  .fixed-content {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
   }
@@ -159,7 +158,8 @@ super-tabs-toolbar {
 
         super-tab-button {
           &:not(.selected) {
-            ion-icon, span:not(.badge) {
+            ion-icon,
+            span:not(.badge) {
               opacity: 0.7;
             }
           }
@@ -235,7 +235,6 @@ super-tabs-toolbar {
         transform: scaleX(0);
         transform-origin: 0;
       }
-
     }
 
     &.scroll-tabs {
@@ -255,10 +254,7 @@ super-tabs-toolbar {
           position: relative;
           margin-top: -2px;
         }
-
       }
     }
-
   }
-
 }

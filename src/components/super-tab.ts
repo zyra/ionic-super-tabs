@@ -121,7 +121,7 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
    * Indicates whether the tab has been loaded
    * @type {boolean}
    */
-  private loaded: boolean = false;
+  private loaded = false;
 
   /**
    * A promise that resolves when the component has initialized

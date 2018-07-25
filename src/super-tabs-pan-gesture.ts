@@ -130,14 +130,15 @@ export class SuperTabsPanGesture {
         } else {
           this.onEnd && this.onEnd(false);
         }
-    }
+      }
 
-    this.isDragging = false;
-    this.shouldCapture = undefined;
+      this.isDragging = false;
+      this.shouldCapture = undefined;
+    }
   }
 
   private checkGesture(newCoords: PointerCoordinates) {
-    if (!this.initialCoords) { 
+    if (!this.initialCoords) {
       return;
     }
 

@@ -16,7 +16,7 @@ import {
   Output,
   Renderer2,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import {
   App,
@@ -26,7 +26,7 @@ import {
   NavControllerBase,
   Platform,
   RootNode,
-  ViewController,
+  ViewController
 } from 'ionic-angular';
 import { DIRECTION_SWITCH } from 'ionic-angular/navigation/nav-util';
 import { NavigationContainer } from 'ionic-angular/navigation/navigation-container';
@@ -117,12 +117,12 @@ export class SuperTabs
   /**
    * Color of the slider that moves based on what tab is selected
    */
-  @Input() indicatorColor: string = 'primary';
+  @Input() indicatorColor = 'primary';
 
   /**
    * Badge color
    */
-  @Input() badgeColor: string = 'primary';
+  @Input() badgeColor = 'primary';
 
   /**
    * Configuration
@@ -179,7 +179,7 @@ export class SuperTabs
    * Tab buttons placement. Can be `top` or `bottom`.
    * @type {string}
    */
-  @Input() tabsPlacement: string = 'top';
+  @Input() tabsPlacement = 'top';
 
   /**
    * Emits the tab index when the selected tab changes
@@ -191,7 +191,7 @@ export class SuperTabs
    * Indicates whether the toolbar is visible
    * @private
    */
-  _isToolbarVisible: boolean = true;
+  _isToolbarVisible = true;
 
   /**
    * @private
@@ -209,14 +209,14 @@ export class SuperTabs
    * @type {boolean}
    * @private
    */
-  private _scrollTabs: boolean = false;
+  private _scrollTabs = false;
 
   /**
    * Selected tab index
    * @type {number}
    * @private
    */
-  private _selectedTabIndex: number = 0;
+  private _selectedTabIndex = 0;
 
   /**
    * Any observable subscriptions that we should unsubscribe from when destroying this component
@@ -230,21 +230,21 @@ export class SuperTabs
    * @type {boolean}
    * @private
    */
-  private hasIcons: boolean = false;
+  private hasIcons = false;
 
   /**
    * Indicates whether any of the tabs has a title
    * @type {boolean}
    * @private
    */
-  private hasTitles: boolean = false;
+  private hasTitles = false;
 
   /**
    * Indicates whether the component has finished initializing
    * @type {boolean}
    * @private
    */
-  private init: boolean = false;
+  private init = false;
 
   /**
    * Parent NavController
@@ -343,7 +343,9 @@ export class SuperTabs
 
     this.linker.navChange(DIRECTION_SWITCH);
 
-    if (!this.hasTitles && !this.hasIcons) this._isToolbarVisible = false;
+    if (!this.hasTitles && !this.hasIcons) {
+      this._isToolbarVisible = false;
+    }
 
     this.tabsContainer.slideTo(this.selectedTabIndex, false);
     await this.refreshTabStates();
@@ -384,7 +386,9 @@ export class SuperTabs
   }
 
   resize() {
-    if (this.el.nativeElement.offsetParent === null) return;
+    if (this.el.nativeElement.offsetParent === null) {
+      return;
+    }
     this.setMaxIndicatorPosition();
     this.updateTabWidth();
     this.setFixedIndicatorWidth();
@@ -471,7 +475,9 @@ export class SuperTabs
    * We listen to drag events to move the "slide" thingy along with the slides
    */
   onDrag() {
-    if (!this._isToolbarVisible) return;
+    if (!this._isToolbarVisible) {
+      return;
+    }
 
     this.domCtrl.write(() => {
       const singleSlideWidth = this.tabsContainer.tabWidth,
@@ -619,7 +625,7 @@ export class SuperTabs
   }
 
   private refreshContainerHeight() {
-    let heightOffset: number = 0;
+    let heightOffset = 0;
 
     if (this._isToolbarVisible) {
       if (this.hasTitles && this.hasIcons) {
@@ -647,7 +653,9 @@ export class SuperTabs
       ip: number = this.toolbar.indicatorPosition, // indicatorPosition
       sp: number = this.toolbar.segmentPosition; // segment position
 
-    if (mw === 0) return;
+    if (mw === 0) {
+      return;
+    }
 
     if (this.toolbar.segmentWidth <= mw) {
       if (this.toolbar.segmentPosition !== 0) {
@@ -670,7 +678,10 @@ export class SuperTabs
       // pos = pos >= 0? pos : 0;
       pos = pos < 0 ? 0 : pos > ip ? ip - mw + iw : pos;
       // pos = pos < 0? 0 : pos > maxPos? maxPos : pos;
-    } else return; // no need to move the segment container
+    } else {
+      // no need to move the segment container
+      return;
+    }
 
     this.toolbar.setSegmentPosition(pos, animate);
   }
@@ -678,8 +689,8 @@ export class SuperTabs
   private getRelativeIndicatorPosition(
     index: number = this.selectedTabIndex
   ): number {
-    let position: number = 0;
-    for (let i: number = 0; i < this.toolbar.segmentButtonWidths.length; i++) {
+    let position = 0;
+    for (let i = 0; i < this.toolbar.segmentButtonWidths.length; i++) {
       if (index > Number(i)) {
         position += this.toolbar.segmentButtonWidths[i];
       }
@@ -688,7 +699,7 @@ export class SuperTabs
   }
 
   private getAbsoluteIndicatorPosition(): number {
-    let position: number =
+    const position =
       (this.selectedTabIndex * this.tabsContainer.tabWidth) / this._tabs.length;
     return position <= this.maxIndicatorPosition
       ? position
@@ -699,7 +710,9 @@ export class SuperTabs
    * Gets the width of a tab button when `scrollTabs` is set to `true`
    */
   private getSegmentButtonWidth(index: number = this.selectedTabIndex): number {
-    if (!this._isToolbarVisible) return;
+    if (!this._isToolbarVisible) {
+      return;
+    }
     return this.toolbar.segmentButtonWidths[index];
   }
 
@@ -712,7 +725,9 @@ export class SuperTabs
   }
 
   private setFixedIndicatorWidth() {
-    if (this.scrollTabs || !this._isToolbarVisible) return;
+    if (this.scrollTabs || !this._isToolbarVisible) {
+      return;
+    }
     // the width of the "slide", should be equal to the width of a single `ion-segment-button`
     // we'll just calculate it instead of querying for a segment button
     this.toolbar.setIndicatorWidth(
@@ -725,7 +740,9 @@ export class SuperTabs
    * Aligns slide position with selected tab
    */
   private alignIndicatorPosition(animate: boolean = false) {
-    if (!this._isToolbarVisible) return;
+    if (!this._isToolbarVisible) {
+      return;
+    }
 
     if (this.scrollTabs) {
       this.toolbar.alignIndicator(
