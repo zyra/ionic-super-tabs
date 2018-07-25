@@ -100,8 +100,8 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.gesture = new SuperTabsPanGesture(
       this.plt,
-      this.tabButtonsContainer.nativeElement,
       this.config,
+      this.tabButtonsContainer.nativeElement,
       this.rnd
     );
     this.gesture.onMove = (delta: number) => {

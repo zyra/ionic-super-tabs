@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { SuperTabs } from '../components/super-tabs';
+import { SuperTabsComponent } from '../components/super-tabs';
 
 @Injectable()
 export class SuperTabsController {
-  private instances: SuperTabs[] = [];
+  private instances: SuperTabsComponent[] = [];
 
   setBadge(tabId: string, value: number, tabsId?: string) {
     const instance = this.getInstance(tabsId);
@@ -60,7 +60,7 @@ export class SuperTabsController {
   /**
    * @private
    */
-  registerInstance(instance: SuperTabs) {
+  registerInstance(instance: SuperTabsComponent) {
     this.instances.push(instance);
   }
 
@@ -74,11 +74,11 @@ export class SuperTabsController {
 
   private getInstanceIndex(id: string): number {
     return this.instances.findIndex(
-      (instance: SuperTabs) => instance.id === id
+      (instance: SuperTabsComponent) => instance.id === id
     );
   }
 
-  private getInstance(id?: string): SuperTabs {
+  private getInstance(id?: string): SuperTabsComponent {
     return (
       (!!id && this.instances[this.getInstanceIndex(id)]) || this.instances[0]
     );

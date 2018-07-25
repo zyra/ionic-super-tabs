@@ -34,7 +34,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import { SuperTabsController } from '../providers/super-tabs-controller';
-import { SuperTab } from './super-tab';
+import { SuperTabComponent } from './super-tab';
 import { SuperTabsContainer } from './super-tabs-container';
 import { SuperTabsToolbar } from './super-tabs-toolbar';
 
@@ -92,11 +92,11 @@ export interface SuperTabsConfig {
   providers: [
     {
       provide: RootNode,
-      useExisting: forwardRef(() => SuperTabs)
+      useExisting: forwardRef(() => SuperTabsComponent)
     }
   ]
 })
-export class SuperTabs
+export class SuperTabsComponent
   implements
     OnInit,
     AfterContentInit,
@@ -196,7 +196,7 @@ export class SuperTabs
   /**
    * @private
    */
-  _tabs: SuperTab[] = [];
+  _tabs: SuperTabComponent[] = [];
 
   @ViewChild(SuperTabsToolbar) private toolbar: SuperTabsToolbar;
 
@@ -452,7 +452,7 @@ export class SuperTabs
     return [this._tabs[this.selectedTabIndex]];
   }
 
-  addTab(tab: SuperTab) {
+  addTab(tab: SuperTabComponent) {
     tab.rootNavCtrl = this.parent;
     tab.rootParams = tab.rootParams || {};
 
@@ -644,7 +644,7 @@ export class SuperTabs
 
   private refreshTabWidths() {
     const width: number = this.el.nativeElement.offsetWidth;
-    this._tabs.forEach((tab: SuperTab) => tab.setWidth(width));
+    this._tabs.forEach((tab: SuperTabComponent) => tab.setWidth(width));
   }
 
   private alignTabButtonsContainer(animate?: boolean) {
@@ -760,14 +760,14 @@ export class SuperTabs
   }
 
   getTabIndexById(tabId: string): number {
-    return this._tabs.findIndex((tab: SuperTab) => tab.tabId === tabId);
+    return this._tabs.findIndex((tab: SuperTabComponent) => tab.tabId === tabId);
   }
 
-  getTabById(tabId: string): SuperTab {
-    return this._tabs.find((tab: SuperTab) => tab.tabId === tabId);
+  getTabById(tabId: string): SuperTabComponent {
+    return this._tabs.find((tab: SuperTabComponent) => tab.tabId === tabId);
   }
 
-  getActiveTab(): SuperTab {
+  getActiveTab(): SuperTabComponent {
     return this._tabs[this.selectedTabIndex];
   }
 
