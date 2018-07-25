@@ -15,7 +15,7 @@ import {
 import { DomController, Platform } from 'ionic-angular';
 import { SuperTabsPanGesture } from '../super-tabs-pan-gesture';
 import { SuperTabsConfig } from './super-tabs';
-import { SuperTabButton } from './super-tab-button';
+import { SuperTabButtonComponent } from './super-tab-button';
 
 @Component({
   selector: 'super-tabs-toolbar',
@@ -67,8 +67,8 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
   @Output()
   tabSelect: EventEmitter<any> = new EventEmitter<any>();
 
-  @ViewChildren(SuperTabButton)
-  private tabButtons: QueryList<SuperTabButton>;
+  @ViewChildren(SuperTabButtonComponent)
+  private tabButtons: QueryList<SuperTabButtonComponent>;
 
   @ViewChild('tabButtonsContainer')
   private tabButtonsContainer: ElementRef;
@@ -194,7 +194,7 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
   indexSegmentButtonWidths() {
     let index = [], total = 0;
 
-    this.tabButtons.forEach((btn: SuperTabButton, i: number) => {
+    this.tabButtons.forEach((btn: SuperTabButtonComponent, i: number) => {
       index[i] = btn.getNativeElement().offsetWidth;
       total += index[i];
     });

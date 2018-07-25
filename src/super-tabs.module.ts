@@ -1,11 +1,12 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { IonicModule } from 'ionic-angular';
+
 import { SuperTab } from './components/super-tab';
+import { SuperTabButtonComponent } from './components/super-tab-button';
 import { SuperTabs } from './components/super-tabs';
-import { SuperTabsController } from './providers/super-tabs-controller';
-import { SuperTabsToolbar } from './components/super-tabs-toolbar';
 import { SuperTabsContainer } from './components/super-tabs-container';
-import { SuperTabButton } from './components/super-tab-button';
+import { SuperTabsToolbar } from './components/super-tabs-toolbar';
+import { SuperTabsController } from './providers/super-tabs-controller';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,7 @@ import { SuperTabButton } from './components/super-tab-button';
     SuperTabs,
     SuperTabsToolbar,
     SuperTabsContainer,
-    SuperTabButton
+    SuperTabButtonComponent
   ],
   imports: [
     IonicModule

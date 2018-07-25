@@ -1,10 +1,10 @@
+import { Renderer2 } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { pointerCoord, PointerCoordinates } from 'ionic-angular/util/dom';
+
 import { SuperTabsConfig } from './components/super-tabs';
-import { Renderer2 } from '@angular/core';
 
 export class SuperTabsPanGesture {
-
   onMove: (delta: number) => void;
 
   onEnd: (shortSwipe: boolean, shortSwipeDelta?: number) => void;
@@ -13,9 +13,9 @@ export class SuperTabsPanGesture {
 
   private initialTimestamp: number;
 
-  private leftThreshold: number = 0;
+  private leftThreshold = 0;
 
-  private rightThreshold: number = 0;
+  private rightThreshold = 0;
 
   private shouldCapture: boolean;
 
@@ -27,11 +27,10 @@ export class SuperTabsPanGesture {
 
   constructor(
     private plt: Platform,
-    private el: HTMLElement,
     private config: SuperTabsConfig,
-    private rnd: Renderer2
+    el: HTMLElement,
+    rnd: Renderer2
   ) {
-
     this.listeners.push(
       rnd.listen(el, 'touchstart', this._onStart.bind(this)),
       rnd.listen(el, 'touchmove', this._onMove.bind(this)),
@@ -45,7 +44,6 @@ export class SuperTabsPanGesture {
     if (config.sideMenu === 'both' || config.sideMenu === 'right') {
       this.rightThreshold = config.sideMenuThreshold;
     }
-
   }
 
   destroy() {
@@ -54,11 +52,13 @@ export class SuperTabsPanGesture {
 
   private _onStart(ev: TouchEvent) {
     // check avoid this element
-    var avoid = false;
-    var element: any = ev.target;
+    let avoid = false;
+    let element: any = ev.target;
     if (element) {
       do {
-        if (element.getAttribute && element.getAttribute('avoid-super-tabs')) avoid = true;
+        if (element.getAttribute && element.getAttribute('avoid-super-tabs')) {
+          avoid = true;
+        }
         element = element.parentElement;
       } while (element && !avoid);
     }
@@ -79,28 +79,27 @@ export class SuperTabsPanGesture {
     // the starting point looks good, let's see what happens when we move
 
     this.initialCoords = coords;
-    if (this.config.shortSwipeDuration > 0) this.initialTimestamp = Date.now();
+    if (this.config.shortSwipeDuration > 0) {
+      this.initialTimestamp = Date.now();
+    }
     this.lastPosX = coords.x;
-
   }
 
   private _onMove(ev: TouchEvent) {
-
     const coords: PointerCoordinates = pointerCoord(ev);
 
     if (!this.isDragging) {
-
-      if (typeof this.shouldCapture !== 'boolean')
+      if (typeof this.shouldCapture !== 'boolean') {
         // we haven't decided yet if we want to capture this gesture
         this.checkGesture(coords);
+      }
 
-
-      if (this.shouldCapture === true)
+      if (this.shouldCapture === true) {
         // gesture is good, let's capture all next onTouchMove events
         this.isDragging = true;
-      else
+      } else {
         return;
-
+      }
     }
 
     // stop anything else from capturing these events, to make sure the content doesn't slide
@@ -117,33 +116,30 @@ export class SuperTabsPanGesture {
 
     // update last X value
     this.lastPosX = coords.x;
-
   }
 
   private _onEnd(ev: TouchEvent) {
     const coords: PointerCoordinates = pointerCoord(ev);
 
     if (this.shouldCapture === true) {
-
       if (this.config.shortSwipeDuration > 0) {
-
         const deltaTime: number = Date.now() - this.initialTimestamp;
 
-        if (deltaTime <= this.config.shortSwipeDuration)
+        if (deltaTime <= this.config.shortSwipeDuration) {
           this.onEnd && this.onEnd(true, coords.x - this.initialCoords.x);
-        else this.onEnd && this.onEnd(false);
-
-      } else this.onEnd && this.onEnd(false);
-
+        } else {
+          this.onEnd && this.onEnd(false);
+        }
     }
 
     this.isDragging = false;
     this.shouldCapture = undefined;
-
   }
 
   private checkGesture(newCoords: PointerCoordinates) {
-    if (!this.initialCoords) return;
+    if (!this.initialCoords) { 
+      return;
+    }
 
     const radians = this.config.maxDragAngle * (Math.PI / 180),
       maxCosine = Math.cos(radians),
@@ -159,7 +155,5 @@ export class SuperTabsPanGesture {
 
       this.shouldCapture = Math.abs(cosine) > maxCosine;
     }
-
   }
-
 }
