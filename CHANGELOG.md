@@ -1,10 +1,10 @@
-<a name="4.3.0"></a>
-# [4.3.0](https://github.com/zyra/ionic2-super-tabs/compare/v4.2.2...v4.3.0) (2018-07-02)
+<a name="4.3.1"></a>
+## [4.3.1](https://github.com/zyra/ionic2-super-tabs/compare/v4.2.1...v4.3.1) (2018-09-23)
 
 
+### Bug Fixes
 
-<a name="4.2.2"></a>
-## [4.2.2](https://github.com/zyra/ionic2-super-tabs/compare/v4.2.1...v4.2.2) (2018-01-26)
+* **lib:** prevent TypeError "Cannot read property 'getActiveChildNavs' of undefined" ([#323](https://github.com/zyra/ionic2-super-tabs/issues/323)) ([a0c8496](https://github.com/zyra/ionic2-super-tabs/commit/a0c8496))
 
 
 
@@ -38,7 +38,7 @@
 
 
 <a name="4.1.5"></a>
-## [4.1.5](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.4...v4.1.5) (2017-11-10)
+## [4.1.5](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.4...v4.1.5) (2017-11-11)
 
 
 
