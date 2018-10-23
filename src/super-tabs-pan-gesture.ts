@@ -62,6 +62,7 @@ export class SuperTabsPanGesture {
         element = element.parentElement;
       } while (element && !avoid);
     }
+
     if (avoid) {
       this.shouldCapture = false;
       return;
@@ -130,11 +131,13 @@ export class SuperTabsPanGesture {
         } else {
           this.onEnd && this.onEnd(false);
         }
+      } else {
+        this.onEnd && this.onEnd(false);
       }
-
-      this.isDragging = false;
-      this.shouldCapture = undefined;
     }
+
+    this.isDragging = false;
+    this.shouldCapture = undefined;
   }
 
   private checkGesture(newCoords: PointerCoordinates) {
