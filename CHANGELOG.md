@@ -1,10 +1,15 @@
-<a name="4.3.1"></a>
-## [4.3.1](https://github.com/zyra/ionic2-super-tabs/compare/v4.2.1...v4.3.1) (2018-09-23)
+<a name="5.0.0"></a>
+# [5.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v4.2.1...v5.0.0) (2018-10-23)
 
 
 ### Bug Fixes
 
 * **lib:** prevent TypeError "Cannot read property 'getActiveChildNavs' of undefined" ([#323](https://github.com/zyra/ionic2-super-tabs/issues/323)) ([a0c8496](https://github.com/zyra/ionic2-super-tabs/commit/a0c8496))
+
+
+### Features
+
+* Angular 5 support ([#324](https://github.com/zyra/ionic2-super-tabs/issues/324)) ([db83b02](https://github.com/zyra/ionic2-super-tabs/commit/db83b02)), closes [#325](https://github.com/zyra/ionic2-super-tabs/issues/325) [#326](https://github.com/zyra/ionic2-super-tabs/issues/326) [#323](https://github.com/zyra/ionic2-super-tabs/issues/323)
 
 
 
