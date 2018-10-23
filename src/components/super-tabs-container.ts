@@ -9,9 +9,10 @@ import {
   Output,
   Renderer2,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { Platform } from 'ionic-angular';
+
 import { SuperTabsPanGesture } from '../super-tabs-pan-gesture';
 import { SuperTabsConfig } from './super-tabs';
 
@@ -34,7 +35,7 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
    * @type {number}
    */
   @Input()
-  tabsCount: number = 0;
+  tabsCount = 0;
 
   /**
    * Selected tab index
@@ -63,7 +64,7 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
    * Container position
    * @type {number}
    */
-  containerPosition: number = 0;
+  containerPosition = 0;
 
   // View children
 
@@ -77,13 +78,13 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
    * Single tab width
    * @type {number}
    */
-  tabWidth: number = 0;
+  tabWidth = 0;
 
   /**
    * Container width (sum of tab widths)
    * @type {number}
    */
-  containerWidth: number = 0;
+  containerWidth = 0;
 
 
   // Animation stuff
@@ -160,7 +161,7 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
 
     this.refreshDimensions();
 
-    this.gesture = new SuperTabsPanGesture(this.plt, this.container.nativeElement, this.config, this.rnd);
+    this.gesture = new SuperTabsPanGesture(this.plt, this.config, this.container.nativeElement, this.rnd);
 
     this.gesture.onMove = (delta: number) => {
       if (this.globalSwipeEnabled === false) return;

@@ -13,7 +13,7 @@ import {
   Renderer,
   ViewChild,
   ViewContainerRef,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import {
   App,
@@ -24,17 +24,18 @@ import {
   NavControllerBase,
   NavOptions,
   Platform,
-  ViewController
+  ViewController,
 } from 'ionic-angular';
 import { TransitionController } from 'ionic-angular/transitions/transition-controller';
-import { SuperTabs } from './super-tabs';
+
+import { SuperTabsComponent } from './super-tabs';
 
 @Component({
   selector: 'super-tab',
   template: '<div #viewport></div><div class="nav-decor"></div>',
   encapsulation: ViewEncapsulation.None
 })
-export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit, OnDestroy {
+export class SuperTabComponent extends NavControllerBase implements OnInit, AfterViewInit, OnDestroy {
 
   /**
    * Title of the tab
@@ -121,7 +122,7 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
    * Indicates whether the tab has been loaded
    * @type {boolean}
    */
-  private loaded: boolean = false;
+  private loaded = false;
 
   /**
    * A promise that resolves when the component has initialized
@@ -133,7 +134,7 @@ export class SuperTab extends NavControllerBase implements OnInit, AfterViewInit
    */
   private initResolve: Function;
 
-  constructor(parent: SuperTabs,
+  constructor(parent: SuperTabsComponent,
               app: App,
               config: Config,
               plt: Platform,
