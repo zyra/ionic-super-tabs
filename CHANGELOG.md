@@ -1,3 +1,18 @@
+<a name="5.0.1"></a>
+## [5.0.1](https://github.com/zyra/ionic2-super-tabs/compare/5.0.0...v5.0.1) (2018-10-23)
+
+
+### Bug Fixes
+
+* fix pan gesture handling bug ([82e33f8](https://github.com/zyra/ionic2-super-tabs/commit/82e33f8))
+
+
+
+<a name="5.0.0"></a>
+# [5.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v5.0.0...5.0.0) (2018-10-23)
+
+
+
 <a name="5.0.0"></a>
 # [5.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v4.2.1...v5.0.0) (2018-10-23)
 
