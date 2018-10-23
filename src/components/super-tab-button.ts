@@ -5,7 +5,7 @@ import {
   EventEmitter,
   Input,
   Output,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 
 @Component({
@@ -28,10 +28,10 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
-export class SuperTabButton {
+export class SuperTabButtonComponent {
 
   @Input()
-  selected: boolean = false;
+  selected = false;
 
   @Input()
   title: string;
@@ -49,17 +49,17 @@ export class SuperTabButton {
   color: string;
 
   @Output()
-  select: EventEmitter<SuperTabButton> = new EventEmitter<SuperTabButton>();
+  select: EventEmitter<SuperTabButtonComponent> = new EventEmitter<SuperTabButtonComponent>();
 
   onClick() {
     this.select.emit(this);
   }
 
-  constructor(private _el: ElementRef) {
+  constructor(private eRef: ElementRef) {
   }
 
   getNativeElement(): HTMLElement {
-    return this._el.nativeElement;
+    return this.eRef.nativeElement;
   }
 
 }
