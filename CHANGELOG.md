@@ -1,3 +1,13 @@
+<a name="5.0.2"></a>
+## [5.0.2](https://github.com/zyra/ionic2-super-tabs/compare/v5.0.1...v5.0.2) (2018-10-24)
+
+
+### Bug Fixes
+
+* delay indexing segment button widths ([46dceb3](https://github.com/zyra/ionic2-super-tabs/commit/46dceb3))
+
+
+
 <a name="5.0.1"></a>
 ## [5.0.1](https://github.com/zyra/ionic2-super-tabs/compare/5.0.0...v5.0.1) (2018-10-23)
 
