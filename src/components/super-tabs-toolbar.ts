@@ -117,7 +117,7 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
     if (this.scrollTabs) {
       this.plt.timeout(() => {
         this.indexSegmentButtonWidths();
-      }, 10);
+      }, 100);
     }
   }
 
