@@ -629,15 +629,7 @@ export class SuperTabsComponent
   }
 
   private refreshContainerHeight() {
-    let heightOffset = 0;
-
-    if (this._isToolbarVisible) {
-      if (this.hasTitles && this.hasIcons) {
-        heightOffset = 72;
-      } else if (this.hasTitles || this.hasIcons) {
-        heightOffset = 48;
-      }
-    }
+    const heightOffset = this._isToolbarVisible ? this.toolbar.height : 0;
 
     this.rnd.setStyle(
       this.tabsContainer.getNativeElement(),

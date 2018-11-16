@@ -97,6 +97,13 @@ export class SuperTabsToolbar implements AfterViewInit, OnDestroy {
     private rnd: Renderer2
   ) {}
 
+  get height(): number {
+    if (!this.el || !this.el.nativeElement) {
+      return 0;
+    }
+    return this.el.nativeElement.getBoundingClientRect().height;
+  }
+
   ngAfterViewInit() {
     this.gesture = new SuperTabsPanGesture(
       this.plt,
