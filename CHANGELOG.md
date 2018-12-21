@@ -1,4 +1,16 @@
-<a name="5.0.2"></a>
+# [5.1.0](https://github.com/zyra/ionic2-super-tabs/compare/5.0.2...v5.1.0) (2018-12-21)
+
+
+### Features
+
+* allow restyling height of toolbar ([#344](https://github.com/zyra/ionic2-super-tabs/issues/344)) ([cbe7869](https://github.com/zyra/ionic2-super-tabs/commit/cbe7869))
+
+
+
+## [5.0.2](https://github.com/zyra/ionic2-super-tabs/compare/5.0.1...5.0.2) (2018-10-24)
+
+
+
 ## [5.0.2](https://github.com/zyra/ionic2-super-tabs/compare/v5.0.1...v5.0.2) (2018-10-24)
 
 
@@ -8,7 +20,6 @@
 
 
 
-<a name="5.0.1"></a>
 ## [5.0.1](https://github.com/zyra/ionic2-super-tabs/compare/5.0.0...v5.0.1) (2018-10-23)
 
 
@@ -18,12 +29,10 @@
 
 
 
-<a name="5.0.0"></a>
 # [5.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v5.0.0...5.0.0) (2018-10-23)
 
 
 
-<a name="5.0.0"></a>
 # [5.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v4.2.1...v5.0.0) (2018-10-23)
 
 
@@ -38,7 +47,6 @@
 
 
 
-<a name="4.2.1"></a>
 ## [4.2.1](https://github.com/zyra/ionic2-super-tabs/compare/v4.2.0...v4.2.1) (2018-01-26)
 
 
@@ -48,7 +56,6 @@
 
 
 
-<a name="4.2.0"></a>
 # [4.2.0](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.5...v4.2.0) (2018-01-25)
 
 
@@ -67,12 +74,10 @@
 
 
 
-<a name="4.1.5"></a>
 ## [4.1.5](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.4...v4.1.5) (2017-11-11)
 
 
 
-<a name="4.1.4"></a>
 ## [4.1.4](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.3...v4.1.4) (2017-10-31)
 
 
@@ -82,7 +87,6 @@
 
 
 
-<a name="4.1.3"></a>
 ## [4.1.3](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.2...v4.1.3) (2017-10-11)
 
 
@@ -92,12 +96,10 @@
 
 
 
-<a name="4.1.2"></a>
 ## [4.1.2](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.1...v4.1.2) (2017-10-11)
 
 
 
-<a name="4.1.1"></a>
 ## [4.1.1](https://github.com/zyra/ionic2-super-tabs/compare/v4.1.0...v4.1.1) (2017-10-10)
 
 
@@ -108,7 +110,6 @@
 
 
 
-<a name="4.1.0"></a>
 # [4.1.0](https://github.com/zyra/ionic2-super-tabs/compare/v4.0.1...v4.1.0) (2017-09-04)
 
 
@@ -124,7 +125,6 @@
 
 
 
-<a name="4.0.1"></a>
 ## [4.0.1](https://github.com/zyra/ionic2-super-tabs/compare/v4.0.0...v4.0.1) (2017-08-06)
 
 
@@ -134,7 +134,6 @@
 
 
 
-<a name="4.0.0"></a>
 # [4.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v3.0.1...v4.0.0) (2017-07-14)
 
 
@@ -147,7 +146,6 @@
 
 
 
-<a name="3.0.1"></a>
 ## [3.0.1](https://github.com/zyra/ionic2-super-tabs/compare/v3.0.0...v3.0.1) (2017-07-03)
 
 
@@ -158,7 +156,6 @@
 
 
 
-<a name="3.0.0"></a>
 # [3.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.6.3...v3.0.0) (2017-07-02)
 
 
@@ -168,7 +165,6 @@
 
 
 
-<a name="2.6.3"></a>
 ## [2.6.3](https://github.com/zyra/ionic2-super-tabs/compare/v2.6.2...v2.6.3) (2017-06-20)
 
 
@@ -178,7 +174,6 @@
 
 
 
-<a name="2.6.2"></a>
 ## [2.6.2](https://github.com/zyra/ionic2-super-tabs/compare/v2.6.1...v2.6.2) (2017-05-21)
 
 
@@ -192,7 +187,6 @@
 
 
 
-<a name="2.5.1"></a>
 ## [2.5.1](https://github.com/zyra/ionic2-super-tabs/compare/v2.5.0...v2.5.1) (2017-05-02)
 
 
@@ -202,7 +196,6 @@
 
 
 
-<a name="2.5.0"></a>
 # [2.5.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.4.1...v2.5.0) (2017-05-01)
 
 
@@ -217,7 +210,6 @@
 
 
 
-<a name="2.4.1"></a>
 ## [2.4.1](https://github.com/zyra/ionic2-super-tabs/compare/v2.4.0...v2.4.1) (2017-04-30)
 
 
@@ -227,7 +219,6 @@
 
 
 
-<a name="2.4.0"></a>
 # [2.4.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.3.3...v2.4.0) (2017-04-30)
 
 
@@ -246,7 +237,6 @@
 
 
 
-<a name="2.3.0"></a>
 # [2.3.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.2.2...v2.3.0) (2017-04-24)
 
 
@@ -267,7 +257,6 @@
 
 
 
-<a name="2.2.2"></a>
 ## [2.2.2](https://github.com/zyra/ionic2-super-tabs/compare/v2.2.1...v2.2.2) (2017-04-19)
 
 
@@ -277,7 +266,6 @@
 
 
 
-<a name="2.2.1"></a>
 ## [2.2.1](https://github.com/zyra/ionic2-super-tabs/compare/v2.1.0...v2.2.1) (2017-04-19)
 
 
@@ -293,7 +281,6 @@
 
 
 
-<a name="2.1.0"></a>
 # [2.1.0](https://github.com/zyra/ionic2-super-tabs/compare/v2.0.0...v2.1.0) (2017-04-18)
 
 
@@ -303,7 +290,6 @@
 
 
 
-<a name="2.0.0"></a>
 # [2.0.0](https://github.com/zyra/ionic2-super-tabs/compare/v0.1.0...v2.0.0) (2017-04-18)
 
 
@@ -318,7 +304,6 @@
 
 
 
-<a name="0.1.0"></a>
 # 0.1.0 (2017-03-18)
 
 
