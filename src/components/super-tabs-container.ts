@@ -38,6 +38,12 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
   tabsCount = 0;
 
   /**
+   * Whether or not to scroll views when dragging
+   * @type {number}
+   */
+  @Input() scrollViews = true;
+
+  /**
    * Selected tab index
    * @type {number}
    */
@@ -274,7 +280,7 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
 
       this.containerPosition = positionX;
 
-    } else {
+    } else if (this.scrollViews) {
 
       if (positionX) {
         this.containerPosition = positionX;
@@ -287,7 +293,6 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
       this.containerPosition = Math.max(this.minPosX, Math.min(this.maxPosX, this.containerPosition));
 
       this.rnd.setStyle(el, this.plt.Css.transform, `translate3d(${-1 * this.containerPosition}px, 0, 0)`);
-
     }
   }
 
