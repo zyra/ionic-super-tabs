@@ -83,7 +83,7 @@ export interface SuperTabsConfig {
                         [scrollTabs]="scrollTabs"
                         [selectedTab]="selectedTabIndex"
                         (tabSelect)="onToolbarTabSelect($event)"></super-tabs-toolbar>
-    <super-tabs-container [config]="config" [tabsCount]="_tabs.length" [selectedTabIndex]="selectedTabIndex"
+    <super-tabs-container [config]="config" [tabsCount]="_tabs.length" [selectedTabIndex]="selectedTabIndex" [scrollViews]="scrollViews"
                           (tabSelect)="onContainerTabSelect($event)" (onDrag)="onDrag()" (onDragStart)="tabDragStart.emit()" (onDragEnd)="tabDragEnd.emit()">
       <ng-content></ng-content>
     </super-tabs-container>
@@ -182,6 +182,19 @@ export class SuperTabsComponent
   }
 
   /**
+   * Set to true to enable view scrolling
+   * @param val
+   */
+  @Input()
+  set scrollViews (val: boolean) {
+    this._scrollViews = typeof val !== 'boolean' || val === true;
+  }
+
+  get scrollViews () {
+    return this._scrollViews;
+  }
+
+  /**
    * Tab buttons placement. Can be `top` or `bottom`.
    * @type {string}
    */
@@ -228,6 +241,13 @@ export class SuperTabsComponent
    * @private
    */
   private _scrollTabs = false;
+
+  /**
+   * Indicates whether the views should scroll
+   * @type {boolean}
+   * @private
+   */
+  private _scrollViews = true;
 
   /**
    * Selected tab index
