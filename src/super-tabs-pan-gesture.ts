@@ -5,6 +5,8 @@ import { pointerCoord, PointerCoordinates } from 'ionic-angular/util/dom';
 import { SuperTabsConfig } from './components/super-tabs';
 
 export class SuperTabsPanGesture {
+  onStart: () => void;
+
   onMove: (delta: number) => void;
 
   onEnd: (shortSwipe: boolean, shortSwipeDelta?: number) => void;
@@ -98,6 +100,9 @@ export class SuperTabsPanGesture {
       if (this.shouldCapture === true) {
         // gesture is good, let's capture all next onTouchMove events
         this.isDragging = true;
+
+        // emit value
+        this.onStart && this.onStart();
       } else {
         return;
       }

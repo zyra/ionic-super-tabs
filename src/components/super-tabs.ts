@@ -84,7 +84,7 @@ export interface SuperTabsConfig {
                         [selectedTab]="selectedTabIndex"
                         (tabSelect)="onToolbarTabSelect($event)"></super-tabs-toolbar>
     <super-tabs-container [config]="config" [tabsCount]="_tabs.length" [selectedTabIndex]="selectedTabIndex"
-                          (tabSelect)="onContainerTabSelect($event)" (onDrag)="onDrag()">
+                          (tabSelect)="onContainerTabSelect($event)" (onDrag)="onDrag()" (onDragStart)="tabDragStart.emit()" (onDragEnd)="tabDragEnd.emit()">
       <ng-content></ng-content>
     </super-tabs-container>
   `,
@@ -180,6 +180,18 @@ export class SuperTabsComponent
    * @type {string}
    */
   @Input() tabsPlacement = 'top';
+
+  /**
+   * Emits event when tab dragging is activated
+   */
+  @Output()
+  tabDragStart: EventEmitter<void> = new EventEmitter<void>();
+
+  /**
+   * Emits event when tab dragging is stopped (when a user lets go)
+   */
+  @Output()
+  tabDragEnd: EventEmitter<void> = new EventEmitter<void>();
 
   /**
    * Emits the tab index when the selected tab changes
@@ -753,6 +765,14 @@ export class SuperTabsComponent
         animate
       );
     }
+  }
+
+  private tabDragStarted() {
+    this.tabDragStart.emit();
+  }
+
+  private tabDragStopped() {
+    this.tabDragEnd.emit();
   }
 
   getTabIndexById(tabId: string): number {

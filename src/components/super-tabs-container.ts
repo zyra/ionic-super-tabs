@@ -58,6 +58,20 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
   @Output()
   onDrag: EventEmitter<TouchEvent> = new EventEmitter<TouchEvent>();
 
+  /**
+   * Notifies when the container has started being dragged
+   * @type {EventEmitter<TouchEvent>}
+   */
+  @Output()
+  onDragStart: EventEmitter<void> = new EventEmitter<void>();
+
+  /**
+   * Notifies when the container has stopped being dragged
+   * @type {EventEmitter<void>}
+   */
+  @Output()
+  onDragEnd: EventEmitter<void> = new EventEmitter<void>();
+
   // View bindings
 
   /**
@@ -163,6 +177,10 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
 
     this.gesture = new SuperTabsPanGesture(this.plt, this.config, this.container.nativeElement, this.rnd);
 
+    this.gesture.onStart = ()=>{
+      this.onDragStart.emit();
+    }
+
     this.gesture.onMove = (delta: number) => {
       if (this.globalSwipeEnabled === false) return;
       if (this.swipeEnabledPerTab[this.selectedTabIndex] === false) return;
@@ -200,6 +218,7 @@ export class SuperTabsContainer implements AfterViewInit, OnDestroy {
         );
       } else this.setSelectedTab(tabIndex);
 
+      this.onDragEnd.emit();
     };
   }
 
