@@ -136,6 +136,12 @@ export class SuperTabsComponent
 
   @Input() name: string;
 
+
+  /**
+   * Allow Ionic NavController lifecycle events to pass through to child tabs
+   */
+  @Input() passthroughLifecycle: boolean;
+
   /**
    * Height of the tabs
    */
@@ -293,6 +299,7 @@ export class SuperTabsComponent
 
     if (viewCtrl) {
       obsToMerge.push(viewCtrl.didEnter);
+      // This causes lifecycle events to be passed through to the active tab
     }
 
     // re-adjust the height of the slider when the orientation changes
@@ -338,6 +345,21 @@ export class SuperTabsComponent
         this.getElementRef().nativeElement,
         'tabs-placement-bottom'
       );
+    }
+
+    if(this.passthroughLifecycle && this.viewCtrl) {
+      this.viewCtrl.willEnter.subscribe(() => {
+        this.fireLifecycleEvent(['willEnter']);
+      });
+      this.viewCtrl.didEnter.subscribe(() => {
+        this.fireLifecycleEvent(['didEnter']);
+      });
+      this.viewCtrl.willLeave.subscribe(() => {
+        this.fireLifecycleEvent(['willLeave']);
+      });
+      this.viewCtrl.didLeave.subscribe(() => {
+        this.fireLifecycleEvent(['didLeave']);
+      });
     }
   }
 
@@ -608,22 +630,24 @@ export class SuperTabsComponent
 
   private fireLifecycleEvent(events: string[]) {
     const activeView = this.getActiveTab().getActive();
-    events.forEach((event: string) => {
-      switch (event) {
-        case 'willEnter':
-          activeView._willEnter();
-          break;
-        case 'didEnter':
-          activeView._didEnter();
-          break;
-        case 'willLeave':
-          activeView._willLeave(false);
-          break;
-        case 'didLeave':
-          activeView._didLeave();
-          break;
-      }
-    });
+    if (activeView) {
+      events.forEach((event: string) => {
+        switch (event) {
+          case 'willEnter':
+            activeView._willEnter();
+            break;
+          case 'didEnter':
+            activeView._didEnter();
+            break;
+          case 'willLeave':
+            activeView._willLeave(false);
+            break;
+          case 'didLeave':
+            activeView._didLeave();
+            break;
+        }
+      });  
+    }
   }
 
   private refreshTabStates() {
