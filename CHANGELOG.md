@@ -1,3 +1,11 @@
+# [5.2.0](https://github.com/zyra/ionic2-super-tabs/compare/v5.1.1...v5.2.0) (2019-02-12)
+
+
+
+## [5.1.1](https://github.com/zyra/ionic2-super-tabs/compare/v5.1.0...v5.1.1) (2018-12-21)
+
+
+
 # [5.1.0](https://github.com/zyra/ionic2-super-tabs/compare/5.0.2...v5.1.0) (2018-12-21)
 
 
