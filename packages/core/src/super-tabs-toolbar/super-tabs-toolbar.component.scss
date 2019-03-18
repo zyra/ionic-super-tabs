@@ -1,0 +1,8 @@
+:host {
+  height: var(--super-tabs-toolbar-height, 50px);
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+}
