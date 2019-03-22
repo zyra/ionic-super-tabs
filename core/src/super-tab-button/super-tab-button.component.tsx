@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Event, EventEmitter, Listen, Prop, State } from '@stencil/core';
+import { Component, ComponentInterface, Element, Event, EventEmitter, Listen, Method, Prop } from '@stencil/core';
 
 @Component({
   tag: 'super-tab-button',
@@ -7,35 +7,35 @@ import { Component, ComponentInterface, Element, Event, EventEmitter, Listen, Pr
 })
 export class SuperTabButtonComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabButtonElement;
-  @State() active: boolean;
+  @Prop() active: boolean;
   @Prop() index: number;
   @Prop() disabled: boolean;
 
-  /**
-   * Emitted when the button has focus.
-   */
-  @Event() ionFocus!: EventEmitter<void>;
+  @Event() stFocus!: EventEmitter<HTMLSuperTabButtonElement>;
+  @Event() stBlur!: EventEmitter<HTMLSuperTabButtonElement>;
+  @Event() stClick!: EventEmitter<HTMLSuperTabButtonElement>;
 
-  /**
-   * Emitted when the button loses focus.
-   */
-  @Event() ionBlur!: EventEmitter<void>;
+  private parent: HTMLSuperTabsToolbarElement;
 
   @Listen('click')
-  async onClick(ev: MouseEvent) {
-    console.log('This el is ', this.el, ev);
-    // const ripple: HTMLIonRippleEffectElement = this.el.shadowRoot.querySelector('ion-ripple-effect');
-    // await ripple.addRipple(ev.pageX, ev.pageY);
+  async onClick() {
+    this.stClick.emit(this.el);
+    this.parent.onButtonClick(this.el);
   }
 
   @Listen('focus')
   onFocus() {
-    this.ionFocus.emit();
+    this.stFocus.emit(this.el);
   }
 
   @Listen('blur')
   onBlur() {
-    this.ionBlur.emit();
+    this.stFocus.emit(this.el);
+  }
+
+  @Method()
+  setParent(parent: HTMLSuperTabsToolbarElement) {
+    this.parent = parent;
   }
 
   hostData() {
@@ -56,7 +56,7 @@ export class SuperTabButtonComponent implements ComponentInterface {
     console.log('im alive!');
     return [
       <slot></slot>,
-      <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+      <ion-ripple-effect type="unbounded"></ion-ripple-effect>,
     ];
   }
 }

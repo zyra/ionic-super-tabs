@@ -1,0 +1,15 @@
+{
+	"dependencies": {
+		"@stencil/core": "latest",
+		"@stencil/sass": "latest",
+		"@stencil/utils": "latest",
+		"@types/jest": "^23.3.1",
+		"@types/node": "10.11.0",
+		"jest": "23.6.0",
+		"jest-cli": "23.6.0",
+		"tslint": "^5.10.0",
+		"tslint-ionic-rules": "0.0.21",
+		"tslint-react": "^3.6.0",
+		"typescript": "^2.9.2"
+	}
+}

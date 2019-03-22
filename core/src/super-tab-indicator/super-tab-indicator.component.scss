@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  height: 2px;
+  width: 100px;
+  background: var(--st-indicator-color, black);
+  position: absolute;
+  left: 0;
+  transform: translate3d(var(--st-indicator-position-x, 0), 0 ,0) scale3d(var(--st-indicator-scale-x, 0), 1, 1);
+  transform-origin: 0;
+  transition: transform var(--st-indicator-transition-duration) ease-in-out;
+}
