@@ -21,10 +21,6 @@ export const config: Config = {
       strict: true,
     },
     {
-      type: 'docs-json',
-      file: 'docs.json',
-    },
-    {
       type: 'stats',
       file: 'stats.json',
     },
@@ -35,7 +31,7 @@ export const config: Config = {
       directivesUtilsFile: '../angular/src/directives/proxies-utils.ts',
       directivesArrayFile: '../angular/src/directives/proxies-list.txt',
       excludeComponents: [
-        'super-tabs-controller',
+        'super-tab-indicator',
       ],
     },
   ],
