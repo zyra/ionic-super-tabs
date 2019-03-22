@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Watch, Prop, State } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop } from '@stencil/core';
 
 @Component({
   tag: 'super-tab-indicator',
@@ -8,24 +8,8 @@ import { Component, ComponentInterface, Element, Watch, Prop, State } from '@ste
 })
 export class SuperTabIndicatorComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabsToolbarElement;
-
-  @State() private activeButton: HTMLSuperTabButtonElement;
-  @State() private _isDragging: boolean;
-
-  @Prop() selectedTabIndex: number;
-  @Prop({ reflectToAttr: true }) activeTabIndex: number;
-  @Prop({ reflectToAttr: true }) isDragging: boolean;
+  @Prop() selectedTabIndex?: number;
   @Prop() toolbarPosition: 'top' | 'bottom' = 'top';
-
-  @Watch('selectedTabIndex')
-  onSelectedTabIndexChange(index: number) {
-    console.log(this.activeButton, this._isDragging, index);
-  }
-
-  @Watch('isDragging')
-  onIsDraggingChange(dragging: boolean) {
-    this._isDragging = Boolean(dragging);
-  }
 
   hostData() {
     const positionStyle: any = {};
@@ -39,8 +23,8 @@ export class SuperTabIndicatorComponent implements ComponentInterface {
     return {
       style: {
         ...positionStyle,
-      }
-    }
+      },
+    };
   }
 
   render() {

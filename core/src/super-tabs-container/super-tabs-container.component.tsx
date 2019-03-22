@@ -1,10 +1,15 @@
-import { Component, ComponentInterface, Element, Event, EventEmitter, Listen, Prop, State, Watch } from '@stencil/core';
 import {
-  pointerCoord,
-  scrollEl,
-  STCoord,
-  SuperTabsConfig,
-} from '../super-tabs.model';
+  Component,
+  ComponentInterface,
+  Element,
+  Event,
+  EventEmitter,
+  Listen,
+  Method,
+  Prop,
+  State,
+} from '@stencil/core';
+import { pointerCoord, scrollEl, STCoord, SuperTabsConfig } from '../super-tabs.model';
 
 @Component({
   tag: 'super-tabs-container',
@@ -19,9 +24,6 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   @Prop() index: number;
   @Prop() config: SuperTabsConfig;
   @Prop() swipeEnabled: boolean;
-
-  @Prop() activeTabIndex: number = 0;
-  @Prop() selectedTabIndex: number = 0;
 
   @Event() stTabsChange!: EventEmitter<HTMLSuperTabElement[]>;
   @Event() activeTabChange!: EventEmitter<HTMLSuperTabElement[]>;
@@ -39,28 +41,13 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   private _activeTabIndex: number;
   private _selectedTabIndex: number;
 
-  @Watch('activeTabIndex')
-  onActiveTabIndexChange(index: number) {
-    this.selectedTabIndex = this._activeTabIndex = index;
-  }
-
-  @Watch('selectedTabIndex')
-  onSelectedTabIndexChange(index: number) {
-    this._selectedTabIndex = index;
-    requestAnimationFrame(async () => {
-      try {
-        await this.moveContainer(index, true);
-      } catch (err) {
-        console.error('[st-container] onSelectedTabIndexChange: ', err);
-      }
-    });
-  }
-
+  @Method()
   moveContainerByIndex(index: number, animate?: boolean) {
     const scrollX = this.indexToPosition(index);
     return this.moveContainer(scrollX, animate);
   }
 
+  @Method()
   async moveContainer(scrollX: number, animate?: boolean) {
     console.log('Moving container ', scrollX, animate);
     if (animate) {
@@ -78,11 +65,6 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   setSelectedTabIndex(index: number) {
     this._selectedTabIndex = index;
     this.selectedTabIndexChange.emit(this._selectedTabIndex);
-  }
-
-  @Listen('window:resize')
-  onWindowResize() {
-    this.moveContainerByIndex(this.activeTabIndex, false);
   }
 
   @Listen('touchstart')
@@ -164,7 +146,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   private getScrollX(delta?: number) {
-    return this.el.scrollLeft + (typeof delta === 'number'? delta : 0);
+    return this.el.scrollLeft + (typeof delta === 'number' ? delta : 0);
   }
 
   private getNormalizedScrollX(delta?: number) {
@@ -227,8 +209,8 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
     this.setSelectedTabIndex(
       this.positionToIndex(
-        this.getNormalizedScrollX(deltaX)
-      )
+        this.getNormalizedScrollX(deltaX),
+      ),
     );
 
     // update last X value
@@ -250,7 +232,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
         const expectedTabIndex = Math.round(selectedTabIndex);
 
         if (shortSwipe && expectedTabIndex === this._activeTabIndex) {
-          selectedTabIndex += shortSwipeDelta > 0? -1 : 1;
+          selectedTabIndex += shortSwipeDelta > 0 ? -1 : 1;
         }
 
         selectedTabIndex = this.normalizeSelectedTab(selectedTabIndex);

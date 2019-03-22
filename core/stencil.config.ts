@@ -4,8 +4,9 @@ import { sass } from '@stencil/sass';
 export const config: Config = {
   namespace: 'SuperTabs',
   bundles: [
-    { components: ['super-tabs-controller', 'super-tabs', 'super-tabs-container', 'super-tab'] },
+    { components: ['super-tabs', 'super-tabs-container', 'super-tab'] },
     { components: ['super-tabs-toolbar', 'super-tab-button'] },
+    { components: ['super-tab-indicator'] },
   ],
   plugins: [
     sass(),

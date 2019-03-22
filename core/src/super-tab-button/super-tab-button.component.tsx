@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Event, EventEmitter, Listen, Method, Prop } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop } from '@stencil/core';
 
 @Component({
   tag: 'super-tab-button',
@@ -7,36 +7,10 @@ import { Component, ComponentInterface, Element, Event, EventEmitter, Listen, Me
 })
 export class SuperTabButtonComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabButtonElement;
-  @Prop() active: boolean;
-  @Prop() index: number;
-  @Prop() disabled: boolean;
 
-  @Event() stFocus!: EventEmitter<HTMLSuperTabButtonElement>;
-  @Event() stBlur!: EventEmitter<HTMLSuperTabButtonElement>;
-  @Event() stClick!: EventEmitter<HTMLSuperTabButtonElement>;
-
-  private parent: HTMLSuperTabsToolbarElement;
-
-  @Listen('click')
-  async onClick() {
-    this.stClick.emit(this.el);
-    this.parent.onButtonClick(this.el);
-  }
-
-  @Listen('focus')
-  onFocus() {
-    this.stFocus.emit(this.el);
-  }
-
-  @Listen('blur')
-  onBlur() {
-    this.stFocus.emit(this.el);
-  }
-
-  @Method()
-  setParent(parent: HTMLSuperTabsToolbarElement) {
-    this.parent = parent;
-  }
+  @Prop() active?: boolean;
+  @Prop() index?: number;
+  @Prop() disabled?: boolean;
 
   hostData() {
     const label: HTMLIonLabelElement = this.el.querySelector('ion-label');
@@ -53,10 +27,9 @@ export class SuperTabButtonComponent implements ComponentInterface {
   }
 
   render() {
-    console.log('im alive!');
     return [
-      <slot></slot>,
-      <ion-ripple-effect type="unbounded"></ion-ripple-effect>,
+      <slot/>,
+      <ion-ripple-effect type="unbounded"/>,
     ];
   }
 }

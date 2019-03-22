@@ -11,25 +11,39 @@ import '@stencil/core';
 import {
   EventEmitter,
 } from '@stencil/core';
+import {
+  SuperTabsConfig,
+} from './super-tabs.model';
 
 
 export namespace Components {
 
   interface SuperTabButton {
+    'active': boolean;
     'disabled': boolean;
     'index': number;
+    'setParent': (parent: any) => void;
   }
   interface SuperTabButtonAttributes extends StencilHTMLAttributes {
-    'disabled'?: boolean;
-    'index'?: number;
-    /**
-    * Emitted when the button loses focus.
-    */
-    'onIonBlur'?: (event: CustomEvent<void>) => void;
-    /**
-    * Emitted when the button has focus.
-    */
-    'onIonFocus'?: (event: CustomEvent<void>) => void;
+    'active': boolean;
+    'disabled': boolean;
+    'index': number;
+    'onStBlur'?: (event: CustomEvent<HTMLSuperTabButtonElement>) => void;
+    'onStClick'?: (event: CustomEvent<HTMLSuperTabButtonElement>) => void;
+    'onStFocus'?: (event: CustomEvent<HTMLSuperTabButtonElement>) => void;
+  }
+
+  interface SuperTabIndicator {
+    'activeTabIndex': number;
+    'isDragging': boolean;
+    'selectedTabIndex': number;
+    'toolbarPosition': 'top' | 'bottom';
+  }
+  interface SuperTabIndicatorAttributes extends StencilHTMLAttributes {
+    'activeTabIndex'?: number;
+    'isDragging'?: boolean;
+    'selectedTabIndex'?: number;
+    'toolbarPosition'?: 'top' | 'bottom';
   }
 
   interface SuperTab {
@@ -44,32 +58,49 @@ export namespace Components {
   }
 
   interface SuperTabsContainer {
+    'activeTabIndex': number;
+    'config': SuperTabsConfig;
     'index': number;
+    'selectedTabIndex': number;
+    'swipeEnabled': boolean;
   }
   interface SuperTabsContainerAttributes extends StencilHTMLAttributes {
+    'activeTabIndex'?: number;
+    'config'?: SuperTabsConfig;
     'index'?: number;
-    'onIonTouchEnd'?: (event: CustomEvent<TouchEvent>) => void;
-    'onIonTouchMove'?: (event: CustomEvent<TouchEvent>) => void;
-    'onIonTouchStart'?: (event: CustomEvent<TouchEvent>) => void;
+    'onActiveTabChange'?: (event: CustomEvent<HTMLSuperTabElement[]>) => void;
+    'onActiveTabIndexChange'?: (event: CustomEvent<number>) => void;
+    'onSelectedTabIndexChange'?: (event: CustomEvent<number>) => void;
+    'onStTabsChange'?: (event: CustomEvent<HTMLSuperTabElement[]>) => void;
+    'selectedTabIndex'?: number;
+    'swipeEnabled'?: boolean;
   }
 
   interface SuperTabsToolbar {
-    'index': number;
+    'config': SuperTabsConfig;
+    'onButtonClick': (button: any) => void;
+    'setActiveTab': (index: number) => void;
+    'setSelectedTab': (index: number) => void;
+    'showIndicator': boolean;
     'toolbarPosition': 'top' | 'bottom';
   }
   interface SuperTabsToolbarAttributes extends StencilHTMLAttributes {
-    'index'?: number;
-    /**
-    * Emitted when the button loses focus.
-    */
-    'onIonBlur'?: (event: CustomEvent<void>) => void;
+    'config'?: SuperTabsConfig;
+    'onButtonClick'?: (event: CustomEvent<HTMLSuperTabButtonElement>) => void;
+    'showIndicator'?: boolean;
     'toolbarPosition'?: 'top' | 'bottom';
   }
 
   interface SuperTabs {
+    'activeTabIndex': number;
+    'config': SuperTabsConfig;
+    'hasToolbar': boolean;
     'index': number;
   }
   interface SuperTabsAttributes extends StencilHTMLAttributes {
+    'activeTabIndex'?: number;
+    'config'?: SuperTabsConfig;
+    'hasToolbar'?: boolean;
     'index'?: number;
     /**
     * Emitted when the button loses focus.
@@ -81,6 +112,7 @@ export namespace Components {
 declare global {
   interface StencilElementInterfaces {
     'SuperTabButton': Components.SuperTabButton;
+    'SuperTabIndicator': Components.SuperTabIndicator;
     'SuperTab': Components.SuperTab;
     'SuperTabsContainer': Components.SuperTabsContainer;
     'SuperTabsToolbar': Components.SuperTabsToolbar;
@@ -89,6 +121,7 @@ declare global {
 
   interface StencilIntrinsicElements {
     'super-tab-button': Components.SuperTabButtonAttributes;
+    'super-tab-indicator': Components.SuperTabIndicatorAttributes;
     'super-tab': Components.SuperTabAttributes;
     'super-tabs-container': Components.SuperTabsContainerAttributes;
     'super-tabs-toolbar': Components.SuperTabsToolbarAttributes;
@@ -100,6 +133,12 @@ declare global {
   var HTMLSuperTabButtonElement: {
     prototype: HTMLSuperTabButtonElement;
     new (): HTMLSuperTabButtonElement;
+  };
+
+  interface HTMLSuperTabIndicatorElement extends Components.SuperTabIndicator, HTMLStencilElement {}
+  var HTMLSuperTabIndicatorElement: {
+    prototype: HTMLSuperTabIndicatorElement;
+    new (): HTMLSuperTabIndicatorElement;
   };
 
   interface HTMLSuperTabElement extends Components.SuperTab, HTMLStencilElement {}
@@ -128,6 +167,7 @@ declare global {
 
   interface HTMLElementTagNameMap {
     'super-tab-button': HTMLSuperTabButtonElement
+    'super-tab-indicator': HTMLSuperTabIndicatorElement
     'super-tab': HTMLSuperTabElement
     'super-tabs-container': HTMLSuperTabsContainerElement
     'super-tabs-toolbar': HTMLSuperTabsToolbarElement
@@ -136,6 +176,7 @@ declare global {
 
   interface ElementTagNameMap {
     'super-tab-button': HTMLSuperTabButtonElement;
+    'super-tab-indicator': HTMLSuperTabIndicatorElement;
     'super-tab': HTMLSuperTabElement;
     'super-tabs-container': HTMLSuperTabsContainerElement;
     'super-tabs-toolbar': HTMLSuperTabsToolbarElement;

@@ -27,7 +27,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   private indicatorWidth: number;
   private isDragging: boolean;
 
-  @Event() buttonClick: EventEmitter<HTMLSuperTabButtonElement>;
+  @Event() buttonClick!: EventEmitter<HTMLSuperTabButtonElement>;
 
   toolbarScrollX: number;
   buttons: HTMLSuperTabButtonElement[];
@@ -59,6 +59,24 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
     this.alignIndicator(this.activeTabIndex);
   }
 
+  @Listen('click')
+  onClick(ev: any) {
+    let button: HTMLSuperTabButtonElement = ev.target;
+
+    const tag = button.tagName.toLowerCase();
+
+    if (tag !== 'super-tab-button') {
+      if (tag === 'super-tabs-toolbar') {
+        return;
+      }
+
+      button = button.closest('super-tab-button');
+    }
+
+    this.setActiveTab(button.index);
+    this.buttonClick.emit(button);
+  }
+
   componentDidLoad() {
     this.indexButtons();
   }
@@ -68,7 +86,6 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   }
 
   private indexButtons() {
-    console.log('Indexing buttons for some reason');
     const buttons = this.el.querySelectorAll('super-tab-button');
     const buttonsArray = [];
 
@@ -80,7 +97,6 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
         this.markButtonActive(button);
       }
 
-      button.setParent(this.el);
       buttonsArray.push(button);
     }
 
@@ -129,7 +145,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   }
 
   private alignIndicator(index: number) {
-    if (this.showIndicator) {
+    if (!this.showIndicator) {
       return;
     }
 
@@ -149,7 +165,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   render() {
     return [
       <slot/>,
-      <super-tab-indicator ref={(ref: HTMLSuperTabIndicatorElement) => this.indicatorEl = ref} toolbarPosition={this.toolbarPosition}/>,
+      this.showIndicator && <super-tab-indicator ref={(ref: HTMLSuperTabIndicatorElement) => this.indicatorEl = ref} toolbarPosition={this.toolbarPosition}/>
     ];
   }
 }

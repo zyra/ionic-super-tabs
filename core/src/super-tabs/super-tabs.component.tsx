@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Event, EventEmitter, Listen, Prop, State } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop } from '@stencil/core';
 import { DEFAULT_CONFIG, SuperTabsConfig } from '../super-tabs.model';
 
 @Component({
@@ -9,50 +9,60 @@ import { DEFAULT_CONFIG, SuperTabsConfig } from '../super-tabs.model';
 export class SuperTabsComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabsElement;
 
-  @State() active: boolean;
-
-  @Prop() index: number;
   @Prop() config: SuperTabsConfig = DEFAULT_CONFIG;
-  @Prop({ reflectToAttr: true, mutable: true, }) activeTabIndex: number = 0;
-
-  /**
-   * Emitted when the button loses focus.
-   */
-  @Event() ionBlur!: EventEmitter<void>;
+  @Prop({ reflectToAttr: true, mutable: true }) activeTabIndex: number = 0;
 
   private container: HTMLSuperTabsContainerElement;
   private toolbar: HTMLSuperTabsToolbarElement;
 
-  @Prop({ reflectToAttr: true, mutable: true }) hasToolbar: boolean;
-
-  @Listen('click')
-  async onClick(ev: MouseEvent) {
-    console.log('This el is ', this.el, ev);
-  }
-
   setSelectedTabIndex(index: number) {
-    console.log('Container is ', this.container);
     if (this.container) {
-      this.container.activeTabIndex = index;
+      this.container.moveContainerByIndex(index, true);
     }
 
-    console.log('Toolbar is ', this.toolbar);
     if (this.toolbar) {
       this.toolbar.setActiveTab(index);
     }
   }
 
-  indexChildren() {
-    this.container = this.el.querySelector('super-tabs-container');
-    this.toolbar = this.el.querySelector('super-tabs-toolbar');
-    this.hasToolbar = !!this.toolbar;
-
-    if (this.container) {
-      this.container.config = this.config;
+  private onContainerSelectedTabChange(ev: any) {
+    if (this.toolbar) {
+      this.toolbar.setSelectedTab(ev.detail);
     }
+  }
+
+  private onContainerActiveTabChange(ev: any) {
+    const index: number = ev.detail;
+    this.activeTabIndex = index;
 
     if (this.toolbar) {
-      this.toolbar.config = this.config;
+      this.toolbar.setActiveTab(index);
+    }
+  }
+
+  private onToolbarButtonClick(ev: any) {
+    if (this.container) {
+      this.container.moveContainerByIndex(ev.detail.index, true);
+    }
+  }
+
+  indexChildren() {
+    const container = this.el.querySelector('super-tabs-container');
+    const toolbar = this.el.querySelector('super-tabs-toolbar');
+
+    if (container && this.container !== container) {
+      this.container = container;
+
+      container.config = this.config;
+      container.addEventListener('selectedTabIndexChange', this.onContainerSelectedTabChange.bind(this));
+      container.addEventListener('activeTabIndexChange', this.onContainerActiveTabChange.bind(this));
+    }
+
+    if (toolbar && this.toolbar !== toolbar) {
+      this.toolbar = toolbar;
+
+      toolbar.config = this.config;
+      toolbar.addEventListener('buttonClick', this.onToolbarButtonClick.bind(this));
     }
   }
 
@@ -64,18 +74,6 @@ export class SuperTabsComponent implements ComponentInterface {
   componentWillLoad() {
     this.indexChildren();
     this.setSelectedTabIndex(this.activeTabIndex);
-
-    this.container.addEventListener('selectedTabIndexChange', (ev: any) => {
-      if (this.toolbar) {
-        this.toolbar.setSelectedTab(ev.detail);
-      }
-    });
-
-    this.container.addEventListener('activeTabIndexChange', (ev: any) => {
-      if (this.toolbar) {
-        this.toolbar.setActiveTab(ev.detail);
-      }
-    });
   }
 
   render() {
