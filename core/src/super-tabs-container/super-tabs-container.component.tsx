@@ -1,14 +1,4 @@
-import {
-  Component,
-  ComponentInterface,
-  Element,
-  Event,
-  EventEmitter,
-  Listen,
-  Method,
-  Prop,
-  State,
-} from '@stencil/core';
+import { Component, ComponentInterface, Element, Event, EventEmitter, Listen, Method, Prop } from '@stencil/core';
 import { pointerCoord, scrollEl, STCoord, SuperTabsConfig } from '../super-tabs.model';
 
 @Component({
@@ -19,11 +9,8 @@ import { pointerCoord, scrollEl, STCoord, SuperTabsConfig } from '../super-tabs.
 export class SuperTabsContainerComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabsContainerElement;
 
-  @State() active: boolean;
-
-  @Prop() index: number;
-  @Prop() config: SuperTabsConfig;
-  @Prop() swipeEnabled: boolean;
+  @Prop({ mutable: true }) config?: SuperTabsConfig;
+  @Prop({ mutable: true }) swipeEnabled: boolean = true;
 
   @Event() stTabsChange!: EventEmitter<HTMLSuperTabElement[]>;
   @Event() activeTabChange!: EventEmitter<HTMLSuperTabElement[]>;
@@ -31,15 +18,14 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   @Event() activeTabIndexChange!: EventEmitter<number>;
   @Event() selectedTabIndexChange!: EventEmitter<number>;
 
-  tabs: HTMLSuperTabElement[];
-
-  private shouldCapture: boolean;
-  private initialCoords: STCoord;
-  private lastPosX: number;
-  private isDragging: boolean;
-  private initialTimestamp: number;
-  private _activeTabIndex: number;
-  private _selectedTabIndex: number;
+  private tabs: HTMLSuperTabElement[] = [];
+  private shouldCapture?: boolean;
+  private initialCoords?: STCoord;
+  private lastPosX?: number;
+  private isDragging?: boolean;
+  private initialTimestamp?: number;
+  private _activeTabIndex?: number;
+  private _selectedTabIndex?: number;
 
   @Method()
   moveContainerByIndex(index: number, animate?: boolean) {
@@ -49,9 +35,8 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
   @Method()
   async moveContainer(scrollX: number, animate?: boolean) {
-    console.log('Moving container ', scrollX, animate);
     if (animate) {
-      await scrollEl(this.el, scrollX, 0, this.config.transitionDuration);
+      await scrollEl(this.el, scrollX, 0, this.config!.transitionDuration);
     } else {
       await scrollEl(this.el, scrollX, 0, 0);
     }
@@ -69,7 +54,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
   @Listen('touchstart')
   async onTouchStart(ev: TouchEvent) {
-    let avoid: boolean;
+    let avoid: boolean = false;
     let element: any = ev.target;
 
     if (element) {
@@ -89,6 +74,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     this.initialCoords = coords;
 
     // TODO: handle short swipe duration
+    // @ts-ignore
     if (this.config.shortSwipeDuration > 0) {
       this.initialTimestamp = window.performance.now();
     }
@@ -178,16 +164,16 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     }
 
     // stop anything else from capturing these events, to make sure the content doesn't slide
-    if (this.config.allowElementScroll !== true) {
+    if (this.config!.allowElementScroll !== true) {
       ev.stopPropagation();
       ev.preventDefault();
     }
 
     // get delta X
+    // @ts-ignore
     const deltaX: number = this.lastPosX - coords.x;
 
     if (deltaX === 0) {
-      console.log('Delta zer0');
       return;
     }
 
@@ -223,9 +209,9 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     const coords = pointerCoord(ev);
 
     if (this.shouldCapture === true) {
-      const deltaTime: number = window.performance.now() - this.initialTimestamp;
-      const shortSwipe = this.config.shortSwipeDuration > 0 && deltaTime <= this.config.shortSwipeDuration;
-      const shortSwipeDelta = coords.x - this.initialCoords.x;
+      const deltaTime: number = window.performance.now() - this.initialTimestamp!;
+      const shortSwipe = this.config!.shortSwipeDuration! > 0 && deltaTime <= this.config!.shortSwipeDuration!;
+      const shortSwipeDelta = coords.x - this.initialCoords!.x;
 
       requestAnimationFrame(() => {
         let selectedTabIndex = this.calcSelectedTab();
@@ -255,12 +241,14 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       return;
     }
 
+    // @ts-ignore
     const radians = this.config.maxDragAngle * (Math.PI / 180),
       maxCosine = Math.cos(radians),
       deltaX = newCoords.x - this.initialCoords.x,
       deltaY = newCoords.y - this.initialCoords.y,
       distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
+    // @ts-ignore
     if (distance >= this.config.dragThreshold) {
       // swipe is long enough
       // lets check the angle

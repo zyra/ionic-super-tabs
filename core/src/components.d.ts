@@ -46,15 +46,13 @@ export namespace Components {
   }
 
   interface SuperTabsContainer {
-    'config': SuperTabsConfig;
-    'index': number;
+    'config'?: SuperTabsConfig;
     'moveContainer': (scrollX: number, animate?: boolean | undefined) => Promise<void>;
     'moveContainerByIndex': (index: number, animate?: boolean | undefined) => Promise<void>;
     'swipeEnabled': boolean;
   }
   interface SuperTabsContainerAttributes extends StencilHTMLAttributes {
     'config'?: SuperTabsConfig;
-    'index'?: number;
     'onActiveTabChange'?: (event: CustomEvent<HTMLSuperTabElement[]>) => void;
     'onActiveTabIndexChange'?: (event: CustomEvent<number>) => void;
     'onSelectedTabIndexChange'?: (event: CustomEvent<number>) => void;
@@ -63,7 +61,7 @@ export namespace Components {
   }
 
   interface SuperTabsToolbar {
-    'config': SuperTabsConfig;
+    'config'?: SuperTabsConfig;
     'onButtonClick': (button: any) => void;
     'setActiveTab': (index: number) => void;
     'setSelectedTab': (index: number) => void;

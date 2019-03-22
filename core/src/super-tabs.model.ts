@@ -1,5 +1,3 @@
-import { SuperTabComponent } from './super-tab/super-tab.component';
-
 export interface SuperTabsConfig {
   /**
    * Defaults to 40
@@ -42,27 +40,6 @@ export const DEFAULT_CONFIG: SuperTabsConfig = {
   shortSwipeDuration: 300,
 };
 
-export interface SuperTabsControllerConfig {
-  animationDuration: number;
-  leftThreshold: number;
-  rightThreshold: number;
-}
-
-export interface SuperTabChangeEvent {
-  tab: SuperTabComponent;
-  index: number;
-}
-
-export interface SuperTabButtonClickEvent {
-  tab: SuperTabComponent;
-  index: number;
-  changed: boolean;
-}
-
-export abstract class SuperTabsAnimatableComponent {
-  abstract setPosition(position: number, duration: number);
-}
-
 export type STCoord = {
   x: number;
   y: number;
@@ -84,7 +61,7 @@ export function pointerCoord(ev: any): STCoord {
   return { x: 0, y: 0 };
 }
 
-export const easeInOutCubic = t => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+export const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
 
 function getScrollCoord(start: number, dest: number, startTime: number, currentTime: number, duration: number) {
   const time = Math.min(1, (currentTime - startTime) / duration);
@@ -115,10 +92,3 @@ export const scrollEl = async (el: Element, x: number, y: number = 0, duration: 
     requestAnimationFrame(() => scroll(el, startX, x, startY, y, now, duration, resolve));
   });
 };
-
-export interface ISuperTabsContainerDragEvent {
-  initialTabIndex: number;
-  selectedTabIndex: number;
-  shortSwipe?: boolean;
-  shortSwipeDelta?: number;
-}

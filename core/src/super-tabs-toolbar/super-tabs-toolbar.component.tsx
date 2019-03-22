@@ -20,26 +20,25 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabsToolbarElement;
 
   @Prop({ reflectToAttr: true }) toolbarPosition: 'top' | 'bottom' = 'top';
-  @Prop() config: SuperTabsConfig;
+  @Prop() config?: SuperTabsConfig;
   @Prop() showIndicator: boolean = true;
 
-  private indicatorPosition: number;
-  private indicatorWidth: number;
-  private isDragging: boolean;
+  private indicatorPosition!: number;
+  private indicatorWidth!: number;
+  private isDragging!: boolean;
 
   @Event() buttonClick!: EventEmitter<HTMLSuperTabButtonElement>;
 
-  toolbarScrollX: number;
-  buttons: HTMLSuperTabButtonElement[];
+  buttons!: HTMLSuperTabButtonElement[];
 
-  private activeButton: HTMLSuperTabButtonElement;
+  private activeButton?: HTMLSuperTabButtonElement;
   private activeTabIndex: number = 0;
   private indicatorEl!: HTMLSuperTabIndicatorElement;
 
   @Method()
   onButtonClick(button: HTMLSuperTabButtonElement) {
     this.buttonClick.emit(button);
-    this.setActiveTab(button.index);
+    this.setActiveTab(button.index as number);
   }
 
   @Method()
@@ -70,10 +69,10 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
         return;
       }
 
-      button = button.closest('super-tab-button');
+      button = button.closest('super-tab-button') as HTMLSuperTabButtonElement;
     }
 
-    this.setActiveTab(button.index);
+    this.setActiveTab(button.index as number);
     this.buttonClick.emit(button);
   }
 
@@ -158,14 +157,14 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
     if (!this.showIndicator || this.indicatorEl) {
       this.indicatorEl.style.setProperty('--st-indicator-position-x', this.indicatorPosition + 'px');
       this.indicatorEl.style.setProperty('--st-indicator-scale-x', String(this.indicatorWidth / 100));
-      this.indicatorEl.style.setProperty('--st-indicator-transition-duration', this.isDragging? '0' : `${ this.config.transitionDuration }ms`);
+      this.indicatorEl.style.setProperty('--st-indicator-transition-duration', this.isDragging? '0' : `${ this.config!.transitionDuration }ms`);
     }
   }
 
   render() {
     return [
       <slot/>,
-      this.showIndicator && <super-tab-indicator ref={(ref: HTMLSuperTabIndicatorElement) => this.indicatorEl = ref} toolbarPosition={this.toolbarPosition}/>
+      this.showIndicator && <super-tab-indicator ref={(ref: any) => this.indicatorEl = ref} toolbarPosition={this.toolbarPosition}/>,
     ];
   }
 }

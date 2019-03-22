@@ -12,8 +12,8 @@ export class SuperTabsComponent implements ComponentInterface {
   @Prop() config: SuperTabsConfig = DEFAULT_CONFIG;
   @Prop({ reflectToAttr: true, mutable: true }) activeTabIndex: number = 0;
 
-  private container: HTMLSuperTabsContainerElement;
-  private toolbar: HTMLSuperTabsToolbarElement;
+  private container!: HTMLSuperTabsContainerElement;
+  private toolbar!: HTMLSuperTabsToolbarElement;
 
   setSelectedTabIndex(index: number) {
     if (this.container) {
