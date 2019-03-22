@@ -3,7 +3,7 @@
   "version": "7.0.0-alpha.0",
   "description": "",
   "main": "dist/index.js",
-  "unpkg": "dist/ionic.js",
+  "unpkg": "dist/supertabs.js",
   "module": "dist/esm/index.js",
   "es2015": "dist/esm/es2017/index.js",
   "es2017": "dist/esm/es2017/index.js",
