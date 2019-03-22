@@ -9,70 +9,56 @@ import '@stencil/core';
 
 
 import {
-  EventEmitter,
-} from '@stencil/core';
-import {
   SuperTabsConfig,
 } from './super-tabs.model';
+import {
+  EventEmitter,
+} from '@stencil/core';
 
 
 export namespace Components {
 
   interface SuperTabButton {
-    'active': boolean;
-    'disabled': boolean;
-    'index': number;
-    'setParent': (parent: any) => void;
+    'active'?: boolean;
+    'disabled'?: boolean;
+    'index'?: number;
   }
   interface SuperTabButtonAttributes extends StencilHTMLAttributes {
-    'active': boolean;
-    'disabled': boolean;
-    'index': number;
-    'onStBlur'?: (event: CustomEvent<HTMLSuperTabButtonElement>) => void;
-    'onStClick'?: (event: CustomEvent<HTMLSuperTabButtonElement>) => void;
-    'onStFocus'?: (event: CustomEvent<HTMLSuperTabButtonElement>) => void;
+    'active'?: boolean;
+    'disabled'?: boolean;
+    'index'?: number;
   }
 
   interface SuperTabIndicator {
-    'activeTabIndex': number;
-    'isDragging': boolean;
-    'selectedTabIndex': number;
+    'selectedTabIndex'?: number;
     'toolbarPosition': 'top' | 'bottom';
   }
   interface SuperTabIndicatorAttributes extends StencilHTMLAttributes {
-    'activeTabIndex'?: number;
-    'isDragging'?: boolean;
     'selectedTabIndex'?: number;
     'toolbarPosition'?: 'top' | 'bottom';
   }
 
   interface SuperTab {
-    'index': number;
+    'index'?: number;
   }
   interface SuperTabAttributes extends StencilHTMLAttributes {
     'index'?: number;
-    /**
-    * Emitted when the button loses focus.
-    */
-    'onIonBlur'?: (event: CustomEvent<void>) => void;
   }
 
   interface SuperTabsContainer {
-    'activeTabIndex': number;
     'config': SuperTabsConfig;
     'index': number;
-    'selectedTabIndex': number;
+    'moveContainer': (scrollX: number, animate?: boolean | undefined) => Promise<void>;
+    'moveContainerByIndex': (index: number, animate?: boolean | undefined) => Promise<void>;
     'swipeEnabled': boolean;
   }
   interface SuperTabsContainerAttributes extends StencilHTMLAttributes {
-    'activeTabIndex'?: number;
     'config'?: SuperTabsConfig;
     'index'?: number;
     'onActiveTabChange'?: (event: CustomEvent<HTMLSuperTabElement[]>) => void;
     'onActiveTabIndexChange'?: (event: CustomEvent<number>) => void;
     'onSelectedTabIndexChange'?: (event: CustomEvent<number>) => void;
     'onStTabsChange'?: (event: CustomEvent<HTMLSuperTabElement[]>) => void;
-    'selectedTabIndex'?: number;
     'swipeEnabled'?: boolean;
   }
 
@@ -94,18 +80,10 @@ export namespace Components {
   interface SuperTabs {
     'activeTabIndex': number;
     'config': SuperTabsConfig;
-    'hasToolbar': boolean;
-    'index': number;
   }
   interface SuperTabsAttributes extends StencilHTMLAttributes {
     'activeTabIndex'?: number;
     'config'?: SuperTabsConfig;
-    'hasToolbar'?: boolean;
-    'index'?: number;
-    /**
-    * Emitted when the button loses focus.
-    */
-    'onIonBlur'?: (event: CustomEvent<void>) => void;
   }
 }
 

@@ -13,7 +13,7 @@ export class SuperTabButtonComponent implements ComponentInterface {
   @Prop() disabled?: boolean;
 
   hostData() {
-    const label: HTMLIonLabelElement = this.el.querySelector('ion-label');
+    const label: any = this.el.querySelector('ion-label');
 
     return {
       role: 'button',
