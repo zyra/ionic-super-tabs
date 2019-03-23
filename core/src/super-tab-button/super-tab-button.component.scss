@@ -16,8 +16,8 @@
   height: 72px;
   padding: 12px 16px 20px 16px;
 
-  --st-icon-line-height: 48px;
   --st-icon-size: 24px;
+
   --st-label-line-height: 14px;
   --st-label-height: 14px;
   --st-label-font-size: 14px;
@@ -38,6 +38,10 @@
   font-weight: var(--st-label-font-weight);
 }
 
+:host(ion-ripple-effect) {
+  transform: translate3d(0,0,0);
+}
+
 ::slotted(ion-icon) {
   color: var(--st-icon-color, var(--ion-color-contrast));
   min-height: var(--st-icon-size);
@@ -49,14 +53,8 @@
   opacity: 1;
 }
 
-:host(.icon-only) {
+:host(.icon-only), :host(.label-only) {
+  padding: 12px 16px;
   height: 48px;
-  --st-icon-line-height: 48px;
-  --st-icon-height: 48px;
-}
-
-:host(.label-only) {
-  height: 48px;
-  --st-label-line-height: 48px;
-  --st-label-height: 48px;
+  justify-content: center;
 }
