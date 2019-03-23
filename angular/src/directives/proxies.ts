@@ -36,6 +36,7 @@ export class SuperTabs {
     this.el = r.nativeElement;
   }
 }
+proxyMethods(SuperTabs, ['selectTab']);
 proxyInputs(SuperTabs, ['config', 'activeTabIndex']);
 
 export declare interface SuperTabsContainer extends StencilComponents<'SuperTabsContainer'> {}

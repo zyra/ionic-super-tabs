@@ -78,11 +78,27 @@ export namespace Components {
   }
 
   interface SuperTabs {
+    /**
+    * Initial active tab index
+    */
     'activeTabIndex': number;
+    /**
+    * Global Super Tabs configuration
+    */
     'config': SuperTabsConfig;
+    /**
+    * Set the selected tab. This will move the container and the toolbar to the selected tab.
+    */
+    'selectTab': (index: number, animate?: boolean) => void;
   }
   interface SuperTabsAttributes extends StencilHTMLAttributes {
+    /**
+    * Initial active tab index
+    */
     'activeTabIndex'?: number;
+    /**
+    * Global Super Tabs configuration
+    */
     'config'?: SuperTabsConfig;
   }
 }

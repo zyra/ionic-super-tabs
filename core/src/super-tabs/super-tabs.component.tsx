@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Prop } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, Method } from '@stencil/core';
 import { DEFAULT_CONFIG, SuperTabsConfig } from '../super-tabs.model';
 
 @Component({
@@ -9,15 +9,29 @@ import { DEFAULT_CONFIG, SuperTabsConfig } from '../super-tabs.model';
 export class SuperTabsComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabsElement;
 
+  /**
+   * Global Super Tabs configuration
+   */
   @Prop() config: SuperTabsConfig = DEFAULT_CONFIG;
+
+  /**
+   * Initial active tab index
+   */
   @Prop({ reflectToAttr: true, mutable: true }) activeTabIndex: number = 0;
 
   private container!: HTMLSuperTabsContainerElement;
   private toolbar!: HTMLSuperTabsToolbarElement;
 
-  setSelectedTabIndex(index: number) {
+  /**
+   * Set the selected tab.
+   * This will move the container and the toolbar to the selected tab.
+   * @param index {number} the index of the tab you want to select
+   * @param [animate=true] {boolean} whether you want to animate the transition
+   */
+  @Method()
+  selectTab(index: number, animate: boolean = true) {
     if (this.container) {
-      this.container.moveContainerByIndex(index, true);
+      this.container.moveContainerByIndex(index, animate);
     }
 
     if (this.toolbar) {
@@ -68,12 +82,12 @@ export class SuperTabsComponent implements ComponentInterface {
 
   componentDidUpdate() {
     this.indexChildren();
-    this.setSelectedTabIndex(this.activeTabIndex);
+    this.selectTab(this.activeTabIndex);
   }
 
   componentWillLoad() {
     this.indexChildren();
-    this.setSelectedTabIndex(this.activeTabIndex);
+    this.selectTab(this.activeTabIndex);
   }
 
   render() {
