@@ -19,9 +19,10 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   @Element() el!: HTMLSuperTabsToolbarElement;
 
-  @Prop({ reflectToAttr: true }) toolbarPosition: 'top' | 'bottom' = 'top';
+  @Prop({ mutable: true }) toolbarPosition: 'top' | 'bottom' = 'top';
   @Prop() config?: SuperTabsConfig;
   @Prop() showIndicator: boolean = true;
+  @Prop() color: string = 'primary';
 
   private indicatorPosition!: number;
   private indicatorWidth!: number;
@@ -158,6 +159,14 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
       this.indicatorEl.style.setProperty('--st-indicator-position-x', this.indicatorPosition + 'px');
       this.indicatorEl.style.setProperty('--st-indicator-scale-x', String(this.indicatorWidth / 100));
       this.indicatorEl.style.setProperty('--st-indicator-transition-duration', this.isDragging? '0' : `${ this.config!.transitionDuration }ms`);
+    }
+  }
+
+  hostData() {
+    return {
+      class: {
+        ['ion-color-' + this.color]: true,
+      }
     }
   }
 

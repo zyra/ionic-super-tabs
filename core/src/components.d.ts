@@ -61,6 +61,7 @@ export namespace Components {
   }
 
   interface SuperTabsToolbar {
+    'color': string;
     'config'?: SuperTabsConfig;
     'onButtonClick': (button: any) => void;
     'setActiveTab': (index: number) => void;
@@ -69,6 +70,7 @@ export namespace Components {
     'toolbarPosition': 'top' | 'bottom';
   }
   interface SuperTabsToolbarAttributes extends StencilHTMLAttributes {
+    'color'?: string;
     'config'?: SuperTabsConfig;
     'onButtonClick'?: (event: CustomEvent<HTMLSuperTabButtonElement>) => void;
     'showIndicator'?: boolean;

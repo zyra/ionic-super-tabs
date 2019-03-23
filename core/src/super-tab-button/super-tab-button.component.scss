@@ -4,13 +4,59 @@
   cursor: pointer;
   position: relative;
   max-width: 100%;
-  height: 100%;
   overflow: hidden;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   -webkit-touch-callout: none;
   box-sizing: border-box;
   transform: translate3d(0,0,0);
+  opacity: 0.7;
+  height: 72px;
+  padding: 12px 16px 20px 16px;
+
+  --st-icon-line-height: 48px;
+  --st-icon-size: 24px;
+  --st-label-line-height: 14px;
+  --st-label-height: 14px;
+  --st-label-font-size: 14px;
+  --st-label-text-transform: uppercase;
+  --st-label-font-weight: 500;
+}
+
+::slotted {
+  flex-shrink: 1;
+}
+
+::slotted(ion-label) {
+  color: var(--st-label-color, var(--ion-color-contrast));
+  line-height: var(--st-label-line-height);
+  height: var(--st-label-height);
+  font-size: var(--st-label-font-size);
+  text-transform: var(--st-label-text-transform);
+  font-weight: var(--st-label-font-weight);
+}
+
+::slotted(ion-icon) {
+  color: var(--st-icon-color, var(--ion-color-contrast));
+  min-height: var(--st-icon-size);
+  min-width: var(--st-icon-size);
+  font-size: var(--st-icon-size);
+}
+
+:host(.active) {
+  opacity: 1;
+}
+
+:host(.icon-only) {
+  height: 48px;
+  --st-icon-line-height: 48px;
+  --st-icon-height: 48px;
+}
+
+:host(.label-only) {
+  height: 48px;
+  --st-label-line-height: 48px;
+  --st-label-height: 48px;
 }

@@ -2,7 +2,7 @@
   display: block;
   height: 2px;
   width: 100px;
-  background: var(--st-indicator-color, black);
+  background: var(--st-indicator-color, var(--ion-color-contrast, white));
   position: absolute;
   left: 0;
   transform: translate3d(var(--st-indicator-position-x, 0), 0 ,0) scale3d(var(--st-indicator-scale-x, 0), 1, 1);

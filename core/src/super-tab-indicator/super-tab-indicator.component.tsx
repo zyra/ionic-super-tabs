@@ -26,8 +26,4 @@ export class SuperTabIndicatorComponent implements ComponentInterface {
       },
     };
   }
-
-  render() {
-    return (<span>&nbsp;</span>);
-  }
 }

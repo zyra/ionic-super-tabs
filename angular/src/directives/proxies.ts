@@ -56,7 +56,7 @@ proxyMethods(SuperTabsContainer, ['moveContainerByIndex', 'moveContainer']);
 proxyInputs(SuperTabsContainer, ['config', 'swipeEnabled']);
 
 export declare interface SuperTabsToolbar extends StencilComponents<'SuperTabsToolbar'> {}
-@Component({ selector: 'super-tabs-toolbar', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['toolbarPosition', 'config', 'showIndicator'] })
+@Component({ selector: 'super-tabs-toolbar', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['toolbarPosition', 'config', 'showIndicator', 'color'] })
 export class SuperTabsToolbar {
   buttonClick!: EventEmitter<CustomEvent>;
   protected el: HTMLElement;
@@ -67,4 +67,4 @@ export class SuperTabsToolbar {
   }
 }
 proxyMethods(SuperTabsToolbar, ['onButtonClick', 'setActiveTab', 'setSelectedTab']);
-proxyInputs(SuperTabsToolbar, ['toolbarPosition', 'config', 'showIndicator']);
+proxyInputs(SuperTabsToolbar, ['toolbarPosition', 'config', 'showIndicator', 'color']);

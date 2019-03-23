@@ -8,4 +8,6 @@
   width: 100%;
   overflow: hidden;
   transform: translate3d(0,0,0);
+  touch-action: pan-y;
+  user-select: none;
 }

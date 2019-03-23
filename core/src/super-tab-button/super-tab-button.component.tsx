@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Prop } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, State } from '@stencil/core';
 
 @Component({
   tag: 'super-tab-button',
@@ -8,20 +8,37 @@ import { Component, ComponentInterface, Element, Prop } from '@stencil/core';
 export class SuperTabButtonComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabButtonElement;
 
-  @Prop() active?: boolean;
+  @Prop({ mutable: true }) active?: boolean;
   @Prop() index?: number;
   @Prop() disabled?: boolean;
 
-  hostData() {
-    const label: any = this.el.querySelector('ion-label');
+  @State() label!: HTMLElement | null;
+  @State() icon!: HTMLElement | null;
 
+  indexChildren() {
+    this.label = this.el.querySelector('ion-label');
+    this.icon = this.el.querySelector('ion-icon');
+  }
+
+  componentWillLoad() {
+    this.indexChildren();
+  }
+
+  componentDidUpdate() {
+    this.indexChildren();
+  }
+
+  hostData() {
     return {
       role: 'button',
-      'aria-label': label ? label.innerText : undefined,
-      'aria-disabled': this.disabled ? 'true' : undefined,
+      'aria-label': this.label ? this.label.innerText : false,
+      'aria-disabled': this.disabled ? 'true' : false,
       class: {
         'ion-activatable': true,
         'ion-focusable': true,
+        'icon-only': !!this.icon && !this.label,
+        'label-only': !!this.label && !this.icon,
+        active: Boolean(this.active),
       },
     };
   }

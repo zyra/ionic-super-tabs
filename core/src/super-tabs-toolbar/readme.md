@@ -9,6 +9,7 @@
 
 | Property          | Attribute          | Description | Type                           | Default     |
 | ----------------- | ------------------ | ----------- | ------------------------------ | ----------- |
+| `color`           | `color`            |             | `string`                       | `'primary'` |
 | `config`          | --                 |             | `SuperTabsConfig \| undefined` | `undefined` |
 | `showIndicator`   | `show-indicator`   |             | `boolean`                      | `true`      |
 | `toolbarPosition` | `toolbar-position` |             | `"bottom" \| "top"`            | `'top'`     |
