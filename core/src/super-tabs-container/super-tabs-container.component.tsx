@@ -55,10 +55,6 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   setActiveTabIndex(index: number) {
-    if (this._activeTabIndex === index) {
-      return;
-    }
-
     this._activeTabIndex = index;
     this.activeTabIndexChange.emit(this._activeTabIndex);
   }
