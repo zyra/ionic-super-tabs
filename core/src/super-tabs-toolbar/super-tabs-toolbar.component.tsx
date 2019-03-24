@@ -109,7 +109,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
     this.lastPosX = coords.x;
   }
 
-  @Listen('touchmove', { passive: false, capture: true })
+  @Listen('touchmove')
   async onTouchMove(ev: TouchEvent) {
     const coords = pointerCoord(ev);
 
@@ -130,9 +130,6 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
       // gesture is good, let's capture all next onTouchMove events
       this.isDragging = true;
     }
-
-    ev.preventDefault();
-    ev.stopPropagation();
 
     // get delta X
     const deltaX: number = this.lastPosX - coords.x;
