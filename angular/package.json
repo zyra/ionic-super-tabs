@@ -10,7 +10,7 @@
     "css/"
   ],
   "scripts": {
-    "build": "npm run build",
+    "build": "npm run build.ng",
     "build.ng": "npm run build.es2015 && npm run build.es5",
     "build.es2015": "ngc -p tsconfig.json && rollup --config ./rollup.config.js",
     "build.es5": "ngc -p tsconfig.legacy.json && rollup --config ./rollup.config.legacy.js"
