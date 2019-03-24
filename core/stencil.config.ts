@@ -2,6 +2,7 @@ import { Config } from '@stencil/core';
 import { sass } from '@stencil/sass';
 
 export const config: Config = {
+
   namespace: 'SuperTabs',
   bundles: [
     { components: ['super-tabs', 'super-tabs-container', 'super-tab'] },
@@ -18,7 +19,6 @@ export const config: Config = {
     },
     {
       type: 'docs',
-      strict: true,
     },
     {
       type: 'stats',

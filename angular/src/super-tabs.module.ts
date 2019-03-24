@@ -3,7 +3,7 @@ import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
 import { appInit } from './app-init';
 import { SuperTab, SuperTabButton, SuperTabs, SuperTabsContainer, SuperTabsToolbar } from './directives/proxies';
 
-const DECLARATIONS = [
+export const DECLARATIONS = [
   SuperTab,
   SuperTabButton,
   SuperTabs,

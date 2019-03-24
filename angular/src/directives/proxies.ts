@@ -2,7 +2,6 @@
 /* auto-generated angular directive proxies */
 import { Component, ElementRef, ChangeDetectorRef, EventEmitter } from '@angular/core';
 import { proxyInputs, proxyMethods, proxyOutputs } from './proxies-utils';
-import '@ionic-super-tabs/core/dist/types/components';
 
 type StencilComponents<T extends keyof StencilElementInterfaces> = StencilElementInterfaces[T];
 

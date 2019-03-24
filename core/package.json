@@ -2,25 +2,19 @@
   "name": "@ionic-super-tabs/core",
   "version": "7.0.0-alpha.0",
   "description": "",
-  "main": "dist/index.js",
-  "unpkg": "dist/supertabs.js",
   "module": "dist/esm/index.js",
-  "es2015": "dist/esm/es2017/index.js",
-  "es2017": "dist/esm/es2017/index.js",
-  "jsnext:main": "dist/esm/es2017/index.js",
+  "main": "dist/index.js",
+  "unpkg": "dist/ionic.js",
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
-  "webComponents": "dist/web-components.json",
   "files": [
     "dist/",
-    "css/",
     "loader/"
   ],
   "scripts": {
-    "build": "stencil build",
-    "postbuild": "sed -i \"5i import '@ionic-super-tabs/core/dist/types/components';\" ../angular/src/directives/proxies.ts"
+    "build": "stencil build"
   },
-  "author": "",
+  "author": "Zyra Media Inc.",
   "license": "MIT",
   "devDependencies": {
     "@ionic/core": "^4.1.2",

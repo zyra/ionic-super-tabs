@@ -1,7 +1,7 @@
 {
   "angularCompilerOptions": {
     "annotateForClosureCompiler": true,
-    "strictMetadataEmit" : true,
+    "strictMetadataEmit": true,
     "flatModuleOutFile": "core.js",
     "flatModuleId": "@ionic-super-tabs/angular",
     "skipTemplateCodegen": true,
@@ -16,7 +16,10 @@
     "declarationDir": "dist",
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["dom", "es2017"],
+    "lib": [
+      "dom",
+      "es2017"
+    ],
     "module": "es2015",
     "moduleResolution": "node",
     "noImplicitAny": true,
@@ -31,6 +34,11 @@
     "strictPropertyInitialization": false,
     "target": "es2015"
   },
-  "exclude": ["node_modules"],
-  "files": ["src/index.ts"]
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "src/index.ts",
+    "node_modules/@ionic-super-tabs/core/dist/types/interface.d.ts"
+  ]
 }

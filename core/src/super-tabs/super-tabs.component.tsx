@@ -1,5 +1,6 @@
 import { Component, ComponentInterface, Element, Prop, Method } from '@stencil/core';
-import { DEFAULT_CONFIG, SuperTabsConfig } from '../super-tabs.model';
+import { SuperTabsConfig } from '../interface';
+import { DEFAULT_CONFIG } from '../utils';
 
 @Component({
   tag: 'super-tabs',

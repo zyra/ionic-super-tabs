@@ -10,6 +10,7 @@
     "css/"
   ],
   "scripts": {
+    "build": "npm run build",
     "build.ng": "npm run build.es2015 && npm run build.es5",
     "build.es2015": "ngc -p tsconfig.json && rollup --config ./rollup.config.js",
     "build.es5": "ngc -p tsconfig.legacy.json && rollup --config ./rollup.config.legacy.js"
@@ -17,7 +18,7 @@
   "author": "Zyra Media Inc. <info@zyra.ca>",
   "license": "MIT",
   "dependencies": {
-    "@ionic-super-tabs/core": "7.0.0-alpha.0"
+    "@ionic-super-tabs/core": "^7.0.0-alpha.0"
   },
   "devDependencies": {
     "@angular-devkit/core": "^7.2.1",

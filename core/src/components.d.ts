@@ -10,7 +10,7 @@ import '@stencil/core';
 
 import {
   SuperTabsConfig,
-} from './super-tabs.model';
+} from './interface';
 import {
   EventEmitter,
 } from '@stencil/core';
@@ -66,7 +66,7 @@ export namespace Components {
     'color': string;
     'config'?: SuperTabsConfig;
     'moveContainer': (scrollX: number, animate?: boolean | undefined) => Promise<void>;
-    'onButtonClick': (button: any) => void;
+    'onButtonClick': (button: HTMLSuperTabButtonElement) => void;
     'scrollable': boolean;
     'setActiveTab': (index: number) => void;
     'setSelectedTab': (index: number) => void;

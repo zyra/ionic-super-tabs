@@ -42,15 +42,15 @@ Type: `Promise<void>`
 
 
 
-### `onButtonClick(button: any) => void`
+### `onButtonClick(button: HTMLSuperTabButtonElement) => void`
 
 
 
 #### Parameters
 
-| Name     | Type  | Description |
-| -------- | ----- | ----------- |
-| `button` | `any` |             |
+| Name     | Type                        | Description |
+| -------- | --------------------------- | ----------- |
+| `button` | `HTMLSuperTabButtonElement` |             |
 
 #### Returns
 

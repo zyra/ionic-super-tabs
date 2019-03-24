@@ -1,12 +1,12 @@
 import { Component, ComponentInterface, Element, Event, EventEmitter, Listen, Method, Prop } from '@stencil/core';
+import { SuperTabsConfig } from '../interface';
 import {
   checkGesture,
   getNormalizedScrollX,
   pointerCoord,
   scrollEl,
   STCoord,
-  SuperTabsConfig,
-} from '../super-tabs.model';
+} from '../utils';
 
 @Component({
   tag: 'super-tabs-toolbar',
