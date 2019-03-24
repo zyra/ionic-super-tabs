@@ -11,6 +11,7 @@ export class SuperTabButtonComponent implements ComponentInterface {
   @Prop({ mutable: true }) active?: boolean;
   @Prop() index?: number;
   @Prop() disabled?: boolean;
+  @Prop({ mutable: true }) scrollableContainer: boolean = false;
 
   @State() label!: HTMLElement | null;
   @State() icon!: HTMLElement | null;
@@ -39,6 +40,7 @@ export class SuperTabButtonComponent implements ComponentInterface {
         'icon-only': !!this.icon && !this.label,
         'label-only': !!this.label && !this.icon,
         active: Boolean(this.active),
+        scrollableContainer: this.scrollableContainer,
       },
     };
   }

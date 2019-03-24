@@ -17,7 +17,7 @@ export class SuperTab {
 proxyInputs(SuperTab, ['index']);
 
 export declare interface SuperTabButton extends StencilComponents<'SuperTabButton'> {}
-@Component({ selector: 'super-tab-button', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['active', 'index', 'disabled'] })
+@Component({ selector: 'super-tab-button', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['active', 'index', 'disabled', 'scrollableContainer'] })
 export class SuperTabButton {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef) {
@@ -25,7 +25,7 @@ export class SuperTabButton {
     this.el = r.nativeElement;
   }
 }
-proxyInputs(SuperTabButton, ['active', 'index', 'disabled']);
+proxyInputs(SuperTabButton, ['active', 'index', 'disabled', 'scrollableContainer']);
 
 export declare interface SuperTabs extends StencilComponents<'SuperTabs'> {}
 @Component({ selector: 'super-tabs', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['config', 'activeTabIndex'] })
@@ -57,7 +57,7 @@ proxyMethods(SuperTabsContainer, ['moveContainerByIndex', 'moveContainer']);
 proxyInputs(SuperTabsContainer, ['config', 'swipeEnabled']);
 
 export declare interface SuperTabsToolbar extends StencilComponents<'SuperTabsToolbar'> {}
-@Component({ selector: 'super-tabs-toolbar', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['toolbarPosition', 'config', 'showIndicator', 'color'] })
+@Component({ selector: 'super-tabs-toolbar', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['toolbarPosition', 'config', 'showIndicator', 'color', 'scrollable'] })
 export class SuperTabsToolbar {
   buttonClick!: EventEmitter<CustomEvent>;
   protected el: HTMLElement;
@@ -67,5 +67,5 @@ export class SuperTabsToolbar {
     proxyOutputs(this, this.el, ['buttonClick']);
   }
 }
-proxyMethods(SuperTabsToolbar, ['onButtonClick', 'setActiveTab', 'setSelectedTab']);
-proxyInputs(SuperTabsToolbar, ['toolbarPosition', 'config', 'showIndicator', 'color']);
+proxyMethods(SuperTabsToolbar, ['onButtonClick', 'setActiveTab', 'setSelectedTab', 'moveContainer']);
+proxyInputs(SuperTabsToolbar, ['toolbarPosition', 'config', 'showIndicator', 'color', 'scrollable']);

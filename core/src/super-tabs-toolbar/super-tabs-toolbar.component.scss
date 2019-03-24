@@ -1,14 +1,21 @@
 :host {
   flex-grow: 0;
   flex-shrink: 0;
-  display: flex;
-  flex-flow: row nowrap;
+  display: block;
   width: 100%;
   transform: translate3d(0, 0, 0);
   position: relative;
   z-index: 2;
   background: var(--super-tabs-toolbar-background, var(--ion-color-base));
   overflow: visible;
+
+  .buttons-container {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    transform: translate3d(0, 0, 0);
+    overflow: hidden;
+  }
 }
 
 :host(:not([no-border])) {
@@ -22,7 +29,14 @@
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAIBAMAAAACWGKkAAAAFVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAASAQCkAAAAB3RSTlMFTEIzJBcOYhQUIwAAAB9JREFUCNdjEIQCBiUoYDCGAgYXKGAIhQKGNChgwAAAorMLKSCkL40AAAAASUVORK5CYII=);
     background-repeat: repeat-x;
     content: '';
-    z-index: 2;
+    z-index: 3;
     transform: translate3d(0,0,0);
+  }
+}
+
+:host([scrollable]) {
+  .buttons-container {
+    padding-left: var(--st-scrollable-toolbar-padding-left, 52px);
+    width: calc(100% - var(--st-scrollable-toolbar-padding-left, 52px));
   }
 }

@@ -22,11 +22,13 @@ export namespace Components {
     'active'?: boolean;
     'disabled'?: boolean;
     'index'?: number;
+    'scrollableContainer': boolean;
   }
   interface SuperTabButtonAttributes extends StencilHTMLAttributes {
     'active'?: boolean;
     'disabled'?: boolean;
     'index'?: number;
+    'scrollableContainer'?: boolean;
   }
 
   interface SuperTabIndicator {
@@ -63,7 +65,9 @@ export namespace Components {
   interface SuperTabsToolbar {
     'color': string;
     'config'?: SuperTabsConfig;
+    'moveContainer': (scrollX: number, animate?: boolean | undefined) => Promise<void>;
     'onButtonClick': (button: any) => void;
+    'scrollable': boolean;
     'setActiveTab': (index: number) => void;
     'setSelectedTab': (index: number) => void;
     'showIndicator': boolean;
@@ -73,6 +77,7 @@ export namespace Components {
     'color'?: string;
     'config'?: SuperTabsConfig;
     'onButtonClick'?: (event: CustomEvent<HTMLSuperTabButtonElement>) => void;
+    'scrollable'?: boolean;
     'showIndicator'?: boolean;
     'toolbarPosition'?: 'top' | 'bottom';
   }

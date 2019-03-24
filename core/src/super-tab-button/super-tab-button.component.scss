@@ -58,3 +58,8 @@
   height: 48px;
   justify-content: center;
 }
+
+:host(.scrollable-container) {
+  flex-grow: 0;
+  min-width: 90px;
+}

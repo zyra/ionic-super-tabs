@@ -11,6 +11,7 @@
 | ----------------- | ------------------ | ----------- | ------------------------------ | ----------- |
 | `color`           | `color`            |             | `string`                       | `'primary'` |
 | `config`          | --                 |             | `SuperTabsConfig \| undefined` | `undefined` |
+| `scrollable`      | `scrollable`       |             | `boolean`                      | `false`     |
 | `showIndicator`   | `show-indicator`   |             | `boolean`                      | `true`      |
 | `toolbarPosition` | `toolbar-position` |             | `"bottom" \| "top"`            | `'top'`     |
 
@@ -23,6 +24,23 @@
 
 
 ## Methods
+
+### `moveContainer(scrollX: number, animate?: boolean | undefined) => Promise<void>`
+
+
+
+#### Parameters
+
+| Name      | Type                   | Description |
+| --------- | ---------------------- | ----------- |
+| `scrollX` | `number`               |             |
+| `animate` | `boolean \| undefined` |             |
+
+#### Returns
+
+Type: `Promise<void>`
+
+
 
 ### `onButtonClick(button: any) => void`
 

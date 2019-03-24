@@ -69,26 +69,61 @@ function getScrollCoord(start: number, dest: number, startTime: number, currentT
   return Math.ceil((timeFn * (dest - start)) + start);
 }
 
-function scroll(el: Element, startX: number, x: number, startY: number, y: number, startTime: number, duration: number, callback: Function) {
+function scroll(el: Element, startX: number, x: number, startTime: number, duration: number, callback: Function) {
   const currentTime = window.performance.now();
   const scrollX = getScrollCoord(startX, x, startTime, currentTime, duration);
-  const scrollY = getScrollCoord(startY, y, startTime, currentTime, duration);
-  el.scrollTo(scrollX, scrollY);
+  el.scrollTo(scrollX, 0);
 
-  if (el.scrollLeft === x && el.scrollTop === y) {
+  if (currentTime - startTime >= duration) {
     callback();
     return;
   }
 
-  requestAnimationFrame(() => scroll(el, startX, x, startY, y, startTime, duration, callback));
+  requestAnimationFrame(() => scroll(el, startX, x, startTime, duration, callback));
 }
 
-export const scrollEl = async (el: Element, x: number, y: number = 0, duration: number = 300) => {
+export const scrollEl = async (el: Element, x: number, duration: number = 300) => {
   const startX = el.scrollLeft;
-  const startY = el.scrollTop;
   const now = window.performance.now();
 
   return new Promise<void>(resolve => {
-    requestAnimationFrame(() => scroll(el, startX, x, startY, y, now, duration, resolve));
+    requestAnimationFrame(() => scroll(el, startX, x, now, duration, resolve));
   });
 };
+
+export function checkGesture(newCoords: STCoord, initialCoords: STCoord, config: SuperTabsConfig): boolean | undefined {
+  if (!initialCoords) {
+    return;
+  }
+
+  const radians = config.maxDragAngle! * (Math.PI / 180),
+    maxCosine = Math.cos(radians),
+    deltaX = newCoords.x - initialCoords.x,
+    deltaY = newCoords.y - initialCoords.y,
+    distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+  if (distance >= config.dragThreshold!) {
+    // swipe is long enough
+    // lets check the angle
+    const angle = Math.atan2(deltaY, deltaX),
+      cosine = Math.cos(angle);
+
+    return Math.abs(cosine) > maxCosine;
+  }
+
+  return;
+}
+
+export function getScrollX(el: HTMLElement, delta?: number) {
+  return el.scrollLeft + (typeof delta === 'number' ? delta : 0);
+}
+
+export function getNormalizedScrollX(el: HTMLElement, delta?: number) {
+  const minX = 0;
+  const maxX = el.scrollWidth - el.clientWidth;
+  let scrollX = getScrollX(el, delta);
+
+  scrollX = Math.max(minX, Math.min(maxX, scrollX));
+
+  return scrollX;
+}

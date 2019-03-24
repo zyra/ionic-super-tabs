@@ -1,5 +1,12 @@
 import { Component, ComponentInterface, Element, Event, EventEmitter, Listen, Method, Prop } from '@stencil/core';
-import { pointerCoord, scrollEl, STCoord, SuperTabsConfig } from '../super-tabs.model';
+import {
+  checkGesture,
+  getNormalizedScrollX,
+  pointerCoord,
+  scrollEl,
+  STCoord,
+  SuperTabsConfig,
+} from '../super-tabs.model';
 
 @Component({
   tag: 'super-tabs-container',
@@ -14,7 +21,6 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
   @Event() stTabsChange!: EventEmitter<HTMLSuperTabElement[]>;
   @Event() activeTabChange!: EventEmitter<HTMLSuperTabElement[]>;
-
   @Event() activeTabIndexChange!: EventEmitter<number>;
   @Event() selectedTabIndexChange!: EventEmitter<number>;
 
@@ -26,6 +32,16 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   private initialTimestamp?: number;
   private _activeTabIndex?: number;
   private _selectedTabIndex?: number;
+  private leftThreshold: number = 0;
+  private rightThreshold: number = 0;
+
+  componentWillLoad() {
+    this.indexTabs();
+  }
+
+  componentDidUpdate() {
+    this.indexTabs();
+  }
 
   @Method()
   moveContainerByIndex(index: number, animate?: boolean) {
@@ -35,19 +51,23 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
   @Method()
   async moveContainer(scrollX: number, animate?: boolean) {
-    if (animate) {
-      await scrollEl(this.el, scrollX, 0, this.config!.transitionDuration);
-    } else {
-      await scrollEl(this.el, scrollX, 0, 0);
-    }
+    await scrollEl(this.el, scrollX, animate? this.config!.transitionDuration : 0);
   }
 
   setActiveTabIndex(index: number) {
+    if (this._activeTabIndex === index) {
+      return;
+    }
+
     this._activeTabIndex = index;
     this.activeTabIndexChange.emit(this._activeTabIndex);
   }
 
   setSelectedTabIndex(index: number) {
+    if (index === this._selectedTabIndex) {
+      return;
+    }
+
     this._selectedTabIndex = index;
     this.selectedTabIndexChange.emit(this._selectedTabIndex);
   }
@@ -69,16 +89,106 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     }
 
     const coords = pointerCoord(ev);
-    // TODO: handle threshold, sidemenu ... etc
+    const vw = this.el.clientWidth;
+    if (coords.x < this.leftThreshold || coords.x > vw - this.rightThreshold) {
+      // ignore this gesture, it started in the side menu touch zone
+      this.shouldCapture = false;
+      return;
+    }
 
     this.initialCoords = coords;
 
-    // TODO: handle short swipe duration
-    // @ts-ignore
-    if (this.config.shortSwipeDuration > 0) {
+    if (this.config!.shortSwipeDuration! > 0) {
       this.initialTimestamp = window.performance.now();
     }
+
     this.lastPosX = coords.x;
+  }
+
+  @Listen('touchmove', { passive: false })
+  async onTouchMove(ev: TouchEvent) {
+    const coords = pointerCoord(ev);
+
+    if (!this.isDragging) {
+      if (typeof this.shouldCapture !== 'boolean') {
+        // we haven't decided yet if we want to capture this gesture
+        this.shouldCapture = checkGesture(coords, this.initialCoords!, this.config!);
+      }
+
+      if (this.shouldCapture !== true) {
+        return;
+      }
+
+      // gesture is good, let's capture all next onTouchMove events
+      this.isDragging = true;
+    }
+
+    // stop anything else from capturing these events, to make sure the content doesn't slide
+    if (this.config!.allowElementScroll !== true) {
+      ev.stopPropagation();
+      ev.preventDefault();
+    }
+
+    // get delta X
+    // @ts-ignore
+    const deltaX: number = this.lastPosX - coords.x;
+
+    if (deltaX === 0) {
+      return;
+    }
+
+    // scroll container
+    requestAnimationFrame(async () => {
+      const scrollLeft = this.el.scrollLeft;
+      const scrollX = getNormalizedScrollX(this.el, deltaX);
+
+      if (scrollX === scrollLeft) {
+        return;
+      }
+
+      try {
+        await this.moveContainer(scrollX, false);
+      } catch (err) {
+        console.error('[st-container] onTouchMove: ', err);
+      }
+    });
+
+    this.setSelectedTabIndex(
+      this.positionToIndex(
+        getNormalizedScrollX(this.el, deltaX),
+      ),
+    );
+
+    // update last X value
+    this.lastPosX = coords.x;
+  }
+
+  @Listen('touchend')
+  async onTouchEnd(ev: TouchEvent) {
+    const coords = pointerCoord(ev);
+
+    if (this.shouldCapture === true) {
+      const deltaTime: number = window.performance.now() - this.initialTimestamp!;
+      const shortSwipe = this.config!.shortSwipeDuration! > 0 && deltaTime <= this.config!.shortSwipeDuration!;
+      const shortSwipeDelta = coords.x - this.initialCoords!.x;
+
+      requestAnimationFrame(() => {
+        let selectedTabIndex = this.calcSelectedTab();
+        const expectedTabIndex = Math.round(selectedTabIndex);
+
+        if (shortSwipe && expectedTabIndex === this._activeTabIndex) {
+          selectedTabIndex += shortSwipeDelta > 0 ? -1 : 1;
+        }
+
+        selectedTabIndex = this.normalizeSelectedTab(selectedTabIndex);
+        this.setActiveTabIndex(selectedTabIndex);
+
+        this.moveContainer(this.indexToPosition(selectedTabIndex), true);
+      });
+    }
+
+    this.isDragging = false;
+    this.shouldCapture = void 0;
   }
 
   private indexTabs() {
@@ -91,6 +201,14 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
     this.tabs = tabsArray;
     this.stTabsChange.emit(this.tabs);
+
+    if (this.config!.sideMenu === 'both' || this.config!.sideMenu === 'left') {
+      this.leftThreshold = this.config!.sideMenuThreshold!;
+    }
+
+    if (this.config!.sideMenu === 'both' || this.config!.sideMenu === 'right') {
+      this.rightThreshold = this.config!.sideMenuThreshold!;
+    }
   }
 
   private calcSelectedTab(): number {
@@ -123,140 +241,8 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     return scrollX / tabWidth;
   }
 
-  componentWillLoad() {
-    this.indexTabs();
-  }
-
-  componentDidUpdate() {
-    this.indexTabs();
-  }
-
-  private getScrollX(delta?: number) {
-    return this.el.scrollLeft + (typeof delta === 'number' ? delta : 0);
-  }
-
-  private getNormalizedScrollX(delta?: number) {
-    const minX = 0;
-    const maxX = this.el.scrollWidth - this.el.clientWidth;
-    let scrollX = this.getScrollX(delta);
-
-    scrollX = Math.max(minX, Math.min(maxX, scrollX));
-
-    return scrollX;
-  }
-
-  @Listen('touchmove', { passive: false })
-  async onTouchMove(ev: TouchEvent) {
-    const coords = pointerCoord(ev);
-
-    if (!this.isDragging) {
-      if (typeof this.shouldCapture !== 'boolean') {
-        // we haven't decided yet if we want to capture this gesture
-        this.checkGesture(coords);
-      }
-
-      if (this.shouldCapture !== true) {
-        return;
-      }
-
-      // gesture is good, let's capture all next onTouchMove events
-      this.isDragging = true;
-    }
-
-    // stop anything else from capturing these events, to make sure the content doesn't slide
-    if (this.config!.allowElementScroll !== true) {
-      ev.stopPropagation();
-      ev.preventDefault();
-    }
-
-    // get delta X
-    // @ts-ignore
-    const deltaX: number = this.lastPosX - coords.x;
-
-    if (deltaX === 0) {
-      return;
-    }
-
-    // scroll container
-    requestAnimationFrame(async () => {
-      const scrollLeft = this.el.scrollLeft;
-      const scrollX = this.getNormalizedScrollX(deltaX);
-
-      if (scrollX === scrollLeft) {
-        return;
-      }
-
-      try {
-        await this.moveContainer(scrollX, false);
-      } catch (err) {
-        console.error('[st-container] onTouchMove: ', err);
-      }
-    });
-
-    this.setSelectedTabIndex(
-      this.positionToIndex(
-        this.getNormalizedScrollX(deltaX),
-      ),
-    );
-
-    // update last X value
-    this.lastPosX = coords.x;
-  }
-
-  @Listen('touchend')
-  async onTouchEnd(ev: TouchEvent) {
-    console.log('Touch end!', this.shouldCapture);
-    const coords = pointerCoord(ev);
-
-    if (this.shouldCapture === true) {
-      const deltaTime: number = window.performance.now() - this.initialTimestamp!;
-      const shortSwipe = this.config!.shortSwipeDuration! > 0 && deltaTime <= this.config!.shortSwipeDuration!;
-      const shortSwipeDelta = coords.x - this.initialCoords!.x;
-
-      requestAnimationFrame(() => {
-        let selectedTabIndex = this.calcSelectedTab();
-        const expectedTabIndex = Math.round(selectedTabIndex);
-
-        if (shortSwipe && expectedTabIndex === this._activeTabIndex) {
-          selectedTabIndex += shortSwipeDelta > 0 ? -1 : 1;
-        }
-
-        selectedTabIndex = this.normalizeSelectedTab(selectedTabIndex);
-        this.setActiveTabIndex(selectedTabIndex);
-
-        this.moveContainer(this.indexToPosition(selectedTabIndex), true);
-      });
-    }
-
-    this.isDragging = false;
-    this.shouldCapture = void 0;
-  }
-
   hostData() {
     return {};
-  }
-
-  private checkGesture(newCoords: STCoord) {
-    if (!this.initialCoords) {
-      return;
-    }
-
-    // @ts-ignore
-    const radians = this.config.maxDragAngle * (Math.PI / 180),
-      maxCosine = Math.cos(radians),
-      deltaX = newCoords.x - this.initialCoords.x,
-      deltaY = newCoords.y - this.initialCoords.y,
-      distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-    // @ts-ignore
-    if (distance >= this.config.dragThreshold) {
-      // swipe is long enough
-      // lets check the angle
-      const angle = Math.atan2(deltaY, deltaX),
-        cosine = Math.cos(angle);
-
-      this.shouldCapture = Math.abs(cosine) > maxCosine;
-    }
   }
 
   render() {
