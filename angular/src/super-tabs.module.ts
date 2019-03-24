@@ -1,5 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
+import { appInit } from './app-init';
 import { SuperTab, SuperTabButton, SuperTabs, SuperTabsContainer, SuperTabsToolbar } from './directives/proxies';
 
 const DECLARATIONS = [
@@ -15,4 +16,18 @@ const DECLARATIONS = [
   exports: DECLARATIONS,
   imports: [CommonModule],
 })
-export class SuperTabsModule {}
+export class SuperTabsModule {
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: SuperTabsModule,
+      providers: [
+        {
+          provide: APP_INITIALIZER,
+          useFactory: appInit,
+          multi: true,
+          deps: [DOCUMENT],
+        },
+      ],
+    };
+  }
+}

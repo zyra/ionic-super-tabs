@@ -8,7 +8,7 @@
   "es2015": "dist/esm/es2017/index.js",
   "es2017": "dist/esm/es2017/index.js",
   "jsnext:main": "dist/esm/es2017/index.js",
-  "types": "dist/types/interface.d.ts",
+  "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "webComponents": "dist/web-components.json",
   "files": [
