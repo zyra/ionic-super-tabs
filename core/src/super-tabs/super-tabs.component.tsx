@@ -1,6 +1,5 @@
 import { Component, ComponentInterface, Element, Prop, Method } from '@stencil/core';
-import { SuperTabsConfig } from '../interface';
-import { DEFAULT_CONFIG } from '../utils';
+import { DEFAULT_CONFIG, SuperTabsConfig } from '../interface';
 
 @Component({
   tag: 'super-tabs',
@@ -10,10 +9,22 @@ import { DEFAULT_CONFIG } from '../utils';
 export class SuperTabsComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabsElement;
 
+  private _config: SuperTabsConfig = DEFAULT_CONFIG;
+
   /**
    * Global Super Tabs configuration
    */
-  @Prop() config: SuperTabsConfig = DEFAULT_CONFIG;
+  @Prop()
+  set config(config: SuperTabsConfig) {
+    this._config = {
+      ...DEFAULT_CONFIG,
+      ...config,
+    };
+  }
+
+  get config(): SuperTabsConfig {
+    return this._config;
+  }
 
   /**
    * Initial active tab index
