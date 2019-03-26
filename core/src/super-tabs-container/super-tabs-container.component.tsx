@@ -19,7 +19,21 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   @Prop({ mutable: true }) config?: SuperTabsConfig;
   @Prop({ mutable: true }) swipeEnabled: boolean = true;
 
+  /**
+   * Emits an event when the active tab changes.
+   * An active tab is the tab that the user looking at.
+   *
+   * This event emitter will not notify you if the user has changed the current active tab.
+   * If you need that information, you should use the `tabChange` event emitted by the `super-tabs` element.
+   */
   @Event() activeTabIndexChange!: EventEmitter<number>;
+
+  /**
+   * Emits events when the container moves.
+   * Selected tab index represents what the user should be seeing.
+   * If you receive a decimal as the emitted number, it means that the container is moving between tabs.
+   * This number is used for animations, and can be used for high tab customizations.
+   */
   @Event() selectedTabIndexChange!: EventEmitter<number>;
 
   private tabs: HTMLSuperTabElement[] = [];
