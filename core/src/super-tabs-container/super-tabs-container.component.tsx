@@ -19,8 +19,6 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   @Prop({ mutable: true }) config?: SuperTabsConfig;
   @Prop({ mutable: true }) swipeEnabled: boolean = true;
 
-  @Event() stTabsChange!: EventEmitter<HTMLSuperTabElement[]>;
-  @Event() activeTabChange!: EventEmitter<HTMLSuperTabElement[]>;
   @Event() activeTabIndexChange!: EventEmitter<number>;
   @Event() selectedTabIndexChange!: EventEmitter<number>;
 
@@ -43,12 +41,22 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     this.indexTabs();
   }
 
+  /**
+   * Moves the container to align with the specified tab index
+   * @param index {number} Index of the tab
+   * @param animate {boolean} Whether to animate the transition
+   */
   @Method()
   moveContainerByIndex(index: number, animate?: boolean) {
     const scrollX = this.indexToPosition(index);
     return this.moveContainer(scrollX, animate);
   }
 
+  /**
+   * Sets the scrollLeft property of the container
+   * @param scrollX {number}
+   * @param animate {boolean}
+   */
   @Method()
   async moveContainer(scrollX: number, animate?: boolean) {
     await scrollEl(this.el, scrollX, animate? this.config!.transitionDuration : 0);
