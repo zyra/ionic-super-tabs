@@ -286,7 +286,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
       <div class="buttons-container" ref={(ref: any) => this.buttonsContainerEl = ref}>
         <slot/>
         {this.showIndicator &&
-        <super-tab-indicator ref={(ref: any) => this.indicatorEl = ref} toolbarPosition={this.toolbarPosition}/>}
+        <super-tab-indicator ref={(ref: any) => this.indicatorEl = ref}/>}
       </div>,
     ];
   }

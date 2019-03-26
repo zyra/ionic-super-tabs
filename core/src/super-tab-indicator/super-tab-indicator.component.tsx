@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Prop } from '@stencil/core';
+import { Component, ComponentInterface, Prop } from '@stencil/core';
 
 @Component({
   tag: 'super-tab-indicator',
@@ -7,8 +7,6 @@ import { Component, ComponentInterface, Element, Prop } from '@stencil/core';
   scoped: true,
 })
 export class SuperTabIndicatorComponent implements ComponentInterface {
-  @Element() el!: HTMLSuperTabsToolbarElement;
-  @Prop() selectedTabIndex?: number;
   @Prop() toolbarPosition: 'top' | 'bottom' = 'top';
 
   hostData() {
