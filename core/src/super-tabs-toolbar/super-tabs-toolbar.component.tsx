@@ -6,7 +6,7 @@ import {
   pointerCoord,
   scrollEl,
   STCoord,
-} from '../utils';
+  } from '../utils';
 
 @Component({
   tag: 'super-tabs-toolbar',
@@ -199,33 +199,29 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   private calcIndicatorAttrs(index: number) {
     const remainder = index % 1;
-    const isDragging = remainder > 0;
-    this.isDragging = isDragging;
+    this.isDragging = remainder > 0;
 
-    if (isDragging) {
-      // we need to set position + scale based on % scrolled between the two tabs
-      const buttonA = this.buttons[Math.floor(index)];
-      const buttonB = this.buttons[Math.ceil(index)];
+    let position: number, width: number;
 
-      const buttonAWidth = buttonA.clientWidth;
-      const buttonAPosition = buttonA.offsetLeft;
+    const floor = Math.floor(index), ceil = Math.ceil(index);
+    const button = this.buttons[index];
 
+    position = button.offsetLeft;
+    width = button.clientWidth;
+
+    if (this.isDragging && floor !== ceil) {
+      const buttonB = this.buttons[ceil];
       const buttonBWidth = buttonB.clientWidth;
       const buttonBPosition = buttonB.offsetLeft;
 
-      const position = buttonAPosition + remainder * (buttonBPosition - buttonAPosition);
-      const width = buttonAWidth + remainder * (buttonBWidth - buttonAWidth);
-
-      this.indicatorPosition = position - this.el.scrollLeft;
-      this.indicatorWidth = width;
-    } else {
-      // indicator should align perfectly with the active button
-      const button = this.buttons[index];
-      this.indicatorPosition = button.offsetLeft;
-      this.indicatorWidth = button.clientWidth;
+      position += remainder * (buttonBPosition - position);
+      width += remainder * (buttonBWidth - width);
     }
 
-    this.adjustContainerScroll(isDragging);
+    this.indicatorPosition = position;
+    this.indicatorWidth = width;
+
+    this.adjustContainerScroll(this.isDragging);
     this.setStyles();
   }
 
