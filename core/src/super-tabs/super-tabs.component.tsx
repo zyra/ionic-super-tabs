@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Prop, Method } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, Method, Watch } from '@stencil/core';
 import { DEFAULT_CONFIG, SuperTabsConfig } from '../interface';
 
 @Component({
@@ -9,22 +9,11 @@ import { DEFAULT_CONFIG, SuperTabsConfig } from '../interface';
 export class SuperTabsComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabsElement;
 
-  private _config: SuperTabsConfig = DEFAULT_CONFIG;
 
   /**
    * Global Super Tabs configuration
    */
-  @Prop()
-  set config(config: SuperTabsConfig) {
-    this._config = {
-      ...DEFAULT_CONFIG,
-      ...config,
-    };
-  }
-
-  get config(): SuperTabsConfig {
-    return this._config;
-  }
+  @Prop({ mutable: true }) config?: SuperTabsConfig;
 
   /**
    * Initial active tab index
@@ -33,6 +22,14 @@ export class SuperTabsComponent implements ComponentInterface {
 
   private container!: HTMLSuperTabsContainerElement;
   private toolbar!: HTMLSuperTabsToolbarElement;
+  private _config: SuperTabsConfig = DEFAULT_CONFIG;
+
+  @Method()
+  setConfig(config: SuperTabsConfig) {
+    this._config = { ...DEFAULT_CONFIG, ...config };
+    this.container && (this.container.config = this._config);
+    this.toolbar && (this.toolbar.config = this._config);
+  }
 
   /**
    * Set the selected tab.
@@ -51,6 +48,11 @@ export class SuperTabsComponent implements ComponentInterface {
     }
   }
 
+  @Watch('config')
+  onConfigChange(config: SuperTabsConfig) {
+    this.setConfig(config);
+  }
+
   private onContainerSelectedTabChange(ev: any) {
     if (this.toolbar) {
       this.toolbar.setSelectedTab(ev.detail);
@@ -67,9 +69,7 @@ export class SuperTabsComponent implements ComponentInterface {
   }
 
   private onToolbarButtonClick(ev: any) {
-    if (this.container) {
-      this.container.moveContainerByIndex(ev.detail.index, true);
-    }
+    this.container && this.container.setActiveTabIndex(ev.detail.index);
   }
 
   indexChildren() {
@@ -79,7 +79,7 @@ export class SuperTabsComponent implements ComponentInterface {
     if (container && this.container !== container) {
       this.container = container;
 
-      container.config = this.config;
+      container.config = this._config;
       container.addEventListener('selectedTabIndexChange', this.onContainerSelectedTabChange.bind(this));
       container.addEventListener('activeTabIndexChange', this.onContainerActiveTabChange.bind(this));
     }
@@ -87,7 +87,7 @@ export class SuperTabsComponent implements ComponentInterface {
     if (toolbar && this.toolbar !== toolbar) {
       this.toolbar = toolbar;
 
-      toolbar.config = this.config;
+      toolbar.config = this._config;
       toolbar.addEventListener('buttonClick', this.onToolbarButtonClick.bind(this));
     }
   }
