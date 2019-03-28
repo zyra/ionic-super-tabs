@@ -26,10 +26,7 @@ export namespace Components {
     'scrollableContainer': boolean;
   }
   interface SuperTabButtonAttributes extends StencilHTMLAttributes {
-    'active'?: boolean;
     'disabled'?: boolean;
-    'index'?: number;
-    'scrollableContainer'?: boolean;
   }
 
   interface SuperTabIndicator {
@@ -41,13 +38,13 @@ export namespace Components {
 
   interface SuperTab {
     'active'?: boolean;
+    /**
+    * Returns the root scrollable element
+    */
     'getRootScrollableEl': () => Promise<HTMLElement | null>;
     'index'?: number;
   }
-  interface SuperTabAttributes extends StencilHTMLAttributes {
-    'active'?: boolean;
-    'index'?: number;
-  }
+  interface SuperTabAttributes extends StencilHTMLAttributes {}
 
   interface SuperTabsContainer {
     /**
@@ -55,18 +52,8 @@ export namespace Components {
     */
     'autoScrollTop': boolean;
     'config'?: SuperTabsConfig;
-    /**
-    * Sets the scrollLeft property of the container
-    */
     'moveContainer': (scrollX: number, animate?: boolean | undefined) => Promise<void>;
-    /**
-    * Moves the container to align with the specified tab index
-    */
     'moveContainerByIndex': (index: number, animate?: boolean | undefined) => Promise<void>;
-    /**
-    * Scroll inner content to top
-    */
-    'scrollContentTop': () => void;
     'setActiveTabIndex': (index: number) => Promise<void>;
     /**
     * Enable/disable swiping
@@ -78,7 +65,6 @@ export namespace Components {
     * Set to true to automatically scroll to the top of the tab when the button is clicked while the tab is already selected.
     */
     'autoScrollTop'?: boolean;
-    'config'?: SuperTabsConfig;
     /**
     * Emits an event when the active tab changes. An active tab is the tab that the user looking at.  This event emitter will not notify you if the user has changed the current active tab. If you need that information, you should use the `tabChange` event emitted by the `super-tabs` element.
     */
@@ -104,6 +90,9 @@ export namespace Components {
     * Whether the toolbar is scrollable. Defaults to `false`.
     */
     'scrollable': boolean;
+    /**
+    * If scrollable is set to true, there will be an added padding to the left of the buttons.  Setting this property to false will remove that padding.  The padding is also configurable via a CSS variable.
+    */
     'scrollablePadding': boolean;
     'setActiveTab': (index: number) => void;
     'setSelectedTab': (index: number) => void;
@@ -117,12 +106,14 @@ export namespace Components {
     * Background color. Defaults to `'primary'`
     */
     'color'?: string;
-    'config'?: SuperTabsConfig;
     'onButtonClick'?: (event: CustomEvent<HTMLSuperTabButtonElement>) => void;
     /**
     * Whether the toolbar is scrollable. Defaults to `false`.
     */
     'scrollable'?: boolean;
+    /**
+    * If scrollable is set to true, there will be an added padding to the left of the buttons.  Setting this property to false will remove that padding.  The padding is also configurable via a CSS variable.
+    */
     'scrollablePadding'?: boolean;
     /**
     * Whether to show the indicator. Defaults to `true`
@@ -154,9 +145,6 @@ export namespace Components {
     * Global Super Tabs configuration
     */
     'config'?: SuperTabsConfig;
-    /**
-    * Emits an event when the current active tab is updated. This event emitter will emit all updates even if the tab index didn't change. It will let you know whether the tab changed or not.
-    */
     'onTabChange'?: (event: CustomEvent<SuperTabChangeEventDetail>) => void;
   }
 }

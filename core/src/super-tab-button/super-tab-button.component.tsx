@@ -8,10 +8,16 @@ import { Component, ComponentInterface, Element, Prop, State } from '@stencil/co
 export class SuperTabButtonComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabButtonElement;
 
-  @Prop({ mutable: true }) active?: boolean;
-  @Prop() index?: number;
-  @Prop() disabled?: boolean;
-  @Prop({ mutable: true }) scrollableContainer: boolean = false;
+  /** @internal */
+  @Prop({ reflectToAttr: true }) active?: boolean;
+
+  /** @internal */
+  @Prop({ reflectToAttr: true }) index?: number;
+
+  @Prop({ reflectToAttr: true }) disabled?: boolean;
+
+  /** @internal */
+  @Prop() scrollableContainer: boolean = false;
 
   @State() label!: HTMLElement | null;
   @State() icon!: HTMLElement | null;

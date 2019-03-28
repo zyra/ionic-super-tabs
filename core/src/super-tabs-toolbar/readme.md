@@ -7,13 +7,12 @@
 
 ## Properties
 
-| Property            | Attribute            | Description                                             | Type                           | Default     |
-| ------------------- | -------------------- | ------------------------------------------------------- | ------------------------------ | ----------- |
-| `color`             | `color`              | Background color. Defaults to `'primary'`               | `string`                       | `'primary'` |
-| `config`            | --                   |                                                         | `SuperTabsConfig \| undefined` | `undefined` |
-| `scrollable`        | `scrollable`         | Whether the toolbar is scrollable. Defaults to `false`. | `boolean`                      | `false`     |
-| `scrollablePadding` | `scrollable-padding` |                                                         | `boolean`                      | `true`      |
-| `showIndicator`     | `show-indicator`     | Whether to show the indicator. Defaults to `true`       | `boolean`                      | `true`      |
+| Property            | Attribute            | Description                                                                                                                                                                                              | Type      | Default     |
+| ------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------- |
+| `color`             | `color`              | Background color. Defaults to `'primary'`                                                                                                                                                                | `string`  | `'primary'` |
+| `scrollable`        | `scrollable`         | Whether the toolbar is scrollable. Defaults to `false`.                                                                                                                                                  | `boolean` | `false`     |
+| `scrollablePadding` | `scrollable-padding` | If scrollable is set to true, there will be an added padding to the left of the buttons.  Setting this property to false will remove that padding.  The padding is also configurable via a CSS variable. | `boolean` | `true`      |
+| `showIndicator`     | `show-indicator`     | Whether to show the indicator. Defaults to `true`                                                                                                                                                        | `boolean` | `true`      |
 
 
 ## Events
@@ -21,58 +20,6 @@
 | Event         | Description | Type                                     |
 | ------------- | ----------- | ---------------------------------------- |
 | `buttonClick` |             | `CustomEvent<HTMLSuperTabButtonElement>` |
-
-
-## Methods
-
-### `moveContainer(scrollX: number, animate?: boolean | undefined) => Promise<void>`
-
-
-
-#### Parameters
-
-| Name      | Type                   | Description |
-| --------- | ---------------------- | ----------- |
-| `scrollX` | `number`               |             |
-| `animate` | `boolean \| undefined` |             |
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `setActiveTab(index: number) => void`
-
-
-
-#### Parameters
-
-| Name    | Type     | Description |
-| ------- | -------- | ----------- |
-| `index` | `number` |             |
-
-#### Returns
-
-Type: `void`
-
-
-
-### `setSelectedTab(index: number) => void`
-
-
-
-#### Parameters
-
-| Name    | Type     | Description |
-| ------- | -------- | ----------- |
-| `index` | `number` |             |
-
-#### Returns
-
-Type: `void`
-
-
 
 
 ----------------------------------------------

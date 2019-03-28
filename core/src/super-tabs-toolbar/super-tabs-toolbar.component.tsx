@@ -17,9 +17,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   @Element() el!: HTMLSuperTabsToolbarElement;
 
-  /**
-   * @private
-   */
+  /** @internal */
   @Prop({ mutable: true }) config?: SuperTabsConfig;
 
   /**
@@ -37,12 +35,19 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
    */
   @Prop({ reflectToAttr: true }) scrollable: boolean = false;
 
+  /**
+   * If scrollable is set to true, there will be an added padding
+   * to the left of the buttons.
+   *
+   * Setting this property to false will remove that padding.
+   *
+   * The padding is also configurable via a CSS variable.
+   */
   @Prop({ reflectToAttr: true }) scrollablePadding: boolean = true;
 
   @Event() buttonClick!: EventEmitter<HTMLSuperTabButtonElement>;
 
-  buttons!: HTMLSuperTabButtonElement[];
-
+  private buttons!: HTMLSuperTabButtonElement[];
   private indicatorPosition!: number;
   private indicatorWidth!: number;
   private activeButton?: HTMLSuperTabButtonElement;
@@ -64,6 +69,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
     this.indexButtons();
   }
 
+  /** @internal */
   @Method()
   setActiveTab(index: number) {
     this.activeTabIndex = index;
@@ -71,11 +77,13 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
     this.markButtonActive(this.buttons[index]);
   }
 
+  /** @internal */
   @Method()
   setSelectedTab(index: number) {
     this.alignIndicator(index);
   }
 
+  /** @internal */
   @Method()
   async moveContainer(scrollX: number, animate?: boolean) {
     await scrollEl(this.buttonsContainerEl, scrollX, 0, animate? this.config!.transitionDuration : 0);

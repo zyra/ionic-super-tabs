@@ -15,9 +15,9 @@
 
 ## Events
 
-| Event       | Description                                                                                                                                                                               | Type                                     |
-| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| `tabChange` | Emits an event when the current active tab is updated. This event emitter will emit all updates even if the tab index didn't change. It will let you know whether the tab changed or not. | `CustomEvent<SuperTabChangeEventDetail>` |
+| Event       | Description | Type                                     |
+| ----------- | ----------- | ---------------------------------------- |
+| `tabChange` |             | `CustomEvent<SuperTabChangeEventDetail>` |
 
 
 ## Methods

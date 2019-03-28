@@ -7,12 +7,9 @@
 
 ## Properties
 
-| Property              | Attribute              | Description | Type                   | Default     |
-| --------------------- | ---------------------- | ----------- | ---------------------- | ----------- |
-| `active`              | `active`               |             | `boolean \| undefined` | `undefined` |
-| `disabled`            | `disabled`             |             | `boolean \| undefined` | `undefined` |
-| `index`               | `index`                |             | `number \| undefined`  | `undefined` |
-| `scrollableContainer` | `scrollable-container` |             | `boolean`              | `false`     |
+| Property   | Attribute  | Description | Type                   | Default     |
+| ---------- | ---------- | ----------- | ---------------------- | ----------- |
+| `disabled` | `disabled` |             | `boolean \| undefined` | `undefined` |
 
 
 ----------------------------------------------

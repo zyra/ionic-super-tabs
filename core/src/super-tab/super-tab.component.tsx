@@ -8,9 +8,15 @@ import { Component, ComponentInterface, Element, Method, Prop } from '@stencil/c
 export class SuperTabComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabElement;
 
-  @Prop({ mutable: true }) active?: boolean;
-  @Prop({ mutable: true }) index?: number;
+  /** @internal */
+  @Prop({ reflectToAttr: true }) active?: boolean;
 
+  /** @internal */
+  @Prop({ reflectToAttr: true }) index?: number;
+
+  /**
+   * Returns the root scrollable element
+   */
   @Method()
   async getRootScrollableEl(): Promise<HTMLElement | null> {
     if (this.el.scrollHeight > this.el.clientHeight) {

@@ -10,18 +10,19 @@ import { checkGesture, getNormalizedScrollX, pointerCoord, scrollEl, STCoord } f
 export class SuperTabsContainerComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabsContainerElement;
 
+  /** @internal */
   @Prop({ mutable: true }) config?: SuperTabsConfig;
 
   /**
    * Enable/disable swiping
    */
-  @Prop({ mutable: true }) swipeEnabled: boolean = true;
+  @Prop() swipeEnabled: boolean = true;
 
   /**
    * Set to true to automatically scroll to the top of the tab when the button is clicked while the tab is
    * already selected.
    */
-  @Prop({ mutable: true }) autoScrollTop: boolean = true;
+  @Prop() autoScrollTop: boolean = false;
 
   /**
    * Emits an event when the active tab changes.
@@ -55,15 +56,15 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
   componentDidLoad() {
     this.indexTabs();
-    console.log('Config is ', this.config);
   }
 
   componentDidUpdate() {
     this.indexTabs();
-    console.log('Config is ', this.config);
   }
 
   /**
+   * @internal
+   *
    * Moves the container to align with the specified tab index
    * @param index {number} Index of the tab
    * @param animate {boolean} Whether to animate the transition
@@ -75,6 +76,8 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   /**
+   * @internal
+   *
    * Sets the scrollLeft property of the container
    * @param scrollX {number}
    * @param animate {boolean}
@@ -84,25 +87,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     await scrollEl(this.el, scrollX, 0,animate ? this.config!.transitionDuration : 0);
   }
 
-  /**
-   * Scroll inner content to top
-   */
-  @Method()
-  scrollContentTop() {
-    const ionContent = this.el.querySelector('ion-content');
-
-    if (!ionContent) {
-      this.el.scrollTo(0, 0);
-      return;
-    }
-
-    const scrollEl = ionContent.querySelector('.inner-scroll');
-
-    if (scrollEl) {
-      scrollEl.scrollTo(0, 0);
-    }
-  }
-
+  /** @internal */
   @Method()
   async setActiveTabIndex(index: number) {
     if (this._activeTabIndex === index) {

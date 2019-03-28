@@ -8,19 +8,12 @@ import { DEFAULT_CONFIG, SuperTabChangeEventDetail, SuperTabsConfig } from '../i
 })
 export class SuperTabsComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabsElement;
-
-  /**
-   * Emits an event when the current active tab is updated.
-   * This event emitter will emit all updates even if the tab
-   * index didn't change. It will let you know whether the tab
-   * changed or not.
-   */
   @Event() tabChange!: EventEmitter<SuperTabChangeEventDetail>;
 
   /**
    * Global Super Tabs configuration
    */
-  @Prop({ mutable: true }) config?: SuperTabsConfig;
+  @Prop() config?: SuperTabsConfig;
 
   /**
    * Initial active tab index
