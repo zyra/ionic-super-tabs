@@ -17,11 +17,27 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   @Element() el!: HTMLSuperTabsToolbarElement;
 
-  @Prop({ mutable: true }) toolbarPosition: 'top' | 'bottom' = 'top';
+  /**
+   * @private
+   */
   @Prop({ mutable: true }) config?: SuperTabsConfig;
-  @Prop({ mutable: true }) showIndicator: boolean = true;
-  @Prop({ mutable: true }) color: string = 'primary';
-  @Prop({ mutable: true, reflectToAttr: true }) scrollable: boolean = false;
+
+  /**
+   * Whether to show the indicator. Defaults to `true`
+   */
+  @Prop() showIndicator: boolean = true;
+
+  /**
+   * Background color. Defaults to `'primary'`
+   */
+  @Prop() color: string = 'primary';
+
+  /**
+   * Whether the toolbar is scrollable. Defaults to `false`.
+   */
+  @Prop({ reflectToAttr: true }) scrollable: boolean = false;
+
+  @Prop({ reflectToAttr: true }) scrollablePadding: boolean = true;
 
   @Event() buttonClick!: EventEmitter<HTMLSuperTabButtonElement>;
 
@@ -49,12 +65,6 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   }
 
   @Method()
-  onButtonClick(button: HTMLSuperTabButtonElement) {
-    this.buttonClick.emit(button);
-    this.setActiveTab(button.index as number);
-  }
-
-  @Method()
   setActiveTab(index: number) {
     this.activeTabIndex = index;
     this.alignIndicator(index);
@@ -68,7 +78,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   @Method()
   async moveContainer(scrollX: number, animate?: boolean) {
-    await scrollEl(this.buttonsContainerEl, scrollX, animate? this.config!.transitionDuration : 0);
+    await scrollEl(this.buttonsContainerEl, scrollX, 0, animate? this.config!.transitionDuration : 0);
   }
 
   @Listen('window:resize')
@@ -204,7 +214,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
     let position: number, width: number;
 
     const floor = Math.floor(index), ceil = Math.ceil(index);
-    const button = this.buttons[index];
+    const button = this.buttons[floor];
 
     position = button.offsetLeft;
     width = button.clientWidth;
@@ -282,7 +292,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
       <div class="buttons-container" ref={(ref: any) => this.buttonsContainerEl = ref}>
         <slot/>
         {this.showIndicator &&
-        <super-tab-indicator ref={(ref: any) => this.indicatorEl = ref}/>}
+        <super-tab-indicator ref={(ref: any) => this.indicatorEl = ref} toolbarPosition={this.el!.assignedSlot!.name as any}/>}
       </div>,
     ];
   }

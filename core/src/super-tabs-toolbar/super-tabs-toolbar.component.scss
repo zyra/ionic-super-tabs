@@ -34,7 +34,7 @@
   }
 }
 
-:host([scrollable]) {
+:host([scrollable][scrollable-padding]) {
   .buttons-container {
     padding-left: var(--st-scrollable-toolbar-padding-left, 52px);
     width: calc(100% - var(--st-scrollable-toolbar-padding-left, 52px));

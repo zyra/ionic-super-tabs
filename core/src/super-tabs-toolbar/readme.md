@@ -7,13 +7,13 @@
 
 ## Properties
 
-| Property          | Attribute          | Description | Type                           | Default     |
-| ----------------- | ------------------ | ----------- | ------------------------------ | ----------- |
-| `color`           | `color`            |             | `string`                       | `'primary'` |
-| `config`          | --                 |             | `SuperTabsConfig \| undefined` | `undefined` |
-| `scrollable`      | `scrollable`       |             | `boolean`                      | `false`     |
-| `showIndicator`   | `show-indicator`   |             | `boolean`                      | `true`      |
-| `toolbarPosition` | `toolbar-position` |             | `"bottom" \| "top"`            | `'top'`     |
+| Property            | Attribute            | Description                                             | Type                           | Default     |
+| ------------------- | -------------------- | ------------------------------------------------------- | ------------------------------ | ----------- |
+| `color`             | `color`              | Background color. Defaults to `'primary'`               | `string`                       | `'primary'` |
+| `config`            | --                   |                                                         | `SuperTabsConfig \| undefined` | `undefined` |
+| `scrollable`        | `scrollable`         | Whether the toolbar is scrollable. Defaults to `false`. | `boolean`                      | `false`     |
+| `scrollablePadding` | `scrollable-padding` |                                                         | `boolean`                      | `true`      |
+| `showIndicator`     | `show-indicator`     | Whether to show the indicator. Defaults to `true`       | `boolean`                      | `true`      |
 
 
 ## Events
@@ -39,22 +39,6 @@
 #### Returns
 
 Type: `Promise<void>`
-
-
-
-### `onButtonClick(button: HTMLSuperTabButtonElement) => void`
-
-
-
-#### Parameters
-
-| Name     | Type                        | Description |
-| -------- | --------------------------- | ----------- |
-| `button` | `HTMLSuperTabButtonElement` |             |
-
-#### Returns
-
-Type: `void`
 
 
 

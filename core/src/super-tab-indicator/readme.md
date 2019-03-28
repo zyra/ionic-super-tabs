@@ -7,10 +7,9 @@
 
 ## Properties
 
-| Property           | Attribute            | Description | Type                  | Default     |
-| ------------------ | -------------------- | ----------- | --------------------- | ----------- |
-| `selectedTabIndex` | `selected-tab-index` |             | `number \| undefined` | `undefined` |
-| `toolbarPosition`  | `toolbar-position`   |             | `"bottom" \| "top"`   | `'top'`     |
+| Property          | Attribute          | Description | Type                | Default |
+| ----------------- | ------------------ | ----------- | ------------------- | ------- |
+| `toolbarPosition` | `toolbar-position` |             | `"bottom" \| "top"` | `'top'` |
 
 
 ----------------------------------------------

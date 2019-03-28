@@ -59,7 +59,8 @@
   justify-content: center;
 }
 
-:host(.scrollable-container) {
+:host(.scrollableContainer) {
   flex-grow: 0;
+  flex-shrink: 0;
   min-width: 90px;
 }

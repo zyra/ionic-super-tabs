@@ -104,7 +104,9 @@ export class SuperTabsComponent implements ComponentInterface {
 
   render() {
     return [
+      <slot name="top" />,
       <slot/>,
+      <slot name="bottom" />,
     ];
   }
 }

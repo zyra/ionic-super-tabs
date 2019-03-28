@@ -38,25 +38,28 @@ function getScrollCoord(start: number, dest: number, startTime: number, currentT
   return Math.ceil((timeFn * (dest - start)) + start);
 }
 
-function scroll(el: Element, startX: number, x: number, startTime: number, duration: number, callback: Function) {
+function scroll(el: Element, startX: number, startY: number, x: number, y: number, startTime: number, duration: number, callback: Function) {
   const currentTime = window.performance.now();
-  const scrollX = getScrollCoord(startX, x, startTime, currentTime, duration);
-  el.scrollTo(scrollX, 0);
+  const scrollX = startX === x? x : getScrollCoord(startX, x, startTime, currentTime, duration);
+  const scrollY = startY === y? y : getScrollCoord(startY, y, startTime, currentTime, duration);
+
+  el.scrollTo(scrollX, scrollY);
 
   if (currentTime - startTime >= duration) {
     callback();
     return;
   }
 
-  requestAnimationFrame(() => scroll(el, startX, x, startTime, duration, callback));
+  requestAnimationFrame(() => scroll(el, startX, startY, x, y, startTime, duration, callback));
 }
 
-export const scrollEl = async (el: Element, x: number, duration: number = 300) => {
+export const scrollEl = async (el: Element, x: number, y: number, duration: number = 300) => {
   const startX = el.scrollLeft;
+  const startY = el.scrollTop;
   const now = window.performance.now();
 
   return new Promise<void>(resolve => {
-    requestAnimationFrame(() => scroll(el, startX, x, now, duration, resolve));
+    requestAnimationFrame(() => scroll(el, startX, startY, x, y, now, duration, resolve));
   });
 };
 
@@ -85,6 +88,10 @@ export function checkGesture(newCoords: STCoord, initialCoords: STCoord, config:
 
 export function getScrollX(el: HTMLElement, delta?: number) {
   return el.scrollLeft + (typeof delta === 'number' ? delta : 0);
+}
+
+export function getScrollY(el: HTMLElement, delta?: number) {
+  return el.scrollTop + (typeof delta === 'number' ? delta : 0);
 }
 
 export function getNormalizedScrollX(el: HTMLElement, delta?: number) {

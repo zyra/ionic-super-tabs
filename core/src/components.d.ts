@@ -32,54 +32,101 @@ export namespace Components {
   }
 
   interface SuperTabIndicator {
-    'selectedTabIndex'?: number;
     'toolbarPosition': 'top' | 'bottom';
   }
   interface SuperTabIndicatorAttributes extends StencilHTMLAttributes {
-    'selectedTabIndex'?: number;
     'toolbarPosition'?: 'top' | 'bottom';
   }
 
   interface SuperTab {
+    'active'?: boolean;
+    'getRootScrollableEl': () => Promise<HTMLElement | null>;
     'index'?: number;
   }
   interface SuperTabAttributes extends StencilHTMLAttributes {
+    'active'?: boolean;
     'index'?: number;
   }
 
   interface SuperTabsContainer {
+    /**
+    * Set to true to automatically scroll to the top of the tab when the button is clicked while the tab is already selected.
+    */
+    'autoScrollTop': boolean;
     'config'?: SuperTabsConfig;
+    /**
+    * Sets the scrollLeft property of the container
+    */
     'moveContainer': (scrollX: number, animate?: boolean | undefined) => Promise<void>;
+    /**
+    * Moves the container to align with the specified tab index
+    */
     'moveContainerByIndex': (index: number, animate?: boolean | undefined) => Promise<void>;
+    /**
+    * Scroll inner content to top
+    */
+    'scrollContentTop': () => void;
+    'setActiveTabIndex': (index: number) => Promise<void>;
+    /**
+    * Enable/disable swiping
+    */
     'swipeEnabled': boolean;
   }
   interface SuperTabsContainerAttributes extends StencilHTMLAttributes {
+    /**
+    * Set to true to automatically scroll to the top of the tab when the button is clicked while the tab is already selected.
+    */
+    'autoScrollTop'?: boolean;
     'config'?: SuperTabsConfig;
-    'onActiveTabChange'?: (event: CustomEvent<HTMLSuperTabElement[]>) => void;
+    /**
+    * Emits an event when the active tab changes. An active tab is the tab that the user looking at.  This event emitter will not notify you if the user has changed the current active tab. If you need that information, you should use the `tabChange` event emitted by the `super-tabs` element.
+    */
     'onActiveTabIndexChange'?: (event: CustomEvent<number>) => void;
+    /**
+    * Emits events when the container moves. Selected tab index represents what the user should be seeing. If you receive a decimal as the emitted number, it means that the container is moving between tabs. This number is used for animations, and can be used for high tab customizations.
+    */
     'onSelectedTabIndexChange'?: (event: CustomEvent<number>) => void;
-    'onStTabsChange'?: (event: CustomEvent<HTMLSuperTabElement[]>) => void;
+    /**
+    * Enable/disable swiping
+    */
     'swipeEnabled'?: boolean;
   }
 
   interface SuperTabsToolbar {
+    /**
+    * Background color. Defaults to `'primary'`
+    */
     'color': string;
     'config'?: SuperTabsConfig;
     'moveContainer': (scrollX: number, animate?: boolean | undefined) => Promise<void>;
-    'onButtonClick': (button: HTMLSuperTabButtonElement) => void;
+    /**
+    * Whether the toolbar is scrollable. Defaults to `false`.
+    */
     'scrollable': boolean;
+    'scrollablePadding': boolean;
     'setActiveTab': (index: number) => void;
     'setSelectedTab': (index: number) => void;
+    /**
+    * Whether to show the indicator. Defaults to `true`
+    */
     'showIndicator': boolean;
-    'toolbarPosition': 'top' | 'bottom';
   }
   interface SuperTabsToolbarAttributes extends StencilHTMLAttributes {
+    /**
+    * Background color. Defaults to `'primary'`
+    */
     'color'?: string;
     'config'?: SuperTabsConfig;
     'onButtonClick'?: (event: CustomEvent<HTMLSuperTabButtonElement>) => void;
+    /**
+    * Whether the toolbar is scrollable. Defaults to `false`.
+    */
     'scrollable'?: boolean;
+    'scrollablePadding'?: boolean;
+    /**
+    * Whether to show the indicator. Defaults to `true`
+    */
     'showIndicator'?: boolean;
-    'toolbarPosition'?: 'top' | 'bottom';
   }
 
   interface SuperTabs {
@@ -90,11 +137,12 @@ export namespace Components {
     /**
     * Global Super Tabs configuration
     */
-    'config': SuperTabsConfig;
+    'config'?: SuperTabsConfig;
     /**
     * Set the selected tab. This will move the container and the toolbar to the selected tab.
     */
     'selectTab': (index: number, animate?: boolean) => void;
+    'setConfig': (config: SuperTabsConfig) => void;
   }
   interface SuperTabsAttributes extends StencilHTMLAttributes {
     /**

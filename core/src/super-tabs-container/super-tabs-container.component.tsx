@@ -1,12 +1,6 @@
 import { Component, ComponentInterface, Element, Event, EventEmitter, Listen, Method, Prop } from '@stencil/core';
 import { SuperTabsConfig } from '../interface';
-import {
-  checkGesture,
-  getNormalizedScrollX,
-  pointerCoord,
-  scrollEl,
-  STCoord,
-} from '../utils';
+import { checkGesture, getNormalizedScrollX, pointerCoord, scrollEl, STCoord } from '../utils';
 
 @Component({
   tag: 'super-tabs-container',
@@ -17,7 +11,17 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabsContainerElement;
 
   @Prop({ mutable: true }) config?: SuperTabsConfig;
+
+  /**
+   * Enable/disable swiping
+   */
   @Prop({ mutable: true }) swipeEnabled: boolean = true;
+
+  /**
+   * Set to true to automatically scroll to the top of the tab when the button is clicked while the tab is
+   * already selected.
+   */
+  @Prop({ mutable: true }) autoScrollTop: boolean = true;
 
   /**
    * Emits an event when the active tab changes.
@@ -42,17 +46,21 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   private lastPosX?: number;
   private isDragging?: boolean;
   private initialTimestamp?: number;
-  private _activeTabIndex?: number;
+  private _activeTabIndex: number = 0;
   private _selectedTabIndex?: number;
   private leftThreshold: number = 0;
   private rightThreshold: number = 0;
+  private scrollWidth: number = 0;
+  private clientWidth: number = 0;
 
-  componentWillLoad() {
+  componentDidLoad() {
     this.indexTabs();
+    console.log('Config is ', this.config);
   }
 
   componentDidUpdate() {
     this.indexTabs();
+    console.log('Config is ', this.config);
   }
 
   /**
@@ -73,15 +81,59 @@ export class SuperTabsContainerComponent implements ComponentInterface {
    */
   @Method()
   async moveContainer(scrollX: number, animate?: boolean) {
-    await scrollEl(this.el, scrollX, animate? this.config!.transitionDuration : 0);
+    await scrollEl(this.el, scrollX, 0,animate ? this.config!.transitionDuration : 0);
   }
 
-  setActiveTabIndex(index: number) {
+  /**
+   * Scroll inner content to top
+   */
+  @Method()
+  scrollContentTop() {
+    const ionContent = this.el.querySelector('ion-content');
+
+    if (!ionContent) {
+      this.el.scrollTo(0, 0);
+      return;
+    }
+
+    const scrollEl = ionContent.querySelector('.inner-scroll');
+
+    if (scrollEl) {
+      scrollEl.scrollTo(0, 0);
+    }
+  }
+
+  @Method()
+  async setActiveTabIndex(index: number) {
+    if (this._activeTabIndex === index) {
+      if (!this.autoScrollTop) {
+        return;
+      }
+
+      const current = this.tabs[this._activeTabIndex];
+      const scrollableEl = await current.getRootScrollableEl();
+      scrollableEl && scrollEl(scrollableEl, 0, 0, this.config!.transitionDuration);
+    }
+
+    this.moveContainerByIndex(index, true);
+    this.updateActiveTabIndex(index, false);
+  }
+
+  private updateActiveTabIndex(index: number, emit: boolean = true) {
+    if (this._activeTabIndex === index) {
+      return;
+    }
+
+    // tab changed
+    const current = this.tabs[this._activeTabIndex];
+    const next = this.tabs[index];
+    current.active = false;
+    next.active = true;
     this._activeTabIndex = index;
-    this.activeTabIndexChange.emit(this._activeTabIndex);
+    emit && this.activeTabIndexChange.emit(this._activeTabIndex);
   }
 
-  setSelectedTabIndex(index: number) {
+  private updateSelectedTabIndex(index: number) {
     if (index === this._selectedTabIndex) {
       return;
     }
@@ -90,8 +142,17 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     this.selectedTabIndexChange.emit(this._selectedTabIndex);
   }
 
+  @Listen('window:resize')
+  async onWindowResize() {
+    this.indexTabs();
+  }
+
   @Listen('touchstart')
   async onTouchStart(ev: TouchEvent) {
+    if (!this.swipeEnabled) {
+      return;
+    }
+
     let avoid: boolean = false;
     let element: any = ev.target;
 
@@ -107,7 +168,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     }
 
     const coords = pointerCoord(ev);
-    const vw = this.el.clientWidth;
+    const vw = this.clientWidth;
     if (coords.x < this.leftThreshold || coords.x > vw - this.rightThreshold) {
       // ignore this gesture, it started in the side menu touch zone
       this.shouldCapture = false;
@@ -125,6 +186,10 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
   @Listen('touchmove', { passive: false })
   async onTouchMove(ev: TouchEvent) {
+    if (!this.swipeEnabled) {
+      return;
+    }
+
     const coords = pointerCoord(ev);
 
     if (!this.isDragging) {
@@ -142,7 +207,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     }
 
     // stop anything else from capturing these events, to make sure the content doesn't slide
-    if (this.config!.allowElementScroll !== true) {
+    if (!this.config!.allowElementScroll) {
       ev.stopPropagation();
       ev.preventDefault();
     }
@@ -171,7 +236,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       }
     });
 
-    this.setSelectedTabIndex(
+    this.updateSelectedTabIndex(
       this.positionToIndex(
         getNormalizedScrollX(this.el, deltaX),
       ),
@@ -183,6 +248,10 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
   @Listen('touchend')
   async onTouchEnd(ev: TouchEvent) {
+    if (!this.swipeEnabled) {
+      return;
+    }
+
     const coords = pointerCoord(ev);
 
     if (this.shouldCapture === true) {
@@ -199,7 +268,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
         }
 
         selectedTabIndex = this.normalizeSelectedTab(selectedTabIndex);
-        this.setActiveTabIndex(selectedTabIndex);
+        this.updateActiveTabIndex(selectedTabIndex);
 
         this.moveContainer(this.indexToPosition(selectedTabIndex), true);
       });
@@ -210,15 +279,20 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   private indexTabs() {
+    this.scrollWidth = this.el.scrollWidth;
+    this.clientWidth = this.el.clientWidth;
+
     const tabs = this.el.querySelectorAll('super-tab');
     const tabsArray = [];
 
     for (let i = 0; i < tabs.length; i++) {
-      tabsArray.push(tabs[i]);
+      const tab = tabs[i];
+      tab.index = i;
+      tab.active = false;
+      tabsArray.push(tab);
     }
 
     this.tabs = tabsArray;
-    this.stTabsChange.emit(this.tabs);
 
     if (this.config!.sideMenu === 'both' || this.config!.sideMenu === 'left') {
       this.leftThreshold = this.config!.sideMenuThreshold!;
@@ -230,8 +304,8 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   private calcSelectedTab(): number {
-    const tabsWidth = this.el.scrollWidth;
-    const tabWidth = this.el.clientWidth;
+    const tabsWidth = this.scrollWidth;
+    const tabWidth = this.clientWidth;
     const minX = 0;
     const maxX = tabsWidth - tabWidth;
     const scrollX = Math.max(minX, Math.min(maxX, this.el.scrollLeft));
@@ -240,18 +314,18 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   private positionToIndex(scrollX: number) {
-    const tabWidth = this.el.clientWidth;
+    const tabWidth = this.clientWidth;
     return scrollX / tabWidth;
   }
 
   private indexToPosition(scrollX: number) {
-    const tabWidth = this.el.clientWidth;
+    const tabWidth = this.clientWidth;
     return scrollX * tabWidth;
   }
 
   private normalizeSelectedTab(index: number): number {
-    const tabsWidth = this.el.scrollWidth;
-    const tabWidth = this.el.clientWidth;
+    const tabsWidth = this.scrollWidth;
+    const tabWidth = this.clientWidth;
     const minX = 0;
     const maxX = tabsWidth - tabWidth;
     const scrollX = Math.max(minX, Math.min(maxX, tabWidth * Math.round(index)));

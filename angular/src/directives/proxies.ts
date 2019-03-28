@@ -6,7 +6,7 @@ import { proxyInputs, proxyMethods, proxyOutputs } from './proxies-utils';
 type StencilComponents<T extends keyof StencilElementInterfaces> = StencilElementInterfaces[T];
 
 export declare interface SuperTab extends StencilComponents<'SuperTab'> {}
-@Component({ selector: 'super-tab', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['index'] })
+@Component({ selector: 'super-tab', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['active', 'index'] })
 export class SuperTab {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef) {
@@ -14,7 +14,8 @@ export class SuperTab {
     this.el = r.nativeElement;
   }
 }
-proxyInputs(SuperTab, ['index']);
+proxyMethods(SuperTab, ['getRootScrollableEl']);
+proxyInputs(SuperTab, ['active', 'index']);
 
 export declare interface SuperTabButton extends StencilComponents<'SuperTabButton'> {}
 @Component({ selector: 'super-tab-button', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['active', 'index', 'disabled', 'scrollableContainer'] })
@@ -36,28 +37,26 @@ export class SuperTabs {
     this.el = r.nativeElement;
   }
 }
-proxyMethods(SuperTabs, ['selectTab']);
+proxyMethods(SuperTabs, ['setConfig', 'selectTab']);
 proxyInputs(SuperTabs, ['config', 'activeTabIndex']);
 
 export declare interface SuperTabsContainer extends StencilComponents<'SuperTabsContainer'> {}
-@Component({ selector: 'super-tabs-container', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['config', 'swipeEnabled'] })
+@Component({ selector: 'super-tabs-container', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['config', 'swipeEnabled', 'autoScrollTop'] })
 export class SuperTabsContainer {
-  stTabsChange!: EventEmitter<CustomEvent>;
-  activeTabChange!: EventEmitter<CustomEvent>;
   activeTabIndexChange!: EventEmitter<CustomEvent>;
   selectedTabIndexChange!: EventEmitter<CustomEvent>;
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef) {
     c.detach();
     this.el = r.nativeElement;
-    proxyOutputs(this, this.el, ['stTabsChange', 'activeTabChange', 'activeTabIndexChange', 'selectedTabIndexChange']);
+    proxyOutputs(this, this.el, ['activeTabIndexChange', 'selectedTabIndexChange']);
   }
 }
-proxyMethods(SuperTabsContainer, ['moveContainerByIndex', 'moveContainer']);
-proxyInputs(SuperTabsContainer, ['config', 'swipeEnabled']);
+proxyMethods(SuperTabsContainer, ['moveContainerByIndex', 'moveContainer', 'scrollContentTop', 'setActiveTabIndex']);
+proxyInputs(SuperTabsContainer, ['config', 'swipeEnabled', 'autoScrollTop']);
 
 export declare interface SuperTabsToolbar extends StencilComponents<'SuperTabsToolbar'> {}
-@Component({ selector: 'super-tabs-toolbar', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['toolbarPosition', 'config', 'showIndicator', 'color', 'scrollable'] })
+@Component({ selector: 'super-tabs-toolbar', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['config', 'showIndicator', 'color', 'scrollable', 'scrollablePadding'] })
 export class SuperTabsToolbar {
   buttonClick!: EventEmitter<CustomEvent>;
   protected el: HTMLElement;
@@ -67,5 +66,5 @@ export class SuperTabsToolbar {
     proxyOutputs(this, this.el, ['buttonClick']);
   }
 }
-proxyMethods(SuperTabsToolbar, ['onButtonClick', 'setActiveTab', 'setSelectedTab', 'moveContainer']);
-proxyInputs(SuperTabsToolbar, ['toolbarPosition', 'config', 'showIndicator', 'color', 'scrollable']);
+proxyMethods(SuperTabsToolbar, ['setActiveTab', 'setSelectedTab', 'moveContainer']);
+proxyInputs(SuperTabsToolbar, ['config', 'showIndicator', 'color', 'scrollable', 'scrollablePadding']);
