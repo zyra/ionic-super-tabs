@@ -7,9 +7,23 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type                  | Default     |
-| -------- | --------- | ----------- | --------------------- | ----------- |
-| `index`  | `index`   |             | `number \| undefined` | `undefined` |
+| Property | Attribute | Description | Type                   | Default     |
+| -------- | --------- | ----------- | ---------------------- | ----------- |
+| `active` | `active`  |             | `boolean \| undefined` | `undefined` |
+| `index`  | `index`   |             | `number \| undefined`  | `undefined` |
+
+
+## Methods
+
+### `getRootScrollableEl() => Promise<HTMLElement | null>`
+
+
+
+#### Returns
+
+Type: `Promise<HTMLElement | null>`
+
+
 
 
 ----------------------------------------------
