@@ -1,5 +1,5 @@
-import { Component, ComponentInterface, Element, Prop, Method, Watch } from '@stencil/core';
-import { DEFAULT_CONFIG, SuperTabsConfig } from '../interface';
+import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, Watch } from '@stencil/core';
+import { DEFAULT_CONFIG, SuperTabChangeEventDetail, SuperTabsConfig } from '../interface';
 
 @Component({
   tag: 'super-tabs',
@@ -9,6 +9,13 @@ import { DEFAULT_CONFIG, SuperTabsConfig } from '../interface';
 export class SuperTabsComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabsElement;
 
+  /**
+   * Emits an event when the current active tab is updated.
+   * This event emitter will emit all updates even if the tab
+   * index didn't change. It will let you know whether the tab
+   * changed or not.
+   */
+  @Event() tabChange!: EventEmitter<SuperTabChangeEventDetail>;
 
   /**
    * Global Super Tabs configuration
@@ -61,6 +68,12 @@ export class SuperTabsComponent implements ComponentInterface {
 
   private onContainerActiveTabChange(ev: any) {
     const index: number = ev.detail;
+
+    this.tabChange.emit({
+      changed: index !== this.activeTabIndex,
+      index,
+    });
+
     this.activeTabIndex = index;
 
     if (this.toolbar) {
@@ -69,7 +82,16 @@ export class SuperTabsComponent implements ComponentInterface {
   }
 
   private onToolbarButtonClick(ev: any) {
-    this.container && this.container.setActiveTabIndex(ev.detail.index);
+    const { index }= ev.detail;
+
+    this.container && this.container.setActiveTabIndex(index);
+
+    this.tabChange.emit({
+      changed: index !== this.activeTabIndex,
+      index,
+    });
+
+    this.activeTabIndex = index;
   }
 
   indexChildren() {
@@ -104,9 +126,9 @@ export class SuperTabsComponent implements ComponentInterface {
 
   render() {
     return [
-      <slot name="top" />,
+      <slot name="top"/>,
       <slot/>,
-      <slot name="bottom" />,
+      <slot name="bottom"/>,
     ];
   }
 }

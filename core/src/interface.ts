@@ -32,3 +32,9 @@ export interface SuperTabsConfig {
    */
   shortSwipeDuration?: number;
 }
+
+export interface SuperTabChangeEventDetail {
+  index: number;
+  changed: boolean;
+}
+

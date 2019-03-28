@@ -13,6 +13,13 @@
 | `config`         | --                 | Global Super Tabs configuration | `SuperTabsConfig \| undefined` | `undefined` |
 
 
+## Events
+
+| Event       | Description                                                                                                                                                                               | Type                                     |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `tabChange` | Emits an event when the current active tab is updated. This event emitter will emit all updates even if the tab index didn't change. It will let you know whether the tab changed or not. | `CustomEvent<SuperTabChangeEventDetail>` |
+
+
 ## Methods
 
 ### `selectTab(index: number, animate?: boolean) => void`

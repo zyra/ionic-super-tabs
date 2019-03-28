@@ -9,6 +9,7 @@ import '@stencil/core';
 
 
 import {
+  SuperTabChangeEventDetail,
   SuperTabsConfig,
 } from './interface';
 import {
@@ -153,6 +154,10 @@ export namespace Components {
     * Global Super Tabs configuration
     */
     'config'?: SuperTabsConfig;
+    /**
+    * Emits an event when the current active tab is updated. This event emitter will emit all updates even if the tab index didn't change. It will let you know whether the tab changed or not.
+    */
+    'onTabChange'?: (event: CustomEvent<SuperTabChangeEventDetail>) => void;
   }
 }
 

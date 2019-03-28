@@ -31,10 +31,12 @@ proxyInputs(SuperTabButton, ['active', 'index', 'disabled', 'scrollableContainer
 export declare interface SuperTabs extends StencilComponents<'SuperTabs'> {}
 @Component({ selector: 'super-tabs', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['config', 'activeTabIndex'] })
 export class SuperTabs {
+  tabChange!: EventEmitter<CustomEvent>;
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef) {
     c.detach();
     this.el = r.nativeElement;
+    proxyOutputs(this, this.el, ['tabChange']);
   }
 }
 proxyMethods(SuperTabs, ['setConfig', 'selectTab']);
