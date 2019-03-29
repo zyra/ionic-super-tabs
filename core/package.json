@@ -1,11 +1,11 @@
 {
   "name": "@ionic-super-tabs/core",
-  "version": "6.0.0-beta.3",
+  "version": "6.0.0-beta.4",
   "description": "",
   "module": "dist/esm/index.js",
   "main": "dist/index.js",
   "unpkg": "dist/ionic.js",
-  "types": "dist/types/components.d.ts",
+  "types": "dist/types/interface.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
     "dist/",
