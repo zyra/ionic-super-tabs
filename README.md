@@ -23,6 +23,9 @@ npm i -S @ionic-super-tabs/core
 npm i -S @ionic-super-tabs/angular
 ```
 
+#### Temporary installation requirement:
+Add `node_modules/@ionic-super-tabs/core/dist/types/index.d.ts` to your `tsconfig.json` file under the `"include"` property.
+
 ---
 
 ## FAQ

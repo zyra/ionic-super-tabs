@@ -1,5 +1,6 @@
 import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, Watch } from '@stencil/core';
-import { DEFAULT_CONFIG, SuperTabChangeEventDetail, SuperTabsConfig } from '../interface';
+import { SuperTabChangeEventDetail, SuperTabsConfig } from '../interface';
+import { DEFAULT_CONFIG } from '../utils';
 
 @Component({
   tag: 'super-tabs',
@@ -75,7 +76,7 @@ export class SuperTabsComponent implements ComponentInterface {
   }
 
   private onToolbarButtonClick(ev: any) {
-    const { index }= ev.detail;
+    const { index } = ev.detail;
 
     this.container && this.container.setActiveTabIndex(index);
 

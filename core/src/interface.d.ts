@@ -1,5 +1,6 @@
 export * from './components';
-export * from './utils';
+export * from './index';
+
 export interface SuperTabsConfig {
   /**
    * Defaults to 40
