@@ -70,9 +70,7 @@ export class SuperTabsComponent implements ComponentInterface {
 
     this.activeTabIndex = index;
 
-    if (this.toolbar) {
-      this.toolbar.setActiveTab(index);
-    }
+    this.toolbar && this.toolbar.setActiveTab(index);
   }
 
   private onToolbarButtonClick(ev: any) {

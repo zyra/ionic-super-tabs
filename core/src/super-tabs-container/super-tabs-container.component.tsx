@@ -105,15 +105,14 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   private updateActiveTabIndex(index: number, emit: boolean = true) {
-    if (this._activeTabIndex === index) {
-      return;
+    if (this._activeTabIndex !== index) {
+      // tab changed
+      const current = this.tabs[this._activeTabIndex];
+      const next = this.tabs[index];
+      current.active = false;
+      next.active = true;
     }
 
-    // tab changed
-    const current = this.tabs[this._activeTabIndex];
-    const next = this.tabs[index];
-    current.active = false;
-    next.active = true;
     this._activeTabIndex = index;
     emit && this.activeTabIndexChange.emit(this._activeTabIndex);
   }
