@@ -1,7 +1,8 @@
+import { QueueApi } from '@stencil/core';
 import { SuperTabsConfig } from './interface';
 
 export const DEFAULT_CONFIG: SuperTabsConfig = {
-  dragThreshold: 10,
+  dragThreshold: 5,
   allowElementScroll: false,
   maxDragAngle: 40,
   sideMenuThreshold: 50,
@@ -38,28 +39,38 @@ function getScrollCoord(start: number, dest: number, startTime: number, currentT
   return Math.ceil((timeFn * (dest - start)) + start);
 }
 
-function scroll(el: Element, startX: number, startY: number, x: number, y: number, startTime: number, duration: number, callback: Function) {
+function scroll(el: Element, startX: number, startY: number, x: number, y: number, startTime: number, duration: number, queue: QueueApi) {
   const currentTime = window.performance.now();
-  const scrollX = startX === x? x : getScrollCoord(startX, x, startTime, currentTime, duration);
-  const scrollY = startY === y? y : getScrollCoord(startY, y, startTime, currentTime, duration);
+  const scrollX = startX === x ? x : getScrollCoord(startX, x, startTime, currentTime, duration);
+  const scrollY = startY === y ? y : getScrollCoord(startY, y, startTime, currentTime, duration);
 
   el.scrollTo(scrollX, scrollY);
 
   if (currentTime - startTime >= duration) {
-    callback();
     return;
   }
 
-  requestAnimationFrame(() => scroll(el, startX, startY, x, y, startTime, duration, callback));
+  queue.write(() => {
+    scroll(el, startX, startY, x, y, startTime, duration, queue);
+  });
 }
 
-export const scrollEl = async (el: Element, x: number, y: number, duration: number = 300) => {
-  const startX = el.scrollLeft;
-  const startY = el.scrollTop;
-  const now = window.performance.now();
+export const scrollEl = (el: Element, x: number, y: number, duration: number = 300, queue: QueueApi) => {
+  if (duration <= 0) {
+    queue.write(() => {
+      el.scrollTo(x, y);
+    });
+    return;
+  }
 
-  return new Promise<void>(resolve => {
-    requestAnimationFrame(() => scroll(el, startX, startY, x, y, now, duration, resolve));
+  queue.read(() => {
+    const startX = el.scrollLeft;
+    const startY = el.scrollTop;
+    const now = window.performance.now();
+
+    queue.write(() => {
+      scroll(el, startX, startY, x, y, now, duration, queue);
+    });
   });
 };
 

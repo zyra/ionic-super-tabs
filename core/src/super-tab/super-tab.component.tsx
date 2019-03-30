@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Method, Prop } from '@stencil/core';
+import { Component, ComponentInterface, Element, Method } from '@stencil/core';
 
 @Component({
   tag: 'super-tab',
@@ -7,12 +7,6 @@ import { Component, ComponentInterface, Element, Method, Prop } from '@stencil/c
 })
 export class SuperTabComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabElement;
-
-  /** @internal */
-  @Prop({ reflectToAttr: true }) active?: boolean;
-
-  /** @internal */
-  @Prop({ reflectToAttr: true }) index?: number;
 
   /**
    * Returns the root scrollable element

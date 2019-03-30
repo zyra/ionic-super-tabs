@@ -94,15 +94,12 @@ export class SuperTabsComponent implements ComponentInterface {
       this.container = container;
 
       container.config = this._config;
-      container.addEventListener('selectedTabIndexChange', this.onContainerSelectedTabChange.bind(this));
-      container.addEventListener('activeTabIndexChange', this.onContainerActiveTabChange.bind(this));
     }
 
     if (toolbar && this.toolbar !== toolbar) {
       this.toolbar = toolbar;
 
       toolbar.config = this._config;
-      toolbar.addEventListener('buttonClick', this.onToolbarButtonClick.bind(this));
     }
   }
 
@@ -114,6 +111,9 @@ export class SuperTabsComponent implements ComponentInterface {
   componentWillLoad() {
     this.indexChildren();
     this.selectTab(this.activeTabIndex);
+    this.el.addEventListener('selectedTabIndexChange', this.onContainerSelectedTabChange.bind(this));
+    this.el.addEventListener('activeTabIndexChange', this.onContainerActiveTabChange.bind(this));
+    this.el.addEventListener('buttonClick', this.onToolbarButtonClick.bind(this));
   }
 
   render() {

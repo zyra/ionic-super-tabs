@@ -39,9 +39,6 @@
   font-weight: var(--st-label-font-weight);
 }
 
-:host(ion-ripple-effect) {
-  transform: translate3d(0,0,0);
-}
 
 ::slotted(ion-icon) {
   color: var(--st-icon-color, var(--ion-color-contrast));
@@ -62,6 +59,7 @@
 
 :host(.scrollableContainer) {
   flex-grow: 0;
-  flex-shrink: 0;
+  flex-basis: auto;
   min-width: 90px;
+  max-width: 360px;
 }

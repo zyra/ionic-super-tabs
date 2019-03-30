@@ -37,12 +37,10 @@ export namespace Components {
   }
 
   interface SuperTab {
-    'active'?: boolean;
     /**
     * Returns the root scrollable element
     */
     'getRootScrollableEl': () => Promise<HTMLElement | null>;
-    'index'?: number;
   }
   interface SuperTabAttributes extends StencilHTMLAttributes {}
 
@@ -52,9 +50,9 @@ export namespace Components {
     */
     'autoScrollTop': boolean;
     'config'?: SuperTabsConfig;
-    'moveContainer': (scrollX: number, animate?: boolean | undefined) => Promise<void>;
-    'moveContainerByIndex': (index: number, animate?: boolean | undefined) => Promise<void>;
-    'setActiveTabIndex': (index: number) => Promise<void>;
+    'moveContainer': (scrollX: number, animate?: boolean | undefined) => void;
+    'moveContainerByIndex': (index: number, animate?: boolean | undefined) => void;
+    'setActiveTabIndex': (index: number) => void;
     /**
     * Enable/disable swiping
     */
@@ -85,7 +83,7 @@ export namespace Components {
     */
     'color': string;
     'config'?: SuperTabsConfig;
-    'moveContainer': (scrollX: number, animate?: boolean | undefined) => Promise<void>;
+    'moveContainer': (scrollX: number, animate?: boolean | undefined) => void;
     /**
     * Whether the toolbar is scrollable. Defaults to `false`.
     */

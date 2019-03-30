@@ -1,4 +1,14 @@
-import { Component, ComponentInterface, Element, Event, EventEmitter, Listen, Method, Prop } from '@stencil/core';
+import {
+  Component,
+  ComponentInterface,
+  Element,
+  Event,
+  EventEmitter,
+  Listen,
+  Method,
+  Prop,
+  QueueApi,
+} from '@stencil/core';
 import { SuperTabsConfig } from '../interface';
 import {
   checkGesture,
@@ -45,6 +55,9 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
    */
   @Prop({ reflectToAttr: true }) scrollablePadding: boolean = true;
 
+  /** @internal */
+  @Prop({ context: 'queue' }) queue!: QueueApi;
+
   @Event() buttonClick!: EventEmitter<HTMLSuperTabButtonElement>;
 
   private buttons!: HTMLSuperTabButtonElement[];
@@ -73,7 +86,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   @Method()
   setActiveTab(index: number) {
     this.activeTabIndex = index;
-    this.alignIndicator(index);
+    this.alignIndicator(index, true);
     this.markButtonActive(this.buttons[index]);
   }
 
@@ -85,8 +98,8 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   /** @internal */
   @Method()
-  async moveContainer(scrollX: number, animate?: boolean) {
-    await scrollEl(this.buttonsContainerEl, scrollX, 0, animate? this.config!.transitionDuration : 0);
+  moveContainer(scrollX: number, animate?: boolean) {
+    scrollEl(this.buttonsContainerEl, scrollX, 0, animate? this.config!.transitionDuration : 0, this.queue);
   }
 
   @Listen('window:resize')
@@ -114,60 +127,62 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   @Listen('touchstart')
   async onTouchStart(ev: TouchEvent) {
-    const coords = pointerCoord(ev);
-    const vw = this.el.clientWidth;
+    this.queue.read(() => {
+      const coords = pointerCoord(ev);
+      const vw = this.el.clientWidth;
 
-    if (coords.x < this.leftThreshold || coords.x > vw - this.rightThreshold) {
-      // ignore this gesture, it started in the side menu touch zone
-      this.shouldCapture = false;
-      return;
-    }
+      if (coords.x < this.leftThreshold || coords.x > vw - this.rightThreshold) {
+        // ignore this gesture, it started in the side menu touch zone
+        this.shouldCapture = false;
+        return;
+      }
 
-    this.initialCoords = coords;
-    this.lastPosX = coords.x;
+      this.initialCoords = coords;
+      this.lastPosX = coords.x;
+    });
   }
 
   @Listen('touchmove')
   async onTouchMove(ev: TouchEvent) {
-    const coords = pointerCoord(ev);
+    this.queue.read(() => {
+      const coords = pointerCoord(ev);
 
-    if (typeof this.lastPosX !== 'number') {
-      return;
-    }
-
-    if (!this.isDragging) {
-      if (typeof this.shouldCapture !== 'boolean') {
-        // we haven't decided yet if we want to capture this gesture
-        this.shouldCapture = checkGesture(coords, this.initialCoords!, this.config!);
-      }
-
-      if (this.shouldCapture !== true) {
+      if (typeof this.lastPosX !== 'number') {
         return;
       }
 
-      // gesture is good, let's capture all next onTouchMove events
-      this.isDragging = true;
-    }
+      if (!this.isDragging) {
+        if (typeof this.shouldCapture !== 'boolean') {
+          // we haven't decided yet if we want to capture this gesture
+          this.shouldCapture = checkGesture(coords, this.initialCoords!, this.config!);
+        }
 
-    // get delta X
-    const deltaX: number = this.lastPosX - coords.x;
+        if (this.shouldCapture !== true) {
+          return;
+        }
 
-    // update last X value
-    this.lastPosX = coords.x;
+        // gesture is good, let's capture all next onTouchMove events
+        this.isDragging = true;
+      }
 
-    if (deltaX === 0) {
-      return;
-    }
+      // get delta X
+      const deltaX: number = this.lastPosX - coords.x;
 
-    // scroll container
-    requestAnimationFrame(async () => {
+      // update last X value
+      this.lastPosX = coords.x;
+
+      if (deltaX === 0) {
+        return;
+      }
+
+      // scroll container
       const scrollLeft = this.buttonsContainerEl.scrollLeft;
       const scrollX = getNormalizedScrollX(this.buttonsContainerEl, deltaX);
 
       if (scrollX === scrollLeft) {
         return;
       }
-      await this.moveContainer(scrollX, false);
+      this.moveContainer(scrollX, false);
     });
   }
 
@@ -215,76 +230,73 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
     this.activeButton = button;
   }
 
-  private calcIndicatorAttrs(index: number) {
-    const remainder = index % 1;
-    this.isDragging = remainder > 0;
+  private adjustContainerScroll(animate: boolean) {
+    this.queue.read(() => {
+      let pos: number;
 
-    let position: number, width: number;
+      const ip = this.indicatorPosition;
+      const iw = this.indicatorWidth;
+      const mw = this.buttonsContainerEl.clientWidth;
+      const sp = this.buttonsContainerEl.scrollLeft;
 
-    const floor = Math.floor(index), ceil = Math.ceil(index);
-    const button = this.buttons[floor];
+      const centerDelta = (mw / 2 - iw / 2);
 
-    position = button.offsetLeft;
-    width = button.clientWidth;
+      if (ip + iw + centerDelta > mw + sp) {
+        // we need to move the segment container to the left
+        const delta: number = ip + iw + centerDelta - mw - sp;
+        pos = sp + delta;
+      } else if (ip - centerDelta < sp) {
+        // we need to move the segment container to the right
+        pos = ip - centerDelta;
+        pos = Math.max(pos, 0);
+        pos = pos > ip ? ip - mw + iw : pos;
+      }
 
-    if (this.isDragging && floor !== ceil) {
-      const buttonB = this.buttons[ceil];
-      const buttonBWidth = buttonB.clientWidth;
-      const buttonBPosition = buttonB.offsetLeft;
-
-      position += remainder * (buttonBPosition - position);
-      width += remainder * (buttonBWidth - width);
-    }
-
-    this.indicatorPosition = position;
-    this.indicatorWidth = width;
-
-    this.adjustContainerScroll(this.isDragging);
-    this.setStyles();
+      if (typeof pos! === 'number') {
+        this.moveContainer(pos!, animate);
+      }
+    });
   }
 
-  private adjustContainerScroll(isDragging: boolean) {
-    let pos: number;
-
-    const ip = this.indicatorPosition;
-    const iw = this.indicatorWidth;
-    const mw = this.buttonsContainerEl.clientWidth;
-    const sp = this.buttonsContainerEl.scrollLeft;
-
-    const centerDelta = (mw / 2 - iw / 2);
-
-    if (ip + iw + centerDelta > mw + sp) {
-      // we need to move the segment container to the left
-      const delta: number = ip + iw + centerDelta - mw - sp;
-      pos = sp + delta;
-    } else if (ip - centerDelta < sp) {
-      // we need to move the segment container to the right
-      pos = ip - centerDelta;
-      pos = Math.max(pos, 0);
-      pos = pos > ip ? ip - mw + iw : pos;
-    }
-
-    if (typeof pos! === 'number') {
-      this.moveContainer(pos!, !isDragging);
-    }
-  }
-
-  private alignIndicator(index: number) {
+  private alignIndicator(index: number, animate: boolean = false) {
     if (!this.showIndicator) {
       return;
     }
 
-    requestAnimationFrame(() => {
-      this.calcIndicatorAttrs(index);
-    });
-  }
+    this.queue.read(() => {
+      const remainder = index % 1;
+      const isDragging = this.isDragging = remainder > 0;
 
-  setStyles() {
-    if (!this.showIndicator || this.indicatorEl) {
-      this.indicatorEl.style.setProperty('--st-indicator-position-x', this.indicatorPosition + 'px');
-      this.indicatorEl.style.setProperty('--st-indicator-scale-x', String(this.indicatorWidth / 100));
-      this.indicatorEl.style.setProperty('--st-indicator-transition-duration', this.isDragging ? '0' : `${this.config!.transitionDuration}ms`);
-    }
+      let position: number, width: number;
+
+      const floor = Math.floor(index), ceil = Math.ceil(index);
+      const button = this.buttons[floor];
+
+      position = button.offsetLeft;
+      width = button.clientWidth;
+
+      if (this.isDragging && floor !== ceil) {
+        const buttonB = this.buttons[ceil];
+        const buttonBWidth = buttonB.clientWidth;
+        const buttonBPosition = buttonB.offsetLeft;
+
+        position += remainder * (buttonBPosition - position);
+        width += remainder * (buttonBWidth - width);
+      }
+
+      this.indicatorPosition = position;
+      this.indicatorWidth = width;
+
+      this.adjustContainerScroll(animate || !isDragging);
+
+      this.queue.write(() => {
+        if (!this.showIndicator || this.indicatorEl) {
+          this.indicatorEl.style.setProperty('--st-indicator-position-x', this.indicatorPosition + 'px');
+          this.indicatorEl.style.setProperty('--st-indicator-scale-x', String(this.indicatorWidth / 100));
+          this.indicatorEl.style.setProperty('--st-indicator-transition-duration', this.isDragging ? '0' : `${this.config!.transitionDuration}ms`);
+        }
+      });
+    });
   }
 
   hostData() {

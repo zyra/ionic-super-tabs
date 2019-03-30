@@ -18,25 +18,25 @@
   }
 }
 
-:host(:not([no-border])) {
-  &:after {
-    left: 0;
-    bottom: -8px;
-    background-position: left 0 top 0;
-    position: absolute;
-    width: 100%;
-    height: 8px;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAIBAMAAAACWGKkAAAAFVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAASAQCkAAAAB3RSTlMFTEIzJBcOYhQUIwAAAB9JREFUCNdjEIQCBiUoYDCGAgYXKGAIhQKGNChgwAAAorMLKSCkL40AAAAASUVORK5CYII=);
-    background-repeat: repeat-x;
-    content: '';
-    z-index: 3;
-    transform: translate3d(0,0,0);
-  }
+:host(:not([no-border])):after {
+  left: 0;
+  bottom: -8px;
+  background-position: left 0 top 0;
+  position: absolute;
+  width: 100%;
+  height: 8px;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAIBAMAAAACWGKkAAAAFVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAASAQCkAAAAB3RSTlMFTEIzJBcOYhQUIwAAAB9JREFUCNdjEIQCBiUoYDCGAgYXKGAIhQKGNChgwAAAorMLKSCkL40AAAAASUVORK5CYII=);
+  background-repeat: repeat-x;
+  content: '';
+  z-index: 3;
+  transform: translate3d(0,0,0);
 }
 
-:host([scrollable][scrollable-padding]) {
-  .buttons-container {
-    padding-left: var(--st-scrollable-toolbar-padding-left, 52px);
-    width: calc(100% - var(--st-scrollable-toolbar-padding-left, 52px));
-  }
+:host([scrollable]) .buttons-container {
+  will-change: scroll-position;
+}
+
+:host([scrollable][scrollable-padding]) .buttons-container {
+  padding-left: var(--st-scrollable-toolbar-padding-left, 52px);
+  width: calc(100% - var(--st-scrollable-toolbar-padding-left, 52px));
 }
