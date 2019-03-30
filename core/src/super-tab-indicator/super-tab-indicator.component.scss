@@ -1,4 +1,8 @@
 :host {
+  /**
+   * @prop --st-indicator-color: Indicator color. Defaults to `--ion-color-contrast`.
+   */
+
   display: block;
   height: 2px;
   width: 100px;
