@@ -2,7 +2,7 @@ import { QueueApi } from '@stencil/core';
 import { SuperTabsConfig } from './interface';
 
 export const DEFAULT_CONFIG: SuperTabsConfig = {
-  dragThreshold: 5,
+  dragThreshold: 10,
   allowElementScroll: false,
   maxDragAngle: 40,
   sideMenuThreshold: 50,
