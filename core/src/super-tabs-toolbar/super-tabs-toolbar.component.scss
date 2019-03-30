@@ -4,8 +4,7 @@
    * @prop --st-scrollable-toolbar-padding-left: Left padding when `scrollable` is set to true. Defaults to `52px`.
    */
 
-  flex-grow: 0;
-  flex-shrink: 0;
+  flex: 0 1 auto;
   display: block;
   width: 100%;
   transform: translate3d(0, 0, 0);

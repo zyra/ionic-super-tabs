@@ -1,5 +1,5 @@
 :host {
-  min-height: 100%;
+  box-sizing: content-box;
   height: 100%;
   max-height: 100%;
   display: flex;
@@ -7,4 +7,5 @@
   overflow: hidden;
   z-index: 1;
   position: relative;
+  contain: layout size style;
 }
