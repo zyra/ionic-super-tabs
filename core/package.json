@@ -21,7 +21,7 @@
   "author": "Zyra Media Inc.",
   "license": "MIT",
   "devDependencies": {
-    "@ionic/core": "^4.1.2",
+    "@ionic/core": "^4.4.2",
     "@stencil/core": "latest",
     "@stencil/sass": "latest",
     "@stencil/utils": "latest"
