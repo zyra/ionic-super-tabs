@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Method } from '@stencil/core';
+import { Component, ComponentInterface, Element, Method, h } from '@stencil/core';
 
 @Component({
   tag: 'super-tab',

@@ -22,13 +22,18 @@
 | `buttonClick` |             | `CustomEvent<HTMLSuperTabButtonElement>` |
 
 
-## CSS Custom Properties
+## Dependencies
 
-| Name                                   | Description                                                        |
-| -------------------------------------- | ------------------------------------------------------------------ |
-| `--st-scrollable-toolbar-padding-left` | Left padding when `scrollable` is set to true. Defaults to `52px`. |
-| `--super-tabs-toolbar-background`      | Toolbar background color. Defaults to `--ion-color-base`.          |
+### Depends on
 
+- [super-tab-indicator](../super-tab-indicator)
+
+### Graph
+```mermaid
+graph TD;
+  super-tabs-toolbar --> super-tab-indicator
+  style super-tabs-toolbar fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

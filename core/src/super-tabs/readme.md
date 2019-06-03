@@ -22,37 +22,24 @@
 
 ## Methods
 
-### `selectTab(index: number, animate?: boolean) => void`
+### `selectTab(index: number, animate?: boolean) => Promise<void>`
 
 Set the selected tab.
 This will move the container and the toolbar to the selected tab.
 
-#### Parameters
+#### Returns
 
-| Name      | Type      | Description                                |
-| --------- | --------- | ------------------------------------------ |
-| `index`   | `number`  | the index of the tab you want to select    |
-| `animate` | `boolean` | whether you want to animate the transition |
+Type: `Promise<void>`
+
+
+
+### `setConfig(config: SuperTabsConfig) => Promise<void>`
+
+
 
 #### Returns
 
-Type: `void`
-
-
-
-### `setConfig(config: SuperTabsConfig) => void`
-
-
-
-#### Parameters
-
-| Name     | Type              | Description |
-| -------- | ----------------- | ----------- |
-| `config` | `SuperTabsConfig` |             |
-
-#### Returns
-
-Type: `void`
+Type: `Promise<void>`
 
 
 

@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Event, EventEmitter, Listen, Method, Prop, QueueApi } from '@stencil/core';
+import { Component, ComponentInterface, Element, Event, EventEmitter, h, Listen, Method, Prop, QueueApi } from '@stencil/core';
 import { SuperTabsConfig } from '../interface';
 import { checkGesture, getNormalizedScrollX, pointerCoord, scrollEl, STCoord } from '../utils';
 
@@ -73,7 +73,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
    * @param animate {boolean} Whether to animate the transition
    */
   @Method()
-  moveContainerByIndex(index: number, animate?: boolean) {
+  moveContainerByIndex(index: number, animate?: boolean): Promise<void> {
     const scrollX = this.indexToPosition(index);
     return this.moveContainer(scrollX, animate);
   }
@@ -86,13 +86,15 @@ export class SuperTabsContainerComponent implements ComponentInterface {
    * @param animate {boolean}
    */
   @Method()
-  moveContainer(scrollX: number, animate?: boolean) {
+  moveContainer(scrollX: number, animate?: boolean): Promise<void> {
     scrollEl(this.el, scrollX, 0, animate ? this.config!.transitionDuration : 0, this.queue);
+
+    return Promise.resolve();
   }
 
   /** @internal */
   @Method()
-  setActiveTabIndex(index: number) {
+  async setActiveTabIndex(index: number): Promise<void> {
     if (this._activeTabIndex === index) {
       if (!this.autoScrollTop) {
         return;
@@ -129,7 +131,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     this.selectedTabIndexChange.emit(this._selectedTabIndex);
   }
 
-  @Listen('window:resize')
+  @Listen('resize', { target: 'window' })
   async onWindowResize() {
     this.indexTabs();
   }
@@ -269,7 +271,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       this.clientWidth = this.el.clientWidth;
 
       const tabs = this.el.querySelectorAll('super-tab');
-      const tabsArray = [];
+      const tabsArray: HTMLSuperTabElement[] = [];
 
       for (let i = 0; i < tabs.length; i++) {
         tabsArray.push(tabs[i]);

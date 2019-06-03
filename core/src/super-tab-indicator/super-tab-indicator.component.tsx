@@ -4,7 +4,6 @@ import { Component, ComponentInterface, Prop } from '@stencil/core';
   tag: 'super-tab-indicator',
   styleUrl: 'super-tab-indicator.component.scss',
   shadow: true,
-  scoped: true,
 })
 export class SuperTabIndicatorComponent implements ComponentInterface {
   @Prop() toolbarPosition: 'top' | 'bottom' = 'top';

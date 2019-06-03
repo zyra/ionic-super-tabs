@@ -12,12 +12,18 @@
 | `toolbarPosition` | `toolbar-position` |             | `"bottom" \| "top"` | `'top'` |
 
 
-## CSS Custom Properties
+## Dependencies
 
-| Name                   | Description                                          |
-| ---------------------- | ---------------------------------------------------- |
-| `--st-indicator-color` | Indicator color. Defaults to `--ion-color-contrast`. |
+### Used by
 
+ - [super-tabs-toolbar](../super-tabs-toolbar)
+
+### Graph
+```mermaid
+graph TD;
+  super-tabs-toolbar --> super-tab-indicator
+  style super-tab-indicator fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

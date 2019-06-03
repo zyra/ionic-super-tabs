@@ -1,22 +1,6 @@
-import {
-  Component,
-  ComponentInterface,
-  Element,
-  Event,
-  EventEmitter,
-  Listen,
-  Method,
-  Prop,
-  QueueApi,
-} from '@stencil/core';
+import { Component, ComponentInterface, Element, Event, EventEmitter, h, Listen, Method, Prop, QueueApi } from '@stencil/core';
 import { SuperTabsConfig } from '../interface';
-import {
-  checkGesture,
-  getNormalizedScrollX,
-  pointerCoord,
-  scrollEl,
-  STCoord,
-  } from '../utils';
+import { checkGesture, getNormalizedScrollX, pointerCoord, scrollEl, STCoord } from '../utils';
 
 @Component({
   tag: 'super-tabs-toolbar',
@@ -84,25 +68,31 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   /** @internal */
   @Method()
-  setActiveTab(index: number) {
+  setActiveTab(index: number): Promise<void> {
     this.activeTabIndex = index;
     this.alignIndicator(index, true);
     this.markButtonActive(this.buttons[index]);
+
+    return Promise.resolve();
   }
 
   /** @internal */
   @Method()
-  setSelectedTab(index: number) {
+  setSelectedTab(index: number): Promise<void> {
     this.alignIndicator(index);
+
+    return Promise.resolve();
   }
 
   /** @internal */
   @Method()
-  moveContainer(scrollX: number, animate?: boolean) {
-    scrollEl(this.buttonsContainerEl, scrollX, 0, animate? this.config!.transitionDuration : 0, this.queue);
+  moveContainer(scrollX: number, animate?: boolean): Promise<void> {
+    scrollEl(this.buttonsContainerEl, scrollX, 0, animate ? this.config!.transitionDuration : 0, this.queue);
+
+    return Promise.resolve();
   }
 
-  @Listen('window:resize')
+  @Listen('resize', { target: 'window' })
   onWindowResize() {
     this.alignIndicator(this.activeTabIndex);
   }
@@ -195,7 +185,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   private indexButtons() {
     const buttons = this.el.querySelectorAll('super-tab-button');
-    const buttonsArray = [];
+    const buttonsArray: HTMLSuperTabButtonElement[] = [];
 
     for (let i = 0; i < buttons.length; i++) {
       const button = buttons[i];

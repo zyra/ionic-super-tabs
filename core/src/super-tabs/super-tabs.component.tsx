@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, Watch } from '@stencil/core';
+import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, Watch, h } from '@stencil/core';
 import { SuperTabChangeEventDetail, SuperTabsConfig } from '../interface';
 import { DEFAULT_CONFIG } from '../utils';
 
@@ -30,6 +30,8 @@ export class SuperTabsComponent implements ComponentInterface {
     this._config = { ...DEFAULT_CONFIG, ...config };
     this.container && (this.container.config = this._config);
     this.toolbar && (this.toolbar.config = this._config);
+
+    return Promise.resolve();
   }
 
   /**
@@ -47,6 +49,8 @@ export class SuperTabsComponent implements ComponentInterface {
     if (this.toolbar) {
       this.toolbar.setActiveTab(index);
     }
+
+    return Promise.resolve();
   }
 
   @Watch('config')

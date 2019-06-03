@@ -1,12 +1,12 @@
 /* tslint:disable */
 /* auto-generated angular directive proxies */
-import { Component, ElementRef, ChangeDetectorRef, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter } from '@angular/core';
 import { proxyInputs, proxyMethods, proxyOutputs } from './proxies-utils';
 
-type StencilComponents<T extends keyof StencilElementInterfaces> = StencilElementInterfaces[T];
+import { Components } from '@ionic-super-tabs/core'
 
-export declare interface SuperTab extends StencilComponents<'SuperTab'> {}
-@Component({ selector: 'super-tab', changeDetection: 0, template: '<ng-content></ng-content>' })
+export declare interface SuperTab extends Components.SuperTab {}
+@Component({ selector: 'super-tab', changeDetection: ChangeDetectionStrategy.OnPush, template: '<ng-content></ng-content>' })
 export class SuperTab {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef) {
@@ -16,8 +16,8 @@ export class SuperTab {
 }
 proxyMethods(SuperTab, ['getRootScrollableEl']);
 
-export declare interface SuperTabButton extends StencilComponents<'SuperTabButton'> {}
-@Component({ selector: 'super-tab-button', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['disabled'] })
+export declare interface SuperTabButton extends Components.SuperTabButton {}
+@Component({ selector: 'super-tab-button', changeDetection: ChangeDetectionStrategy.OnPush, template: '<ng-content></ng-content>', inputs: ['disabled'] })
 export class SuperTabButton {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef) {
@@ -27,8 +27,8 @@ export class SuperTabButton {
 }
 proxyInputs(SuperTabButton, ['disabled']);
 
-export declare interface SuperTabs extends StencilComponents<'SuperTabs'> {}
-@Component({ selector: 'super-tabs', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['config', 'activeTabIndex'] })
+export declare interface SuperTabs extends Components.SuperTabs {}
+@Component({ selector: 'super-tabs', changeDetection: ChangeDetectionStrategy.OnPush, template: '<ng-content></ng-content>', inputs: ['activeTabIndex', 'config'] })
 export class SuperTabs {
   tabChange!: EventEmitter<CustomEvent>;
   protected el: HTMLElement;
@@ -39,10 +39,10 @@ export class SuperTabs {
   }
 }
 proxyMethods(SuperTabs, ['setConfig', 'selectTab']);
-proxyInputs(SuperTabs, ['config', 'activeTabIndex']);
+proxyInputs(SuperTabs, ['activeTabIndex', 'config']);
 
-export declare interface SuperTabsContainer extends StencilComponents<'SuperTabsContainer'> {}
-@Component({ selector: 'super-tabs-container', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['swipeEnabled', 'autoScrollTop'] })
+export declare interface SuperTabsContainer extends Components.SuperTabsContainer {}
+@Component({ selector: 'super-tabs-container', changeDetection: ChangeDetectionStrategy.OnPush, template: '<ng-content></ng-content>', inputs: ['autoScrollTop', 'swipeEnabled'] })
 export class SuperTabsContainer {
   activeTabIndexChange!: EventEmitter<CustomEvent>;
   selectedTabIndexChange!: EventEmitter<CustomEvent>;
@@ -53,10 +53,10 @@ export class SuperTabsContainer {
     proxyOutputs(this, this.el, ['activeTabIndexChange', 'selectedTabIndexChange']);
   }
 }
-proxyInputs(SuperTabsContainer, ['swipeEnabled', 'autoScrollTop']);
+proxyInputs(SuperTabsContainer, ['autoScrollTop', 'swipeEnabled']);
 
-export declare interface SuperTabsToolbar extends StencilComponents<'SuperTabsToolbar'> {}
-@Component({ selector: 'super-tabs-toolbar', changeDetection: 0, template: '<ng-content></ng-content>', inputs: ['showIndicator', 'color', 'scrollable', 'scrollablePadding'] })
+export declare interface SuperTabsToolbar extends Components.SuperTabsToolbar {}
+@Component({ selector: 'super-tabs-toolbar', changeDetection: ChangeDetectionStrategy.OnPush, template: '<ng-content></ng-content>', inputs: ['color', 'scrollable', 'scrollablePadding', 'showIndicator'] })
 export class SuperTabsToolbar {
   buttonClick!: EventEmitter<CustomEvent>;
   protected el: HTMLElement;
@@ -66,4 +66,4 @@ export class SuperTabsToolbar {
     proxyOutputs(this, this.el, ['buttonClick']);
   }
 }
-proxyInputs(SuperTabsToolbar, ['showIndicator', 'color', 'scrollable', 'scrollablePadding']);
+proxyInputs(SuperTabsToolbar, ['color', 'scrollable', 'scrollablePadding', 'showIndicator']);

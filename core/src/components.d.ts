@@ -5,60 +5,150 @@
  */
 
 
-import '@stencil/core';
-
-
+import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 import {
   SuperTabChangeEventDetail,
   SuperTabsConfig,
 } from './interface';
-import {
-  EventEmitter,
-} from '@stencil/core';
 
 
 export namespace Components {
-
-  interface SuperTabButton {
-    'active'?: boolean;
-    'disabled'?: boolean;
-    'index'?: number;
-    'scrollableContainer': boolean;
-  }
-  interface SuperTabButtonAttributes extends StencilHTMLAttributes {
-    'disabled'?: boolean;
-  }
-
-  interface SuperTabIndicator {
-    'toolbarPosition': 'top' | 'bottom';
-  }
-  interface SuperTabIndicatorAttributes extends StencilHTMLAttributes {
-    'toolbarPosition'?: 'top' | 'bottom';
-  }
-
   interface SuperTab {
     /**
     * Returns the root scrollable element
     */
     'getRootScrollableEl': () => Promise<HTMLElement | null>;
   }
-  interface SuperTabAttributes extends StencilHTMLAttributes {}
-
+  interface SuperTabButton {
+    'active'?: boolean;
+    'disabled'?: boolean;
+    'index'?: number;
+    'scrollableContainer': boolean;
+  }
+  interface SuperTabIndicator {
+    'toolbarPosition': 'top' | 'bottom';
+  }
+  interface SuperTabs {
+    /**
+    * Initial active tab index
+    */
+    'activeTabIndex': number;
+    /**
+    * Global Super Tabs configuration
+    */
+    'config'?: SuperTabsConfig;
+    /**
+    * Set the selected tab. This will move the container and the toolbar to the selected tab.
+    */
+    'selectTab': (index: number, animate?: boolean) => Promise<void>;
+    'setConfig': (config: SuperTabsConfig) => Promise<void>;
+  }
   interface SuperTabsContainer {
     /**
     * Set to true to automatically scroll to the top of the tab when the button is clicked while the tab is already selected.
     */
     'autoScrollTop': boolean;
     'config'?: SuperTabsConfig;
-    'moveContainer': (scrollX: number, animate?: boolean | undefined) => void;
-    'moveContainerByIndex': (index: number, animate?: boolean | undefined) => void;
-    'setActiveTabIndex': (index: number) => void;
+    'moveContainer': (scrollX: number, animate?: boolean | undefined) => Promise<void>;
+    'moveContainerByIndex': (index: number, animate?: boolean | undefined) => Promise<void>;
+    'setActiveTabIndex': (index: number) => Promise<void>;
     /**
     * Enable/disable swiping
     */
     'swipeEnabled': boolean;
   }
-  interface SuperTabsContainerAttributes extends StencilHTMLAttributes {
+  interface SuperTabsToolbar {
+    /**
+    * Background color. Defaults to `'primary'`
+    */
+    'color': string;
+    'config'?: SuperTabsConfig;
+    'moveContainer': (scrollX: number, animate?: boolean | undefined) => Promise<void>;
+    /**
+    * Whether the toolbar is scrollable. Defaults to `false`.
+    */
+    'scrollable': boolean;
+    /**
+    * If scrollable is set to true, there will be an added padding to the left of the buttons.  Setting this property to false will remove that padding.  The padding is also configurable via a CSS variable.
+    */
+    'scrollablePadding': boolean;
+    'setActiveTab': (index: number) => Promise<void>;
+    'setSelectedTab': (index: number) => Promise<void>;
+    /**
+    * Whether to show the indicator. Defaults to `true`
+    */
+    'showIndicator': boolean;
+  }
+}
+
+declare global {
+
+
+  interface HTMLSuperTabElement extends Components.SuperTab, HTMLStencilElement {}
+  var HTMLSuperTabElement: {
+    prototype: HTMLSuperTabElement;
+    new (): HTMLSuperTabElement;
+  };
+
+  interface HTMLSuperTabButtonElement extends Components.SuperTabButton, HTMLStencilElement {}
+  var HTMLSuperTabButtonElement: {
+    prototype: HTMLSuperTabButtonElement;
+    new (): HTMLSuperTabButtonElement;
+  };
+
+  interface HTMLSuperTabIndicatorElement extends Components.SuperTabIndicator, HTMLStencilElement {}
+  var HTMLSuperTabIndicatorElement: {
+    prototype: HTMLSuperTabIndicatorElement;
+    new (): HTMLSuperTabIndicatorElement;
+  };
+
+  interface HTMLSuperTabsElement extends Components.SuperTabs, HTMLStencilElement {}
+  var HTMLSuperTabsElement: {
+    prototype: HTMLSuperTabsElement;
+    new (): HTMLSuperTabsElement;
+  };
+
+  interface HTMLSuperTabsContainerElement extends Components.SuperTabsContainer, HTMLStencilElement {}
+  var HTMLSuperTabsContainerElement: {
+    prototype: HTMLSuperTabsContainerElement;
+    new (): HTMLSuperTabsContainerElement;
+  };
+
+  interface HTMLSuperTabsToolbarElement extends Components.SuperTabsToolbar, HTMLStencilElement {}
+  var HTMLSuperTabsToolbarElement: {
+    prototype: HTMLSuperTabsToolbarElement;
+    new (): HTMLSuperTabsToolbarElement;
+  };
+  interface HTMLElementTagNameMap {
+    'super-tab': HTMLSuperTabElement;
+    'super-tab-button': HTMLSuperTabButtonElement;
+    'super-tab-indicator': HTMLSuperTabIndicatorElement;
+    'super-tabs': HTMLSuperTabsElement;
+    'super-tabs-container': HTMLSuperTabsContainerElement;
+    'super-tabs-toolbar': HTMLSuperTabsToolbarElement;
+  }
+}
+
+declare namespace LocalJSX {
+  interface SuperTab extends JSXBase.HTMLAttributes<HTMLSuperTabElement> {}
+  interface SuperTabButton extends JSXBase.HTMLAttributes<HTMLSuperTabButtonElement> {
+    'disabled'?: boolean;
+  }
+  interface SuperTabIndicator extends JSXBase.HTMLAttributes<HTMLSuperTabIndicatorElement> {
+    'toolbarPosition'?: 'top' | 'bottom';
+  }
+  interface SuperTabs extends JSXBase.HTMLAttributes<HTMLSuperTabsElement> {
+    /**
+    * Initial active tab index
+    */
+    'activeTabIndex'?: number;
+    /**
+    * Global Super Tabs configuration
+    */
+    'config'?: SuperTabsConfig;
+    'onTabChange'?: (event: CustomEvent<SuperTabChangeEventDetail>) => void;
+  }
+  interface SuperTabsContainer extends JSXBase.HTMLAttributes<HTMLSuperTabsContainerElement> {
     /**
     * Set to true to automatically scroll to the top of the tab when the button is clicked while the tab is already selected.
     */
@@ -76,30 +166,7 @@ export namespace Components {
     */
     'swipeEnabled'?: boolean;
   }
-
-  interface SuperTabsToolbar {
-    /**
-    * Background color. Defaults to `'primary'`
-    */
-    'color': string;
-    'config'?: SuperTabsConfig;
-    'moveContainer': (scrollX: number, animate?: boolean | undefined) => void;
-    /**
-    * Whether the toolbar is scrollable. Defaults to `false`.
-    */
-    'scrollable': boolean;
-    /**
-    * If scrollable is set to true, there will be an added padding to the left of the buttons.  Setting this property to false will remove that padding.  The padding is also configurable via a CSS variable.
-    */
-    'scrollablePadding': boolean;
-    'setActiveTab': (index: number) => void;
-    'setSelectedTab': (index: number) => void;
-    /**
-    * Whether to show the indicator. Defaults to `true`
-    */
-    'showIndicator': boolean;
-  }
-  interface SuperTabsToolbarAttributes extends StencilHTMLAttributes {
+  interface SuperTabsToolbar extends JSXBase.HTMLAttributes<HTMLSuperTabsToolbarElement> {
     /**
     * Background color. Defaults to `'primary'`
     */
@@ -119,115 +186,23 @@ export namespace Components {
     'showIndicator'?: boolean;
   }
 
-  interface SuperTabs {
-    /**
-    * Initial active tab index
-    */
-    'activeTabIndex': number;
-    /**
-    * Global Super Tabs configuration
-    */
-    'config'?: SuperTabsConfig;
-    /**
-    * Set the selected tab. This will move the container and the toolbar to the selected tab.
-    */
-    'selectTab': (index: number, animate?: boolean) => void;
-    'setConfig': (config: SuperTabsConfig) => void;
-  }
-  interface SuperTabsAttributes extends StencilHTMLAttributes {
-    /**
-    * Initial active tab index
-    */
-    'activeTabIndex'?: number;
-    /**
-    * Global Super Tabs configuration
-    */
-    'config'?: SuperTabsConfig;
-    'onTabChange'?: (event: CustomEvent<SuperTabChangeEventDetail>) => void;
+  interface IntrinsicElements {
+    'super-tab': SuperTab;
+    'super-tab-button': SuperTabButton;
+    'super-tab-indicator': SuperTabIndicator;
+    'super-tabs': SuperTabs;
+    'super-tabs-container': SuperTabsContainer;
+    'super-tabs-toolbar': SuperTabsToolbar;
   }
 }
 
-declare global {
-  interface StencilElementInterfaces {
-    'SuperTabButton': Components.SuperTabButton;
-    'SuperTabIndicator': Components.SuperTabIndicator;
-    'SuperTab': Components.SuperTab;
-    'SuperTabsContainer': Components.SuperTabsContainer;
-    'SuperTabsToolbar': Components.SuperTabsToolbar;
-    'SuperTabs': Components.SuperTabs;
-  }
-
-  interface StencilIntrinsicElements {
-    'super-tab-button': Components.SuperTabButtonAttributes;
-    'super-tab-indicator': Components.SuperTabIndicatorAttributes;
-    'super-tab': Components.SuperTabAttributes;
-    'super-tabs-container': Components.SuperTabsContainerAttributes;
-    'super-tabs-toolbar': Components.SuperTabsToolbarAttributes;
-    'super-tabs': Components.SuperTabsAttributes;
-  }
+export { LocalJSX as JSX };
 
 
-  interface HTMLSuperTabButtonElement extends Components.SuperTabButton, HTMLStencilElement {}
-  var HTMLSuperTabButtonElement: {
-    prototype: HTMLSuperTabButtonElement;
-    new (): HTMLSuperTabButtonElement;
-  };
-
-  interface HTMLSuperTabIndicatorElement extends Components.SuperTabIndicator, HTMLStencilElement {}
-  var HTMLSuperTabIndicatorElement: {
-    prototype: HTMLSuperTabIndicatorElement;
-    new (): HTMLSuperTabIndicatorElement;
-  };
-
-  interface HTMLSuperTabElement extends Components.SuperTab, HTMLStencilElement {}
-  var HTMLSuperTabElement: {
-    prototype: HTMLSuperTabElement;
-    new (): HTMLSuperTabElement;
-  };
-
-  interface HTMLSuperTabsContainerElement extends Components.SuperTabsContainer, HTMLStencilElement {}
-  var HTMLSuperTabsContainerElement: {
-    prototype: HTMLSuperTabsContainerElement;
-    new (): HTMLSuperTabsContainerElement;
-  };
-
-  interface HTMLSuperTabsToolbarElement extends Components.SuperTabsToolbar, HTMLStencilElement {}
-  var HTMLSuperTabsToolbarElement: {
-    prototype: HTMLSuperTabsToolbarElement;
-    new (): HTMLSuperTabsToolbarElement;
-  };
-
-  interface HTMLSuperTabsElement extends Components.SuperTabs, HTMLStencilElement {}
-  var HTMLSuperTabsElement: {
-    prototype: HTMLSuperTabsElement;
-    new (): HTMLSuperTabsElement;
-  };
-
-  interface HTMLElementTagNameMap {
-    'super-tab-button': HTMLSuperTabButtonElement
-    'super-tab-indicator': HTMLSuperTabIndicatorElement
-    'super-tab': HTMLSuperTabElement
-    'super-tabs-container': HTMLSuperTabsContainerElement
-    'super-tabs-toolbar': HTMLSuperTabsToolbarElement
-    'super-tabs': HTMLSuperTabsElement
-  }
-
-  interface ElementTagNameMap {
-    'super-tab-button': HTMLSuperTabButtonElement;
-    'super-tab-indicator': HTMLSuperTabIndicatorElement;
-    'super-tab': HTMLSuperTabElement;
-    'super-tabs-container': HTMLSuperTabsContainerElement;
-    'super-tabs-toolbar': HTMLSuperTabsToolbarElement;
-    'super-tabs': HTMLSuperTabsElement;
-  }
-
-
+declare module "@stencil/core" {
   export namespace JSX {
-    export interface Element {}
-    export interface IntrinsicElements extends StencilIntrinsicElements {
-      [tagName: string]: any;
-    }
+    interface IntrinsicElements extends LocalJSX.IntrinsicElements {}
   }
-  export interface HTMLAttributes extends StencilHTMLAttributes {}
-
 }
+
+

@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Prop, State } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, State, h } from '@stencil/core';
 
 @Component({
   tag: 'super-tab-button',
