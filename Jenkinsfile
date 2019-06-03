@@ -7,9 +7,7 @@ node {
     sh 'npm i && npx lerna bootstrap'
 
     stage('Build') {
-      dir('core') {
-        sh 'npm run build'
-      }
+      sh 'npm run build'
     }
   }
 }
