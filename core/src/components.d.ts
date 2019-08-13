@@ -11,7 +11,6 @@ import {
   SuperTabsConfig,
 } from './interface';
 
-
 export namespace Components {
   interface SuperTab {
     /**
@@ -30,17 +29,25 @@ export namespace Components {
   }
   interface SuperTabs {
     /**
-    * Initial active tab index
+    * Initial active tab index. Defaults to `0`.
+    * @type {number}
     */
     'activeTabIndex': number;
     /**
-    * Global Super Tabs configuration
+    * Global Super Tabs configuration.  This is the only place you need to configure the components. Any changes to this input will propagate to child components.
+    * @type {SuperTabsConfig}
     */
     'config'?: SuperTabsConfig;
     /**
     * Set the selected tab. This will move the container and the toolbar to the selected tab.
+    * @param index the index of the tab you want to select
+    * @param animate whether you want to animate the transition
     */
     'selectTab': (index: number, animate?: boolean) => Promise<void>;
+    /**
+    * Set/update the configuration
+    * @param config Configuration object
+    */
     'setConfig': (config: SuperTabsConfig) => Promise<void>;
   }
   interface SuperTabsContainer {
@@ -49,8 +56,21 @@ export namespace Components {
     */
     'autoScrollTop': boolean;
     'config'?: SuperTabsConfig;
+    /**
+    * @param scrollX
+    * @param animate
+    */
     'moveContainer': (scrollX: number, animate?: boolean | undefined) => Promise<void>;
+    /**
+    * @param index Index of the tab
+    * @param animate Whether to animate the transition
+    */
     'moveContainerByIndex': (index: number, animate?: boolean | undefined) => Promise<void>;
+    'reindexTabs': () => Promise<void>;
+    /**
+    * Scroll the active tab to the top.
+    */
+    'scrollToTop': () => Promise<void>;
     'setActiveTabIndex': (index: number) => Promise<void>;
     /**
     * Enable/disable swiping
@@ -139,13 +159,18 @@ declare namespace LocalJSX {
   }
   interface SuperTabs extends JSXBase.HTMLAttributes<HTMLSuperTabsElement> {
     /**
-    * Initial active tab index
+    * Initial active tab index. Defaults to `0`.
+    * @type {number}
     */
     'activeTabIndex'?: number;
     /**
-    * Global Super Tabs configuration
+    * Global Super Tabs configuration.  This is the only place you need to configure the components. Any changes to this input will propagate to child components.
+    * @type {SuperTabsConfig}
     */
     'config'?: SuperTabsConfig;
+    /**
+    * Tab change event.  This event fires up when a tab button is clicked, or when a user swipes between tabs.  The event will fire even if the tab did not change, you can check if the tab changed by checking the `changed` property in the event detail.
+    */
     'onTabChange'?: (event: CustomEvent<SuperTabChangeEventDetail>) => void;
   }
   interface SuperTabsContainer extends JSXBase.HTMLAttributes<HTMLSuperTabsContainerElement> {

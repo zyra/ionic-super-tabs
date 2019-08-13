@@ -21,6 +21,19 @@
 | `selectedTabIndexChange` | Emits events when the container moves. Selected tab index represents what the user should be seeing. If you receive a decimal as the emitted number, it means that the container is moving between tabs. This number is used for animations, and can be used for high tab customizations.      | `CustomEvent<number>` |
 
 
+## Methods
+
+### `scrollToTop() => Promise<void>`
+
+Scroll the active tab to the top.
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

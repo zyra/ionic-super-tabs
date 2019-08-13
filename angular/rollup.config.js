@@ -2,15 +2,13 @@ import resolve from 'rollup-plugin-node-resolve';
 
 export default {
   input: 'build/es2015/core.js',
-  output: {
-    file: 'dist/fesm2015.js',
-    format: 'es'
-  },
+  output: [
+    {
+      file: 'dist/fesm2015.js',
+      format: 'es',
+    },
+  ],
   external: (id) => {
-    // inline @ionic-super-tabs/core deps
-    if (id === '@ionic-super-tabs/core') {
-      return false;
-    }
     // anything else is external
     // Windows: C:\xxxxxx\xxx
     const colonPosition = 1;
@@ -19,6 +17,6 @@ export default {
   plugins: [
     resolve({
       module: true,
-    })
-  ]
+    }),
+  ],
 };

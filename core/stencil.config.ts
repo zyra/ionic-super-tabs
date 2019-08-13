@@ -16,13 +16,14 @@ export const config: Config = {
     {
       type: 'dist',
       esmLoaderPath: '../loader',
+      copy: [{ src: '**/*.scss' }],
     },
     {
       type: 'docs-readme',
+      strict: true,
     },
     {
-      type: 'stats',
-      file: 'stats.json',
+      type: 'dist-hydrate-script'
     },
     {
       type: 'angular',
@@ -35,5 +36,5 @@ export const config: Config = {
       ],
     },
   ],
-  copy: [{ src: '**/*.scss' }],
+  validateTypes: true,
 };

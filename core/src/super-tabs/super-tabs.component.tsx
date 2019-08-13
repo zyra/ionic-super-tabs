@@ -1,7 +1,23 @@
-import { Component, ComponentInterface, Element, Event, EventEmitter, Method, Prop, Watch, h } from '@stencil/core';
+import {
+  Component,
+  ComponentInterface,
+  Element,
+  Event,
+  EventEmitter,
+  h,
+  Listen,
+  Method,
+  Prop,
+  Watch,
+} from '@stencil/core';
 import { SuperTabChangeEventDetail, SuperTabsConfig } from '../interface';
-import { DEFAULT_CONFIG } from '../utils';
+import { debugLog, DEFAULT_CONFIG } from '../utils';
 
+/**
+ * Root component that controls the other super-tab components.
+ *
+ * This component propagates configuration over to children and keeps track of the tabs state.
+ */
 @Component({
   tag: 'super-tabs',
   styleUrl: 'super-tabs.component.scss',
@@ -9,15 +25,32 @@ import { DEFAULT_CONFIG } from '../utils';
 })
 export class SuperTabsComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabsElement;
+
+  /**
+   * Tab change event.
+   *
+   * This event fires up when a tab button is clicked, or when a user swipes between tabs.
+   *
+   * The event will fire even if the tab did not change, you can check if the tab changed by checking the `changed`
+   * property in the event detail.
+   */
   @Event() tabChange!: EventEmitter<SuperTabChangeEventDetail>;
 
   /**
-   * Global Super Tabs configuration
+   * Global Super Tabs configuration.
+   *
+   * This is the only place you need to configure the components. Any changes to this input will propagate to child
+   * components.
+   *
+   * @type {SuperTabsConfig}
    */
   @Prop() config?: SuperTabsConfig;
 
   /**
-   * Initial active tab index
+   * Initial active tab index.
+   * Defaults to `0`.
+   *
+   * @type {number}
    */
   @Prop({ reflectToAttr: true, mutable: true }) activeTabIndex: number = 0;
 
@@ -25,13 +58,17 @@ export class SuperTabsComponent implements ComponentInterface {
   private toolbar!: HTMLSuperTabsToolbarElement;
   private _config: SuperTabsConfig = DEFAULT_CONFIG;
 
+  /**
+   * Set/update the configuration
+   * @param {SuperTabsConfig} config Configuration object
+   */
   @Method()
-  setConfig(config: SuperTabsConfig) {
+  async setConfig(config: SuperTabsConfig) {
+    this.debug('setConfig called with: ', config);
+
     this._config = { ...DEFAULT_CONFIG, ...config };
     this.container && (this.container.config = this._config);
     this.toolbar && (this.toolbar.config = this._config);
-
-    return Promise.resolve();
   }
 
   /**
@@ -41,30 +78,69 @@ export class SuperTabsComponent implements ComponentInterface {
    * @param [animate=true] {boolean} whether you want to animate the transition
    */
   @Method()
-  selectTab(index: number, animate: boolean = true) {
+  async selectTab(index: number, animate: boolean = true) {
+    this.debug('selectTab called with :', index, animate);
+
     if (this.container) {
-      this.container.moveContainerByIndex(index, animate);
+      await this.container.moveContainerByIndex(index, animate);
     }
 
     if (this.toolbar) {
-      this.toolbar.setActiveTab(index);
+      await this.toolbar.setActiveTab(index);
     }
-
-    return Promise.resolve();
   }
 
   @Watch('config')
-  onConfigChange(config: SuperTabsConfig) {
-    this.setConfig(config);
+  async onConfigChange(config: SuperTabsConfig) {
+    await this.setConfig(config);
   }
 
-  private onContainerSelectedTabChange(ev: any) {
+  @Listen('resize', { target: 'window', capture: false, passive: true })
+  onWindowResize() {
+    this.debug('onWindowResize called');
+    this.toolbar.setSelectedTab(this.activeTabIndex);
+    this.container.reindexTabs();
+  }
+
+  componentDidLoad() {
+    this.debug('Component did load fired');
+
+    // listen to `slotchange` event to detect any changes in children
+    this.el.shadowRoot!.addEventListener('slotchange', this.onSlotchange.bind(this));
+  }
+
+  async componentWillLoad() {
+    if (this.config) {
+      await this.setConfig(this.config);
+    }
+
+    this.debug('componentWillLoad fired');
+
+    // index children
+    this.indexChildren();
+
+    // set the selected tab so the toolbar & container are aligned and in sync
+    this.selectTab(this.activeTabIndex);
+
+    // setup event listeners so we can synchronize child components
+    // 1. listen to selectedTabIndex changes emitted by the container.
+    this.el.addEventListener('selectedTabIndexChange', this.onContainerSelectedTabChange.bind(this));
+    // 2. listen to activeTabIndex changes emitted by the container
+    this.el.addEventListener('activeTabIndexChange', this.onContainerActiveTabChange.bind(this));
+    // 3. listen to tab button clicks emitted by the toolbar
+    this.el.addEventListener('buttonClick', this.onToolbarButtonClick.bind(this));
+  }
+
+  private async onContainerSelectedTabChange(ev: any) {
+    // this.debug('onContainerSelectedTabChange called with: ', ev);
+
     if (this.toolbar) {
-      this.toolbar.setSelectedTab(ev.detail);
+      await this.toolbar.setSelectedTab(ev.detail);
     }
   }
 
   private onContainerActiveTabChange(ev: any) {
+    this.debug('onContainerActiveTabChange called with: ', ev);
     const index: number = ev.detail;
 
     this.tabChange.emit({
@@ -78,6 +154,8 @@ export class SuperTabsComponent implements ComponentInterface {
   }
 
   private onToolbarButtonClick(ev: any) {
+    this.debug('onToolbarButtonClick called with: ', ev);
+
     const { index } = ev.detail;
 
     this.container && this.container.setActiveTabIndex(index);
@@ -90,7 +168,9 @@ export class SuperTabsComponent implements ComponentInterface {
     this.activeTabIndex = index;
   }
 
-  indexChildren() {
+  private indexChildren() {
+    this.debug('indexChildren called');
+
     const container = this.el.querySelector('super-tabs-container');
     const toolbar = this.el.querySelector('super-tabs-toolbar');
 
@@ -107,20 +187,27 @@ export class SuperTabsComponent implements ComponentInterface {
     }
   }
 
-  componentDidUpdate() {
+  private async onSlotchange() {
+    this.debug('onSlotChange fired');
+
+    // re-index the child components
     this.indexChildren();
+
+    // reselect the current tab to ensure that we're on the correct tab
     this.selectTab(this.activeTabIndex);
   }
 
-  componentWillLoad() {
-    this.indexChildren();
-    this.selectTab(this.activeTabIndex);
-    this.el.addEventListener('selectedTabIndexChange', this.onContainerSelectedTabChange.bind(this));
-    this.el.addEventListener('activeTabIndexChange', this.onContainerActiveTabChange.bind(this));
-    this.el.addEventListener('buttonClick', this.onToolbarButtonClick.bind(this));
+  /**
+   * Internal method to output values in debug mode.
+   */
+  private debug(...vals: any[]) {
+    debugLog(this._config, 'tabs', vals);
   }
 
   render() {
+    // Render 3 slots
+    // Top & bottom slots allow the toolbar position to be configurable via slots.
+    // The nameless slot is used to hold the `super-tabs-container`.
     return [
       <slot name="top"/>,
       <slot/>,

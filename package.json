@@ -10,8 +10,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "lerna": "^2.11.0",
-    "tslint": "^5.14.0",
-    "typescript": "^3.3.4000"
+    "lerna": "latest",
+    "tslint": "latest"
   }
 }

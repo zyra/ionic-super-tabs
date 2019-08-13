@@ -1,6 +1,27 @@
-import { Component, ComponentInterface, Element, Event, EventEmitter, h, Listen, Method, Prop, QueueApi } from '@stencil/core';
+import {
+  Component,
+  ComponentInterface,
+  Element,
+  Event,
+  EventEmitter,
+  h,
+  Listen,
+  Method,
+  Prop,
+  QueueApi,
+  State,
+} from '@stencil/core';
 import { SuperTabsConfig } from '../interface';
-import { checkGesture, getNormalizedScrollX, pointerCoord, scrollEl, STCoord } from '../utils';
+import {
+  checkGesture,
+  debugLog,
+  getNormalizedScrollX,
+  getScrollX,
+  getTs,
+  pointerCoord,
+  scrollEl,
+  STCoord,
+} from '../utils';
 
 @Component({
   tag: 'super-tabs-container',
@@ -44,7 +65,8 @@ export class SuperTabsContainerComponent implements ComponentInterface {
    */
   @Event() selectedTabIndexChange!: EventEmitter<number>;
 
-  private tabs: HTMLSuperTabElement[] = [];
+  @State() tabs: HTMLSuperTabElement[] = [];
+
   private shouldCapture?: boolean;
   private initialCoords?: STCoord;
   private lastPosX?: number;
@@ -56,12 +78,31 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   private rightThreshold: number = 0;
   private scrollWidth: number = 0;
   private clientWidth: number = 0;
+  private slot!: HTMLSlotElement;
 
   componentDidLoad() {
+    this.debug('componentDidLoad');
+    this.slot = this.el.shadowRoot!.querySelector('slot') as HTMLSlotElement;
+    this.slot.addEventListener('slotchange', this.onSlotChange.bind(this));
+  }
+
+  private async onSlotChange() {
+    const tabs = Array.from(this.el.querySelectorAll('super-tab'));
+    await Promise.all(tabs.map(t => t.componentOnReady()));
+    this.tabs = tabs;
+    this.debug('onSlotChange fired', 'total tabs:', this.tabs.length);
+  }
+
+  componentWillUpdate() {
+    this.debug('componentDidUpdate fired');
     this.indexTabs();
   }
 
-  componentDidUpdate() {
+  /**
+   * @internal
+   */
+  @Method()
+  async reindexTabs() {
     this.indexTabs();
   }
 
@@ -74,6 +115,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
    */
   @Method()
   moveContainerByIndex(index: number, animate?: boolean): Promise<void> {
+    this.debug('moveContainerByIndex called with:', index, animate);
     const scrollX = this.indexToPosition(index);
     return this.moveContainer(scrollX, animate);
   }
@@ -100,21 +142,27 @@ export class SuperTabsContainerComponent implements ComponentInterface {
         return;
       }
 
-      const current = this.tabs[this._activeTabIndex];
-      this.queue.read(() => {
-        current.getRootScrollableEl()
-          .then(el => {
-            if (el) {
-              this.queue.write(() => {
-                scrollEl(el, 0, 0, this.config!.transitionDuration, this.queue);
-              });
-            }
-          });
-      });
+      await this.scrollToTop();
     }
 
     this.moveContainerByIndex(index, true);
     this.updateActiveTabIndex(index, false);
+  }
+
+  /**
+   * Scroll the active tab to the top.
+   */
+  @Method()
+  async scrollToTop() {
+    const current = this.tabs[this._activeTabIndex];
+    this.queue.read(() => {
+      current.getRootScrollableEl()
+        .then(el => {
+          if (el) {
+            scrollEl(el, 0, 0, this.config!.transitionDuration, this.queue);
+          }
+        });
+    });
   }
 
   private updateActiveTabIndex(index: number, emit: boolean = true) {
@@ -129,11 +177,6 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
     this._selectedTabIndex = index;
     this.selectedTabIndexChange.emit(this._selectedTabIndex);
-  }
-
-  @Listen('resize', { target: 'window' })
-  async onWindowResize() {
-    this.indexTabs();
   }
 
   @Listen('touchstart')
@@ -167,7 +210,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     this.initialCoords = coords;
 
     if (this.config!.shortSwipeDuration! > 0) {
-      this.initialTimestamp = window.performance.now();
+      this.initialTimestamp = getTs();
     }
 
     this.lastPosX = coords.x;
@@ -210,7 +253,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
         return;
       }
 
-      const scrollLeft = this.el.scrollLeft;
+      const scrollLeft = getScrollX(this.el);
       const scrollX = getNormalizedScrollX(this.el, deltaX);
 
       if (scrollX === scrollLeft) {
@@ -223,11 +266,9 @@ export class SuperTabsContainerComponent implements ComponentInterface {
         ),
       );
 
-      this.queue.write(() => {
-        // update last X value
-        this.lastPosX = coords.x;
-        this.moveContainer(scrollX, false);
-      });
+      // update last X value
+      this.lastPosX = coords.x;
+      this.moveContainer(scrollX, false);
     });
   }
 
@@ -240,7 +281,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     const coords = pointerCoord(ev);
 
     if (this.shouldCapture === true) {
-      const deltaTime: number = window.performance.now() - this.initialTimestamp!;
+      const deltaTime: number = getTs() - this.initialTimestamp!;
       const shortSwipe = this.config!.shortSwipeDuration! > 0 && deltaTime <= this.config!.shortSwipeDuration!;
       const shortSwipeDelta = coords.x - this.initialCoords!.x;
 
@@ -255,9 +296,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
         selectedTabIndex = this.normalizeSelectedTab(selectedTabIndex);
         this.updateActiveTabIndex(selectedTabIndex);
 
-        this.queue.write(() => {
-          this.moveContainer(this.indexToPosition(selectedTabIndex), true);
-        });
+        this.moveContainer(this.indexToPosition(selectedTabIndex), true);
       });
     }
 
@@ -265,20 +304,18 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     this.shouldCapture = void 0;
   }
 
-  private indexTabs() {
-    this.queue.read(() => {
-      this.scrollWidth = this.el.scrollWidth;
-      this.clientWidth = this.el.clientWidth;
+  private indexTabs(): any {
+    this.scrollWidth = this.el.scrollWidth;
+    this.clientWidth = this.el.clientWidth;
 
-      const tabs = this.el.querySelectorAll('super-tab');
-      const tabsArray: HTMLSuperTabElement[] = [];
+    this.debug('indexTab called', 'scrollWidth:', this.scrollWidth, 'clientWidth:', this.clientWidth);
 
-      for (let i = 0; i < tabs.length; i++) {
-        tabsArray.push(tabs[i]);
-      }
-
-      this.tabs = tabsArray;
-    });
+    if (this.scrollWidth === 0 || this.clientWidth === 0) {
+      requestAnimationFrame(() => {
+        this.indexTabs();
+      });
+      return;
+    }
 
     if (this.config!.sideMenu === 'both' || this.config!.sideMenu === 'left') {
       this.leftThreshold = this.config!.sideMenuThreshold!;
@@ -287,6 +324,8 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     if (this.config!.sideMenu === 'both' || this.config!.sideMenu === 'right') {
       this.rightThreshold = this.config!.sideMenuThreshold!;
     }
+
+    this.moveContainerByIndex(this._activeTabIndex, false);
   }
 
   private calcSelectedTab(): number {
@@ -294,7 +333,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     const tabWidth = this.clientWidth;
     const minX = 0;
     const maxX = tabsWidth - tabWidth;
-    const scrollX = Math.max(minX, Math.min(maxX, this.el.scrollLeft));
+    const scrollX = Math.max(minX, Math.min(maxX, getScrollX(this.el)));
 
     return this.positionToIndex(scrollX);
   }
@@ -319,7 +358,15 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     return scrollX / tabWidth;
   }
 
+  /**
+   * Internal method to output values in debug mode.
+   */
+  private debug(...vals: any[]) {
+    debugLog(this.config!, 'container', vals);
+  }
+
   render() {
+    this.debug('Rendering');
     return <slot></slot>;
   }
 }

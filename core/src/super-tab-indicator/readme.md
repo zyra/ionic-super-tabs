@@ -12,6 +12,13 @@
 | `toolbarPosition` | `toolbar-position` |             | `"bottom" \| "top"` | `'top'` |
 
 
+## CSS Custom Properties
+
+| Name                   | Description                                          |
+| ---------------------- | ---------------------------------------------------- |
+| `--st-indicator-color` | Indicator color. Defaults to `--ion-color-contrast`. |
+
+
 ## Dependencies
 
 ### Used by

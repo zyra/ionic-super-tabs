@@ -22,6 +22,14 @@
 | `buttonClick` |             | `CustomEvent<HTMLSuperTabButtonElement>` |
 
 
+## CSS Custom Properties
+
+| Name                                   | Description                                                        |
+| -------------------------------------- | ------------------------------------------------------------------ |
+| `--st-scrollable-toolbar-padding-left` | Left padding when `scrollable` is set to true. Defaults to `52px`. |
+| `--super-tabs-toolbar-background`      | Toolbar background color. Defaults to `--ion-color-base`.          |
+
+
 ## Dependencies
 
 ### Depends on

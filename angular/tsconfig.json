@@ -38,7 +38,6 @@
     "node_modules"
   ],
   "files": [
-    "src/index.ts",
-    "node_modules/@ionic-super-tabs/core/dist/types/interface.d.ts"
+    "src/index.ts"
   ]
 }

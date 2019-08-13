@@ -8,6 +8,7 @@ export const DEFAULT_CONFIG: SuperTabsConfig = {
   sideMenuThreshold: 50,
   transitionDuration: 300,
   shortSwipeDuration: 300,
+  debug: false,
 };
 
 export type STCoord = {
@@ -31,6 +32,8 @@ export function pointerCoord(ev: any): STCoord {
   return { x: 0, y: 0 };
 }
 
+export const getTs = () => window.performance && window.performance.now ? window.performance.now() : Date.now();
+
 export const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
 
 function getScrollCoord(start: number, dest: number, startTime: number, currentTime: number, duration: number) {
@@ -40,7 +43,7 @@ function getScrollCoord(start: number, dest: number, startTime: number, currentT
 }
 
 function scroll(el: Element, startX: number, startY: number, x: number, y: number, startTime: number, duration: number, queue: QueueApi) {
-  const currentTime = window.performance.now();
+  const currentTime = getTs();
   const scrollX = startX === x ? x : getScrollCoord(startX, x, startTime, currentTime, duration);
   const scrollY = startY === y ? y : getScrollCoord(startY, y, startTime, currentTime, duration);
 
@@ -50,14 +53,14 @@ function scroll(el: Element, startX: number, startY: number, x: number, y: numbe
     return;
   }
 
-  queue.write(() => {
+  requestAnimationFrame(() => {
     scroll(el, startX, startY, x, y, startTime, duration, queue);
   });
 }
 
 export const scrollEl = (el: Element, x: number, y: number, duration: number = 300, queue: QueueApi) => {
   if (duration <= 0) {
-    queue.write(() => {
+    requestAnimationFrame(() => {
       el.scrollTo(x, y);
     });
     return;
@@ -66,9 +69,9 @@ export const scrollEl = (el: Element, x: number, y: number, duration: number = 3
   queue.read(() => {
     const startX = el.scrollLeft;
     const startY = el.scrollTop;
-    const now = window.performance.now();
+    const now = getTs();
 
-    queue.write(() => {
+    requestAnimationFrame(() => {
       scroll(el, startX, startY, x, y, now, duration, queue);
     });
   });
@@ -113,4 +116,16 @@ export function getNormalizedScrollX(el: HTMLElement, delta?: number) {
   scrollX = Math.max(minX, Math.min(maxX, scrollX));
 
   return scrollX;
+}
+
+const debugStyle1 = 'background: linear-gradient(135deg,#4150b2,#f71947); border: 1px solid #9a9a9a; color: #ffffff; border-bottom-left-radius: 2px; border-top-left-radius: 2px; padding: 2px 0 2px 4px;';
+const debugStyle2 = 'background: #252b3e; border: 1px solid #9a9a9a; border-top-right-radius: 2px; border-bottom-right-radius: 2px; margin-left: -2px; padding: 2px 4px; color: white;';
+
+export function debugLog(config: SuperTabsConfig, tag: string, vals: any[]) {
+  if (!config || !config.debug) {
+    return;
+  }
+
+  // Some gorgeous logging, because apparently I have lots of free time to style console logs and write this comment
+  console.log('%csuper-tabs' + ' %c' + tag, debugStyle1, debugStyle2, ...vals);
 }
