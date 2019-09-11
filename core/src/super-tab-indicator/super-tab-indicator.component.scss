@@ -4,7 +4,7 @@
    */
 
   display: block;
-  height: 2px;
+  height: var(--st-indicator-height,2px);
   width: 100px;
   background: var(--st-indicator-color, var(--ion-color-contrast, white));
   position: absolute;
