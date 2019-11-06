@@ -3,6 +3,7 @@
 [![npm](https://img.shields.io/npm/l/ionic2-super-tabs.svg)](https://www.npmjs.com/package/ionic2-super-tabs/)
 [![npm](https://img.shields.io/npm/dt/ionic2-super-tabs.svg)](https://www.npmjs.com/package/ionic2-super-tabs)
 [![npm](https://img.shields.io/npm/dm/ionic2-super-tabs.svg)](https://www.npmjs.com/package/ionic2-super-tabs)
+[![Build Status](https://drone.zyra.ca/api/badges/zyra/ionic-super-tabs/status.svg)](https://drone.zyra.ca/zyra/ionic-super-tabs)
 
 ---
 

@@ -1,0 +1,58 @@
+---
+kind: pipeline
+type: docker
+name: build
+trigger:
+  event:
+  - push
+
+clone:
+  depth: 1
+
+steps:
+- name: Install node modules
+  image: node:12-alpine
+  commands:
+  - npm install
+  - npx lerna bootstrap
+
+- name: Build
+  image: node:12-alpine
+  commands:
+  - npm run build
+
+---
+kind: pipeline
+type: docker
+name: publish
+trigger:
+  event:
+  - tag
+
+clone:
+  depth: 1
+
+steps:
+- name: Install node modules
+  image: node:12-alpine
+  commands:
+  - npm install
+  - npx lerna bootstrap
+
+- name: Build
+  image: node:12-alpine
+  commands:
+  - npm run build
+
+- name: Publish
+  image: node:12-alpine
+  environment:
+    NPM_TOKEN:
+      from_secret: npm_token
+  commands:
+  - npx lerna exec 'npm publish'
+---
+kind: signature
+hmac: 67cce8b24a7da644e0faa75fe5f2f38c24df8927f3cfe7e0609e500536ea9e39
+
+...

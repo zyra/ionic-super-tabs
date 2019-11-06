@@ -13,7 +13,8 @@
   "webComponents": "dist/web-components.json",
   "files": [
     "dist/",
-    "loader/"
+    "loader/",
+    "hydrate/"
   ],
   "scripts": {
     "build": "stencil build"
