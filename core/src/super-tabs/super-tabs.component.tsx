@@ -81,6 +81,8 @@ export class SuperTabsComponent implements ComponentInterface {
   async selectTab(index: number, animate: boolean = true) {
     this.debug('selectTab called with :', index, animate);
 
+    const lastIndex = this.activeTabIndex;
+
     if (this.container) {
       await this.container.moveContainerByIndex(index, animate);
     }
@@ -88,6 +90,9 @@ export class SuperTabsComponent implements ComponentInterface {
     if (this.toolbar) {
       await this.toolbar.setActiveTab(index);
     }
+
+    this.emitTabChangeEvent(index, lastIndex);
+    this.activeTabIndex = lastIndex;
   }
 
   @Watch('config')
@@ -139,14 +144,26 @@ export class SuperTabsComponent implements ComponentInterface {
     }
   }
 
+  private emitTabChangeEvent(newIndex: number, oldIndex?: number) {
+    if (typeof (newIndex as unknown) !== 'number' || newIndex < 0) {
+      return;
+    }
+
+    if (typeof oldIndex !== 'number' || oldIndex < 0) {
+      oldIndex = this.activeTabIndex;
+    }
+
+    this.tabChange.emit({
+      changed: newIndex !== oldIndex,
+      index: newIndex,
+    });
+  }
+
   private onContainerActiveTabChange(ev: any) {
     this.debug('onContainerActiveTabChange called with: ', ev);
     const index: number = ev.detail;
 
-    this.tabChange.emit({
-      changed: index !== this.activeTabIndex,
-      index,
-    });
+    this.emitTabChangeEvent(index);
 
     this.activeTabIndex = index;
 
@@ -160,10 +177,7 @@ export class SuperTabsComponent implements ComponentInterface {
 
     this.container && this.container.setActiveTabIndex(index);
 
-    this.tabChange.emit({
-      changed: index !== this.activeTabIndex,
-      index,
-    });
+    this.emitTabChangeEvent(index);
 
     this.activeTabIndex = index;
   }
