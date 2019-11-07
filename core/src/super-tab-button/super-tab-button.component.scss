@@ -20,7 +20,7 @@
   justify-content: space-between;
   -webkit-touch-callout: none;
   box-sizing: border-box;
-  transform: translate3d(0,0,0);
+  transform: translate3d(0, 0, 0);
   height: 72px;
   padding: 0 24px;
 
@@ -32,8 +32,10 @@
   --st-label-font-weight: 500;
 }
 
-:host(:hover) {
-  background: rgba(var(--ion-color-contrast-rgb), 0.04);
+@media(hover: hover) {
+  :host(:hover) {
+    background: rgba(var(--ion-color-contrast-rgb), 0.04);
+  }
 }
 
 :host(.active) {
