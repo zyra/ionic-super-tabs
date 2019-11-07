@@ -138,13 +138,13 @@ _copy() {
   local extractDest="${EXAMPLE_PROJECT_DIR}/node_modules/@ionic-super-tabs/"
   _logv "Extracting packages to ${extractDest}"
 
-  rm -rf "${extractDest}/core"
   tar xf "${WS_DIR}/${core_tgz}" -C "${extractDest}"
-  mv "${extractDest}/package" "${extractDest}/core"
+  cp -a "${extractDest}package/." "${extractDest}/core/"
+  rm -rf "${extractDest}package"
 
-  rm -rf "${extractDest}/angular"
   tar xf "${WS_DIR}/${ng_tgz}" -C "${extractDest}"
-  mv "${extractDest}/package" "${extractDest}/angular"
+  cp -a "${extractDest}package/." "${extractDest}/angular/"
+  rm -rf "${extractDest}package"
 
   _log "Good luck!"
 }
