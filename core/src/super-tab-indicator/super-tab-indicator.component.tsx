@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop } from '@stencil/core';
+import { Component, ComponentInterface, h, Host, Prop } from '@stencil/core';
 
 @Component({
   tag: 'super-tab-indicator',
@@ -8,19 +8,17 @@ import { Component, ComponentInterface, Prop } from '@stencil/core';
 export class SuperTabIndicatorComponent implements ComponentInterface {
   @Prop() toolbarPosition: 'top' | 'bottom' = 'top';
 
-  hostData() {
-    const positionStyle: any = {};
+  render() {
+    const style: any = {};
 
     if (this.toolbarPosition === 'bottom') {
-      positionStyle.top = 0;
+      style.top = 0;
     } else {
-      positionStyle.bottom = 0;
+      style.bottom = 0;
     }
 
-    return {
-      style: {
-        ...positionStyle,
-      },
-    };
+    return (
+      <Host style={style} />
+    )
   }
 }
