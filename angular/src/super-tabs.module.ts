@@ -1,5 +1,5 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
-import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule, NgZone } from '@angular/core';
 import { appInit } from './app-init';
 import { SuperTab, SuperTabButton, SuperTabs, SuperTabsContainer, SuperTabsToolbar } from './directives/proxies';
 
@@ -25,7 +25,7 @@ export class SuperTabsModule {
           provide: APP_INITIALIZER,
           useFactory: appInit,
           multi: true,
-          deps: [DOCUMENT],
+          deps: [DOCUMENT, NgZone],
         },
       ],
     };
