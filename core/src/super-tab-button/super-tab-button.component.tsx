@@ -1,4 +1,5 @@
-import { Component, ComponentInterface, Element, Prop, State, h, Host } from '@stencil/core';
+import { Component, ComponentInterface, Element, h, Host, Prop, State } from '@stencil/core';
+
 
 @Component({
   tag: 'super-tab-button',
@@ -33,6 +34,13 @@ export class SuperTabButtonComponent implements ComponentInterface {
 
   componentDidUpdate() {
     this.indexChildren();
+  }
+
+  componentDidLoad() {
+    const slot = this.el!.shadowRoot!.querySelector('slot');
+    slot!.addEventListener('slotchange', () => {
+      this.indexChildren();
+    });
   }
 
   render() {
