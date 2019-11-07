@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { APP_INITIALIZER, ModuleWithProviders, NgModule, NgZone } from '@angular/core';
 import { appInit } from './app-init';
 import { SuperTab, SuperTabButton, SuperTabs, SuperTabsContainer, SuperTabsToolbar } from './directives/proxies';
