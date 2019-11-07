@@ -18,19 +18,33 @@ steps:
   commands:
   - npm run build
 
-- name: Publish
-  image: node:12
+- name: Publish core package
+  image: plugins/npm
   when:
     event:
     - tag
-  environment:
-    NPM_TOKEN:
-      from_secret: npm_token
-  commands:
-  - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> core/.npmrc
-  - cp core/.npmrc angular/dist/
-  - cd core && npm publish && cd ../
-  - cd angular/dist && npm publish
+  settings:
+    username:
+      from_secret: npm_username
+    password:
+      from_secret: npm_password
+    email:
+      from_secret: npm_email
+    folder: core
+
+- name: Publish angular package
+  image: plugins/npm
+  when:
+    event:
+    - tag
+  settings:
+    username:
+      from_secret: npm_username
+    password:
+      from_secret: npm_password
+    email:
+      from_secret: npm_email
+    folder: angular/dist
 
 #- name: Update example project
 #  image: plugins/downstream
@@ -44,6 +58,6 @@ steps:
 
 ---
 kind: signature
-hmac: 2cbcbb2572a12957793641846db031d168d8f5f0f64e5f8fc05353f015c12805
+hmac: 6591ffa45cb9398783dba8c821d72c22f788e85087691f21005f9c2c537852a4
 
 ...
