@@ -1,6 +1,6 @@
 {
   "name": "@ionic-super-tabs/angular",
-  "version": "6.0.0-rc.0",
+  "version": "6.0.0-rc.1",
   "description": "Angular specific wrappers for @ionic-super-tabs/core",
   "module": "dist/fesm2015/ionic-super-tabs-angular.js",
   "main": "dist/fesm5/ionic-super-tabs-angular.js",
@@ -14,7 +14,7 @@
   "author": "Zyra Media Inc. <info@zyra.ca>",
   "license": "MIT",
   "dependencies": {
-    "@ionic-super-tabs/core": "^6.0.0-rc.0"
+    "@ionic-super-tabs/core": "^6.0.0-rc.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.803.17",
