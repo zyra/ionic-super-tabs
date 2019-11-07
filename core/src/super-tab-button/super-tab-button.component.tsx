@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, Prop, State, h } from '@stencil/core';
+import { Component, ComponentInterface, Element, Prop, State, h, Host } from '@stencil/core';
 
 @Component({
   tag: 'super-tab-button',
@@ -35,26 +35,24 @@ export class SuperTabButtonComponent implements ComponentInterface {
     this.indexChildren();
   }
 
-  hostData() {
-    return {
-      role: 'button',
-      'aria-label': this.label ? this.label.innerText : false,
-      'aria-disabled': this.disabled ? 'true' : false,
-      class: {
-        'ion-activatable': true,
-        'ion-focusable': true,
-        'icon-only': !!this.icon && !this.label,
-        'label-only': !!this.label && !this.icon,
-        active: Boolean(this.active),
-        scrollableContainer: this.scrollableContainer,
-      },
-    };
-  }
-
   render() {
-    return [
-      <slot/>,
-      <ion-ripple-effect type="unbounded"/>,
-    ];
+    return (
+      <Host
+        role="button"
+        aria-label={this.label ? this.label.innerText : false}
+        aria-disabled={this.disabled ? 'true' : false}
+        aria-selected={this.active ? 'true' : 'false'}
+        class={{
+          'ion-activatable': true,
+          'ion-focusable': true,
+          'icon-only': !!this.icon && !this.label,
+          'label-only': !!this.label && !this.icon,
+          active: Boolean(this.active),
+          scrollableContainer: this.scrollableContainer,
+        }}>
+        <slot/>,
+        <ion-ripple-effect type="unbounded"/>,
+      </Host>
+    );
   }
 }
