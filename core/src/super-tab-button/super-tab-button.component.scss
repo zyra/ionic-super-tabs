@@ -22,7 +22,7 @@
   box-sizing: border-box;
   transform: translate3d(0,0,0);
   height: 72px;
-  padding: 12px 16px 20px 16px;
+  padding: 0 24px;
 
   --st-icon-size: 24px;
   --st-label-line-height: 14px;
@@ -30,32 +30,6 @@
   --st-label-font-size: 14px;
   --st-label-text-transform: uppercase;
   --st-label-font-weight: 500;
-}
-
-::slotted {
-  flex-shrink: 1;
-}
-
-::slotted(ion-label), ::slotted(ion-icon) {
-  opacity: 0.7;
-  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  transition-delay: 0s;
-}
-
-::slotted(ion-label) {
-  color: var(--st-label-color, var(--ion-color-contrast));
-  line-height: var(--st-label-line-height);
-  height: var(--st-label-height);
-  font-size: var(--st-label-font-size);
-  text-transform: var(--st-label-text-transform);
-  font-weight: var(--st-label-font-weight);
-}
-
-::slotted(ion-icon) {
-  color: var(--st-icon-color, var(--ion-color-contrast));
-  min-height: var(--st-icon-size);
-  min-width: var(--st-icon-size);
-  font-size: var(--st-icon-size);
 }
 
 :host(:hover) {
@@ -70,7 +44,6 @@
 }
 
 :host(.icon-only), :host(.label-only) {
-  padding: 12px 16px;
   height: 48px;
   justify-content: center;
 }
@@ -80,4 +53,41 @@
   flex-basis: auto;
   min-width: 90px;
   max-width: 360px;
+}
+
+::slotted {
+  flex-shrink: 1;
+}
+
+::slotted(ion-label), ::slotted(ion-icon) {
+  opacity: 0.7;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: 0s;
+  box-sizing: content-box !important;
+}
+
+::slotted(ion-label) {
+  color: var(--st-label-color, var(--ion-color-contrast));
+  line-height: var(--st-label-line-height);
+  height: var(--st-label-height);
+  font-size: var(--st-label-font-size);
+  text-transform: var(--st-label-text-transform);
+  font-weight: var(--st-label-font-weight);
+  padding-bottom: 16px;
+}
+
+:host(.label-only) ::slotted(ion-label) {
+  padding-bottom: 0;
+}
+
+::slotted(ion-icon) {
+  color: var(--st-icon-color, var(--ion-color-contrast));
+  min-height: var(--st-icon-size);
+  min-width: var(--st-icon-size);
+  font-size: var(--st-icon-size);
+  padding-top: 12px;
+}
+
+:host(.icon-only) ::slotted(ion-icon) {
+  padding-top: 0;
 }
