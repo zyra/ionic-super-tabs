@@ -27,7 +27,8 @@ steps:
     NPM_TOKEN:
       from_secret: npm_token
   commands:
-  - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+  - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> core/.npmrc
+  - cp core/.npmrc angular/dist/
   - cd core && npm publish && cd ../
   - cd angular/dist && npm publish
 
@@ -43,6 +44,6 @@ steps:
 
 ---
 kind: signature
-hmac: 3578449e61b5be64bccc01be1a252a30b02b690912164d5fc93ebdf70afcd8ea
+hmac: 2cbcbb2572a12957793641846db031d168d8f5f0f64e5f8fc05353f015c12805
 
 ...
