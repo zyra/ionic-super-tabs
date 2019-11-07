@@ -50,8 +50,8 @@ export class SuperTabButtonComponent implements ComponentInterface {
           active: Boolean(this.active),
           scrollableContainer: this.scrollableContainer,
         }}>
-        <slot/>,
-        <ion-ripple-effect type="unbounded"/>,
+        <slot/>
+        <ion-ripple-effect type="unbounded"/>
       </Host>
     );
   }
