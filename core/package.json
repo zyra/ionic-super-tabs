@@ -3,14 +3,13 @@
   "version": "6.0.0-rc.0",
   "description": "",
   "main": "dist/index.js",
-  "unpkg": "dist/supertabs.js",
   "module": "dist/index.mjs",
-  "es2015": "dist/esm/es2017/index.js",
-  "es2017": "dist/esm/es2017/index.js",
-  "jsnext:main": "dist/esm/es2017/index.js",
-  "types": "dist/types/interface.d.ts",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
+  "jsnext:main": "dist/esm/index.mjs",
+  "collection:main": "dist/collection/index.js",
   "collection": "dist/collection/collection-manifest.json",
-  "webComponents": "dist/web-components.json",
+  "types": "dist/types/interface.d.ts",
   "files": [
     "dist/",
     "loader/",
@@ -22,9 +21,8 @@
   "author": "Zyra Media Inc.",
   "license": "MIT",
   "devDependencies": {
-    "@ionic/core": "latest",
-    "@stencil/core": "latest",
-    "@stencil/sass": "latest",
-    "@stencil/utils": "latest"
+    "@ionic/core": "4.10.3",
+    "@stencil/core": "1.5.3",
+    "@stencil/sass": "1.0.1"
   }
 }
