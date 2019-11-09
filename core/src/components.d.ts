@@ -77,7 +77,7 @@ export namespace Components {
     * Scroll the active tab to the top.
     */
     'scrollToTop': () => Promise<void>;
-    'setActiveTabIndex': (index: number) => Promise<void>;
+    'setActiveTabIndex': (index: number, moveContainer?: boolean, animate?: boolean) => Promise<void>;
     /**
     * Enable/disable swiping
     */

@@ -73,7 +73,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   private lastPosX?: number;
   private isDragging?: boolean;
   private initialTimestamp?: number;
-  private _activeTabIndex: number = 0;
+  private _activeTabIndex: number | undefined;
   private _selectedTabIndex?: number;
   private leftThreshold: number = 0;
   private rightThreshold: number = 0;
@@ -94,7 +94,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     this.tabs = tabs;
     this.debug('onSlotChange', 'total tabs:', this.tabs.length);
 
-    if (this.ready) {
+    if (this.ready && typeof this._activeTabIndex === 'number') {
       this.moveContainerByIndex(this._activeTabIndex, true);
     }
   }
@@ -123,6 +123,12 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   moveContainerByIndex(index: number, animate?: boolean): Promise<void> {
     this.debug('moveContainerByIndex called with:', index, animate);
     const scrollX = this.indexToPosition(index);
+
+    if (scrollX === 0 && index > 0) {
+      this.debug('moveContainerByIndex', 'scrollX === 0 && index > 0');
+      return Promise.resolve();
+    }
+
     return this.moveContainer(scrollX, animate);
   }
 
@@ -142,7 +148,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
   /** @internal */
   @Method()
-  async setActiveTabIndex(index: number): Promise<void> {
+  async setActiveTabIndex(index: number, moveContainer: boolean = true, animate: boolean = true): Promise<void> {
     this.debug('setActiveTabIndex', index);
 
     if (this._activeTabIndex === index) {
@@ -153,7 +159,10 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       await this.scrollToTop();
     }
 
-    await this.moveContainerByIndex(index, true);
+    if (moveContainer) {
+      await this.moveContainerByIndex(index, animate);
+    }
+
     await this.updateActiveTabIndex(index, false);
   }
 
@@ -162,6 +171,10 @@ export class SuperTabsContainerComponent implements ComponentInterface {
    */
   @Method()
   async scrollToTop() {
+    if (this._activeTabIndex === undefined) {
+      return;
+    }
+
     const current = this.tabs[this._activeTabIndex];
     this.queue.read(() => {
       current.getRootScrollableEl()
@@ -342,10 +355,12 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       }
     }
 
-    this.moveContainerByIndex(this._activeTabIndex, false)
-      .then(() => {
-        this.ready = true;
-      });
+    if (this._activeTabIndex !== undefined) {
+      this.moveContainerByIndex(this._activeTabIndex, false)
+        .then(() => {
+          this.ready = true;
+        });
+    }
   }
 
   private calcSelectedTab(): number {

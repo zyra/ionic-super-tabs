@@ -132,7 +132,7 @@ export class SuperTabsComponent implements ComponentInterface {
 
     // set the selected tab so the toolbar & container are aligned and in sync
     // this.selectTab(this.activeTabIndex);
-    this.container.moveContainerByIndex(this.activeTabIndex, false);
+    this.container.setActiveTabIndex(this.activeTabIndex);
     this.toolbar.setActiveTab(this.activeTabIndex);
 
     // setup event listeners so we can synchronize child components
