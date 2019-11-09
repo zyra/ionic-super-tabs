@@ -151,7 +151,10 @@ _copy() {
 
 _publish() {
   _log "Publishing all packages to npm"
-  _exec sleep 1
+  cd "${DIR}/core" || exit 1
+  npm publish || exit 1
+  cd "${DIR}/angular/dist" || exit 1
+  npm publish || exit 1
 }
 
 _setupWorkspace
@@ -175,7 +178,10 @@ case $1 in
   ;;
 
 "publish")
-  exec "${@:2}"
+  _publish "${@:2}"
+  ;;
+"exec")
+  cd "${DIR}" && _exec "${@:2}"
   ;;
 *)
   _printUsage
