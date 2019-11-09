@@ -1,6 +1,7 @@
 import { QueueApi } from '@stencil/core';
 import { SuperTabsConfig } from './interface';
 
+
 export const DEFAULT_CONFIG: SuperTabsConfig = {
   dragThreshold: 10,
   allowElementScroll: false,
@@ -8,7 +9,7 @@ export const DEFAULT_CONFIG: SuperTabsConfig = {
   sideMenuThreshold: 50,
   transitionDuration: 300,
   shortSwipeDuration: 300,
-  debug: false,
+  debug: true,
 };
 
 export type STCoord = {
@@ -127,5 +128,5 @@ export function debugLog(config: SuperTabsConfig, tag: string, vals: any[]) {
   }
 
   // Some gorgeous logging, because apparently I have lots of free time to style console logs and write this comment
-  console.log('%csuper-tabs' + ' %c' + tag, debugStyle1, debugStyle2, ...vals);
+  console.log(`%csuper-tabs %c%s`, debugStyle1, debugStyle2, ' '.repeat(10 - tag.length) + tag, ...vals);
 }

@@ -7,19 +7,19 @@
 
 ## Properties
 
-| Property            | Attribute            | Description                                                                                                                                                                                              | Type      | Default     |
-| ------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------- |
-| `color`             | `color`              | Background color. Defaults to `'primary'`                                                                                                                                                                | `string`  | `'primary'` |
-| `scrollable`        | `scrollable`         | Whether the toolbar is scrollable. Defaults to `false`.                                                                                                                                                  | `boolean` | `false`     |
-| `scrollablePadding` | `scrollable-padding` | If scrollable is set to true, there will be an added padding to the left of the buttons.  Setting this property to false will remove that padding.  The padding is also configurable via a CSS variable. | `boolean` | `true`      |
-| `showIndicator`     | `show-indicator`     | Whether to show the indicator. Defaults to `true`                                                                                                                                                        | `boolean` | `true`      |
+| Property            | Attribute            | Description                                                                                                                                                                                              | Type                  | Default     |
+| ------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------- |
+| `color`             | `color`              | Background color. Defaults to `'primary'`                                                                                                                                                                | `string \| undefined` | `'primary'` |
+| `scrollable`        | `scrollable`         | Whether the toolbar is scrollable. Defaults to `false`.                                                                                                                                                  | `boolean`             | `false`     |
+| `scrollablePadding` | `scrollable-padding` | If scrollable is set to true, there will be an added padding to the left of the buttons.  Setting this property to false will remove that padding.  The padding is also configurable via a CSS variable. | `boolean`             | `true`      |
+| `showIndicator`     | `show-indicator`     | Whether to show the indicator. Defaults to `true`                                                                                                                                                        | `boolean`             | `true`      |
 
 
 ## Events
 
-| Event         | Description | Type                                     |
-| ------------- | ----------- | ---------------------------------------- |
-| `buttonClick` |             | `CustomEvent<HTMLSuperTabButtonElement>` |
+| Event         | Description                                                                                      | Type                                     |
+| ------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------- |
+| `buttonClick` | Emits an event when a button is clicked Event data contains the clicked SuperTabButton component | `CustomEvent<HTMLSuperTabButtonElement>` |
 
 
 ## CSS Custom Properties

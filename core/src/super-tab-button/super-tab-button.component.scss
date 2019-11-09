@@ -19,10 +19,14 @@
   align-items: center;
   justify-content: space-between;
   -webkit-touch-callout: none;
-  box-sizing: border-box;
+  box-sizing: content-box;
   transform: translate3d(0, 0, 0);
   height: 72px;
   padding: 0 24px;
+  -webkit-user-select: none;
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-font-smoothing: antialiased;
 
   --st-icon-size: 24px;
   --st-label-line-height: 14px;
@@ -66,6 +70,10 @@
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
   transition-delay: 0s;
   box-sizing: content-box !important;
+  -webkit-user-select: none;
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-font-smoothing: antialiased;
 }
 
 ::slotted(ion-label) {

@@ -20,11 +20,17 @@ export namespace Components {
   }
   interface SuperTabButton {
     'active'?: boolean;
+    /**
+    * Whether the button is disabled
+    */
     'disabled'?: boolean;
     'index'?: number;
     'scrollableContainer': boolean;
   }
   interface SuperTabIndicator {
+    /**
+    * Toolbar position This determines the position of the indicator
+    */
     'toolbarPosition': 'top' | 'bottom';
   }
   interface SuperTabs {
@@ -81,7 +87,7 @@ export namespace Components {
     /**
     * Background color. Defaults to `'primary'`
     */
-    'color': string;
+    'color': string | undefined;
     'config'?: SuperTabsConfig;
     'moveContainer': (scrollX: number, animate?: boolean | undefined) => Promise<void>;
     /**
@@ -92,8 +98,8 @@ export namespace Components {
     * If scrollable is set to true, there will be an added padding to the left of the buttons.  Setting this property to false will remove that padding.  The padding is also configurable via a CSS variable.
     */
     'scrollablePadding': boolean;
-    'setActiveTab': (index: number) => Promise<void>;
-    'setSelectedTab': (index: number) => Promise<void>;
+    'setActiveTab': (index: number, align?: boolean | undefined, animate?: boolean | undefined) => Promise<void>;
+    'setSelectedTab': (index: number, animate?: boolean | undefined) => Promise<void>;
     /**
     * Whether to show the indicator. Defaults to `true`
     */
@@ -152,9 +158,15 @@ declare global {
 declare namespace LocalJSX {
   interface SuperTab {}
   interface SuperTabButton {
+    /**
+    * Whether the button is disabled
+    */
     'disabled'?: boolean;
   }
   interface SuperTabIndicator {
+    /**
+    * Toolbar position This determines the position of the indicator
+    */
     'toolbarPosition'?: 'top' | 'bottom';
   }
   interface SuperTabs {
@@ -195,7 +207,10 @@ declare namespace LocalJSX {
     /**
     * Background color. Defaults to `'primary'`
     */
-    'color'?: string;
+    'color'?: string | undefined;
+    /**
+    * Emits an event when a button is clicked Event data contains the clicked SuperTabButton component
+    */
     'onButtonClick'?: (event: CustomEvent<HTMLSuperTabButtonElement>) => void;
     /**
     * Whether the toolbar is scrollable. Defaults to `false`.

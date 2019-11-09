@@ -1,11 +1,17 @@
 import { Component, ComponentInterface, h, Host, Prop } from '@stencil/core';
 
+
 @Component({
   tag: 'super-tab-indicator',
   styleUrl: 'super-tab-indicator.component.scss',
   shadow: true,
 })
 export class SuperTabIndicatorComponent implements ComponentInterface {
+
+  /**
+   * Toolbar position
+   * This determines the position of the indicator
+   */
   @Prop() toolbarPosition: 'top' | 'bottom' = 'top';
 
   render() {
@@ -18,7 +24,7 @@ export class SuperTabIndicatorComponent implements ComponentInterface {
     }
 
     return (
-      <Host style={style} />
-    )
+      <Host style={style}/>
+    );
   }
 }

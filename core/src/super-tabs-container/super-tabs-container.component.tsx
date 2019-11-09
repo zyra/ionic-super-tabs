@@ -23,6 +23,7 @@ import {
   STCoord,
 } from '../utils';
 
+
 @Component({
   tag: 'super-tabs-container',
   styleUrl: 'super-tabs-container.component.scss',
@@ -79,6 +80,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   private scrollWidth: number = 0;
   private clientWidth: number = 0;
   private slot!: HTMLSlotElement;
+  private ready?: boolean;
 
   componentDidLoad() {
     this.debug('componentDidLoad');
@@ -90,7 +92,11 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     const tabs = Array.from(this.el.querySelectorAll('super-tab'));
     await Promise.all(tabs.map(t => t.componentOnReady()));
     this.tabs = tabs;
-    this.debug('onSlotChange fired', 'total tabs:', this.tabs.length);
+    this.debug('onSlotChange', 'total tabs:', this.tabs.length);
+
+    if (this.ready) {
+      this.moveContainerByIndex(this._activeTabIndex, true);
+    }
   }
 
   componentWillUpdate() {
@@ -129,14 +135,16 @@ export class SuperTabsContainerComponent implements ComponentInterface {
    */
   @Method()
   moveContainer(scrollX: number, animate?: boolean): Promise<void> {
+    this.debug('moveContainer', scrollX, animate);
     scrollEl(this.el, scrollX, 0, animate ? this.config!.transitionDuration : 0, this.queue);
-
     return Promise.resolve();
   }
 
   /** @internal */
   @Method()
   async setActiveTabIndex(index: number): Promise<void> {
+    this.debug('setActiveTabIndex', index);
+
     if (this._activeTabIndex === index) {
       if (!this.autoScrollTop) {
         return;
@@ -145,8 +153,8 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       await this.scrollToTop();
     }
 
-    this.moveContainerByIndex(index, true);
-    this.updateActiveTabIndex(index, false);
+    await this.moveContainerByIndex(index, true);
+    await this.updateActiveTabIndex(index, false);
   }
 
   /**
@@ -166,6 +174,8 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   private updateActiveTabIndex(index: number, emit: boolean = true) {
+    this.debug('updateActiveTabIndex', index, emit, this._activeTabIndex);
+
     this._activeTabIndex = index;
     emit && this.activeTabIndexChange.emit(this._activeTabIndex);
   }
@@ -317,15 +327,25 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       return;
     }
 
-    if (this.config!.sideMenu === 'both' || this.config!.sideMenu === 'left') {
-      this.leftThreshold = this.config!.sideMenuThreshold!;
+    if (this.config) {
+      switch (this.config.sideMenu) {
+        case 'both':
+          this.rightThreshold = this.config.sideMenuThreshold || 0;
+          this.leftThreshold = this.config.sideMenuThreshold || 0;
+          break;
+        case 'left':
+          this.leftThreshold = this.config.sideMenuThreshold || 0;
+          break;
+        case 'right':
+          this.rightThreshold = this.config.sideMenuThreshold || 0;
+          break;
+      }
     }
 
-    if (this.config!.sideMenu === 'both' || this.config!.sideMenu === 'right') {
-      this.rightThreshold = this.config!.sideMenuThreshold!;
-    }
-
-    this.moveContainerByIndex(this._activeTabIndex, false);
+    this.moveContainerByIndex(this._activeTabIndex, false)
+      .then(() => {
+        this.ready = true;
+      });
   }
 
   private calcSelectedTab(): number {
@@ -339,13 +359,15 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   private positionToIndex(scrollX: number) {
+    this.debug('positionToIndex', scrollX, this.clientWidth);
     const tabWidth = this.clientWidth;
     return scrollX / tabWidth;
   }
 
-  private indexToPosition(scrollX: number) {
+  private indexToPosition(tabIndex: number) {
+    this.debug('indexToPosition', tabIndex, this.clientWidth);
     const tabWidth = this.clientWidth;
-    return scrollX * tabWidth;
+    return tabIndex * tabWidth;
   }
 
   private normalizeSelectedTab(index: number): number {

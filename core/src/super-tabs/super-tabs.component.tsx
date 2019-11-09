@@ -4,7 +4,7 @@ import {
   Element,
   Event,
   EventEmitter,
-  h,
+  h, Host,
   Listen,
   Method,
   Prop,
@@ -84,7 +84,7 @@ export class SuperTabsComponent implements ComponentInterface {
     const lastIndex = this.activeTabIndex;
 
     if (this.container) {
-      await this.container.moveContainerByIndex(index, animate);
+      await this.container.setActiveTabIndex(index);
     }
 
     if (this.toolbar) {
@@ -102,30 +102,38 @@ export class SuperTabsComponent implements ComponentInterface {
 
   @Listen('resize', { target: 'window', capture: false, passive: true })
   onWindowResize() {
-    this.debug('onWindowResize called');
+    this.debug('onWindowResize');
     this.toolbar.setSelectedTab(this.activeTabIndex);
     this.container.reindexTabs();
   }
 
   componentDidLoad() {
-    this.debug('Component did load fired');
+    this.debug('componentDidLoad');
 
     // listen to `slotchange` event to detect any changes in children
     this.el.shadowRoot!.addEventListener('slotchange', this.onSlotchange.bind(this));
+
+
+    requestAnimationFrame(() => {
+      this.container.moveContainerByIndex(this.activeTabIndex, false);
+      this.toolbar.setSelectedTab(this.activeTabIndex, false);
+    });
   }
 
   async componentWillLoad() {
+    this.debug('componentWillLoad');
+
     if (this.config) {
       await this.setConfig(this.config);
     }
-
-    this.debug('componentWillLoad fired');
 
     // index children
     this.indexChildren();
 
     // set the selected tab so the toolbar & container are aligned and in sync
-    this.selectTab(this.activeTabIndex);
+    // this.selectTab(this.activeTabIndex);
+    this.container.moveContainerByIndex(this.activeTabIndex, false);
+    this.toolbar.setActiveTab(this.activeTabIndex);
 
     // setup event listeners so we can synchronize child components
     // 1. listen to selectedTabIndex changes emitted by the container.
@@ -167,7 +175,7 @@ export class SuperTabsComponent implements ComponentInterface {
 
     this.activeTabIndex = index;
 
-    this.toolbar && this.toolbar.setActiveTab(index);
+    this.toolbar && this.toolbar.setActiveTab(index, true, true);
   }
 
   private onToolbarButtonClick(ev: any) {
@@ -222,10 +230,12 @@ export class SuperTabsComponent implements ComponentInterface {
     // Render 3 slots
     // Top & bottom slots allow the toolbar position to be configurable via slots.
     // The nameless slot is used to hold the `super-tabs-container`.
-    return [
-      <slot name="top"/>,
-      <slot/>,
-      <slot name="bottom"/>,
-    ];
+    return (
+      <Host>
+        <slot name="top"/>
+        <slot/>
+        <slot name="bottom"/>
+      </Host>
+    );
   }
 }

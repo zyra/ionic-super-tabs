@@ -15,6 +15,9 @@ export class SuperTabButtonComponent implements ComponentInterface {
   /** @internal */
   @Prop({ reflectToAttr: true }) index?: number;
 
+  /**
+   * Whether the button is disabled
+   */
   @Prop({ reflectToAttr: true }) disabled?: boolean;
 
   /** @internal */

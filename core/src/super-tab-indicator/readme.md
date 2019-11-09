@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property          | Attribute          | Description | Type                | Default |
-| ----------------- | ------------------ | ----------- | ------------------- | ------- |
-| `toolbarPosition` | `toolbar-position` |             | `"bottom" \| "top"` | `'top'` |
+| Property          | Attribute          | Description                                                    | Type                | Default |
+| ----------------- | ------------------ | -------------------------------------------------------------- | ------------------- | ------- |
+| `toolbarPosition` | `toolbar-position` | Toolbar position This determines the position of the indicator | `"bottom" \| "top"` | `'top'` |
 
 
 ## CSS Custom Properties
