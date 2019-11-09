@@ -9,7 +9,7 @@ export const DEFAULT_CONFIG: SuperTabsConfig = {
   sideMenuThreshold: 50,
   transitionDuration: 300,
   shortSwipeDuration: 300,
-  debug: true,
+  debug: false,
 };
 
 export type STCoord = {
