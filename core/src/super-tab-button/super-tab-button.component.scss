@@ -25,15 +25,24 @@
   padding: 0 24px;
   -webkit-user-select: none;
   -webkit-text-size-adjust: none;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-font-smoothing: antialiased;
 
+  --st-base-color-active: var(--ion-color-contrast);
+  --st-base-color-inactive: rgba(var(--ion-color-contrast-rgb), 0.7);
+
   --st-icon-size: 24px;
+  --st-icon-color-inactive: var(--st-base-color-inactive);
+  --st-icon-color-active: var(--st-base-color-active);
+
   --st-label-line-height: 14px;
   --st-label-height: 14px;
   --st-label-font-size: 14px;
   --st-label-text-transform: uppercase;
   --st-label-font-weight: 500;
+  --st-label-padding-bottom: 16px;
+  --st-label-color-inactive: var(--st-base-color-inactive);
+  --st-label-color-active: var(--st-base-color-active);
 }
 
 @media(hover: hover) {
@@ -44,8 +53,15 @@
 
 :host(.active) {
   ::slotted(ion-label), ::slotted(ion-icon) {
-    opacity: 1;
     transition-delay: 100ms;
+  }
+
+  ::slotted(ion-label) {
+    color: var(--st-label-color-active);
+  }
+
+  ::slotted(ion-icon) {
+    color: var(--st-icon-color-active);
   }
 }
 
@@ -66,24 +82,23 @@
 }
 
 ::slotted(ion-label), ::slotted(ion-icon) {
-  opacity: 0.7;
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
   transition-delay: 0s;
   box-sizing: content-box !important;
   -webkit-user-select: none;
   -webkit-text-size-adjust: none;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-font-smoothing: antialiased;
 }
 
 ::slotted(ion-label) {
-  color: var(--st-label-color, var(--ion-color-contrast));
+  color: var(--st-label-color-inactive);
   line-height: var(--st-label-line-height);
   height: var(--st-label-height);
   font-size: var(--st-label-font-size);
   text-transform: var(--st-label-text-transform);
   font-weight: var(--st-label-font-weight);
-  padding-bottom: 16px;
+  padding-bottom: var(--st-label-padding-bottom);
 }
 
 :host(.label-only) ::slotted(ion-label) {
@@ -91,7 +106,7 @@
 }
 
 ::slotted(ion-icon) {
-  color: var(--st-icon-color, var(--ion-color-contrast));
+  color: var(--st-icon-color-inactive);
   min-height: var(--st-icon-size);
   min-width: var(--st-icon-size);
   font-size: var(--st-icon-size);
