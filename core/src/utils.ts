@@ -10,6 +10,7 @@ export const DEFAULT_CONFIG: SuperTabsConfig = {
   transitionDuration: 300,
   shortSwipeDuration: 300,
   debug: false,
+  avoidElements: false,
 };
 
 export type STCoord = {
@@ -78,27 +79,26 @@ export const scrollEl = (el: Element, x: number, y: number, duration: number = 3
   });
 };
 
-export function checkGesture(newCoords: STCoord, initialCoords: STCoord, config: SuperTabsConfig): boolean | undefined {
+export function checkGesture(newCoords: STCoord, initialCoords: STCoord, config: SuperTabsConfig): boolean {
   if (!initialCoords) {
-    return;
+    return false;
   }
 
-  const radians = config.maxDragAngle! * (Math.PI / 180),
-    maxCosine = Math.cos(radians),
-    deltaX = newCoords.x - initialCoords.x,
-    deltaY = newCoords.y - initialCoords.y,
-    distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+  const radians = config.maxDragAngle! * (Math.PI / 180);
+  const maxCosine = Math.cos(radians);
+  const deltaX = newCoords.x - initialCoords.x;
+  const deltaY = newCoords.y - initialCoords.y;
+  const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
   if (distance >= config.dragThreshold!) {
     // swipe is long enough
     // lets check the angle
-    const angle = Math.atan2(deltaY, deltaX),
-      cosine = Math.cos(angle);
-
+    const angle = Math.atan2(deltaY, deltaX);
+    const cosine = Math.cos(angle);
     return Math.abs(cosine) > maxCosine;
   }
 
-  return;
+  return false;
 }
 
 export function getScrollX(el: HTMLElement, delta?: number) {

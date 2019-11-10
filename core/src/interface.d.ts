@@ -71,6 +71,11 @@ export interface SuperTabsConfig {
    * Defaults to `false`.
    */
   debug?: boolean;
+
+  /**
+   * Whether the container should look and avoid elements with avoid-super-tabs attribute
+   */
+  avoidElements?: boolean;
 }
 
 /**

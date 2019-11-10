@@ -68,10 +68,9 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
   @State() tabs: HTMLSuperTabElement[] = [];
 
-  private shouldCapture?: boolean;
-  private initialCoords?: STCoord;
-  private lastPosX?: number;
-  private isDragging?: boolean;
+  private initialCoords: STCoord | undefined;
+  private lastPosX: number | undefined;
+  private isDragging: boolean = false;
   private initialTimestamp?: number;
   private _activeTabIndex: number | undefined;
   private _selectedTabIndex?: number;
@@ -208,123 +207,132 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       return;
     }
 
-    let avoid: boolean = false;
-    let element: any = ev.target;
+    if (this.config!.avoidElements) {
+      let avoid: boolean = false;
+      let element: any = ev.target;
 
-    if (element) {
-      do {
-        if (typeof element.getAttribute === 'function' && element.getAttribute('avoid-super-tabs')) {
-          this.shouldCapture = false;
-          return;
-        }
+      if (element) {
+        do {
+          if (typeof element.getAttribute === 'function' && element.getAttribute('avoid-super-tabs')) {
+            return;
+          }
 
-        element = element.parentElement;
-      } while (element && !avoid);
+          element = element.parentElement;
+        } while (element && !avoid);
+      }
     }
 
     const coords = pointerCoord(ev);
     const vw = this.clientWidth;
     if (coords.x < this.leftThreshold || coords.x > vw - this.rightThreshold) {
       // ignore this gesture, it started in the side menu touch zone
-      this.shouldCapture = false;
       return;
     }
-
-    this.initialCoords = coords;
 
     if (this.config!.shortSwipeDuration! > 0) {
       this.initialTimestamp = getTs();
     }
 
+    this.initialCoords = coords;
     this.lastPosX = coords.x;
   }
 
-  @Listen('touchmove', { passive: false })
-  async onTouchMove(ev: TouchEvent) {
-    if (!this.swipeEnabled) {
-      return;
+  @Listen('click', { passive: false, capture: true })
+  async onClick(ev: TouchEvent) {
+    if (this.isDragging) {
+      ev.stopImmediatePropagation();
+      ev.preventDefault();
     }
-
-    // scroll container
-    this.queue.read(() => {
-      const coords = pointerCoord(ev);
-
-      if (!this.isDragging) {
-        if (typeof this.shouldCapture !== 'boolean') {
-          // we haven't decided yet if we want to capture this gesture
-          this.shouldCapture = checkGesture(coords, this.initialCoords!, this.config!);
-        }
-
-        if (this.shouldCapture !== true) {
-          return;
-        }
-
-        // gesture is good, let's capture all next onTouchMove events
-        this.isDragging = true;
-      }
-
-      // stop anything else from capturing these events, to make sure the content doesn't slide
-      if (!this.config!.allowElementScroll) {
-        ev.stopPropagation();
-        ev.preventDefault();
-      }
-
-      // get delta X
-      const deltaX: number = this.lastPosX! - coords.x;
-
-      if (deltaX === 0) {
-        return;
-      }
-
-      const scrollLeft = getScrollX(this.el);
-      const scrollX = getNormalizedScrollX(this.el, deltaX);
-
-      if (scrollX === scrollLeft) {
-        return;
-      }
-
-      this.updateSelectedTabIndex(
-        this.positionToIndex(
-          scrollX,
-        ),
-      );
-
-      // update last X value
-      this.lastPosX = coords.x;
-      this.moveContainer(scrollX, false);
-    });
   }
 
-  @Listen('touchend')
-  async onTouchEnd(ev: TouchEvent) {
-    if (!this.swipeEnabled) {
+  @Listen('touchmove', { passive: true, capture: true })
+  async onTouchMove(ev: TouchEvent) {
+    if (!this.swipeEnabled || !this.initialCoords || !this.lastPosX) {
       return;
     }
 
     const coords = pointerCoord(ev);
 
-    if (this.shouldCapture === true) {
-      const deltaTime: number = getTs() - this.initialTimestamp!;
-      const shortSwipe = this.config!.shortSwipeDuration! > 0 && deltaTime <= this.config!.shortSwipeDuration!;
-      const shortSwipeDelta = coords.x - this.initialCoords!.x;
+    if (!this.isDragging) {
+      const shouldCapture = checkGesture(coords, this.initialCoords, this.config!);
 
-      this.queue.read(() => {
-        let selectedTabIndex = this.calcSelectedTab();
-        const expectedTabIndex = Math.round(selectedTabIndex);
-
-        if (shortSwipe && expectedTabIndex === this._activeTabIndex) {
-          selectedTabIndex += shortSwipeDelta > 0 ? -1 : 1;
+      if (!shouldCapture) {
+        if (Math.abs(coords.y - this.initialCoords.y) > 100) {
+          this.initialCoords = void 0;
+          this.lastPosX = void 0;
         }
+        return;
+      }
 
-        selectedTabIndex = this.normalizeSelectedTab(selectedTabIndex);
-        this.updateActiveTabIndex(selectedTabIndex);
-
-        this.moveContainer(this.indexToPosition(selectedTabIndex), true);
-      });
+      // gesture is good, let's capture all next onTouchMove events
+      this.isDragging = true;
     }
 
+    // scroll container
+
+    if (!this.isDragging) {
+      return;
+    }
+
+    // stop anything else from capturing these events, to make sure the content doesn't slide
+    if (!this.config!.allowElementScroll) {
+      ev.stopImmediatePropagation();
+      ev.preventDefault();
+    }
+
+    // get delta X
+    const deltaX: number = this.lastPosX! - coords.x;
+
+    if (deltaX === 0) {
+      return;
+    }
+
+    const scrollLeft = getScrollX(this.el);
+    const scrollX = getNormalizedScrollX(this.el, deltaX);
+
+    if (scrollX === scrollLeft) {
+      return;
+    }
+
+    this.updateSelectedTabIndex(
+      this.positionToIndex(
+        scrollX,
+      ),
+    );
+
+    // update last X value
+    this.lastPosX = coords.x;
+    this.moveContainer(scrollX, false);
+  }
+
+  @Listen('touchend', { passive: false, capture: true })
+  async onTouchEnd(ev: TouchEvent) {
+    if (!this.swipeEnabled || !this.isDragging) {
+      return;
+    }
+
+    const coords = pointerCoord(ev);
+
+    const deltaTime: number = getTs() - this.initialTimestamp!;
+    const shortSwipe = this.config!.shortSwipeDuration! > 0 && deltaTime <= this.config!.shortSwipeDuration!;
+    const shortSwipeDelta = coords.x - this.initialCoords!.x;
+
+    this.queue.read(() => {
+      let selectedTabIndex = this.calcSelectedTab();
+      const expectedTabIndex = Math.round(selectedTabIndex);
+
+      if (shortSwipe && expectedTabIndex === this._activeTabIndex) {
+        selectedTabIndex += shortSwipeDelta > 0 ? -1 : 1;
+      }
+
+      selectedTabIndex = this.normalizeSelectedTab(selectedTabIndex);
+      this.updateActiveTabIndex(selectedTabIndex);
+      this.moveContainerByIndex(selectedTabIndex, true);
+    });
+
     this.isDragging = false;
-    this.shouldCapture = void 0;
+    this.initialCoords = void 0;
+    this.lastPosX = void 0;
   }
 
   private indexTabs(): any {
@@ -343,8 +351,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     if (this.config) {
       switch (this.config.sideMenu) {
         case 'both':
-          this.rightThreshold = this.config.sideMenuThreshold || 0;
-          this.leftThreshold = this.config.sideMenuThreshold || 0;
+          this.rightThreshold = this.leftThreshold = this.config.sideMenuThreshold || 0;
           break;
         case 'left':
           this.leftThreshold = this.config.sideMenuThreshold || 0;
