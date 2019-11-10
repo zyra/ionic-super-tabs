@@ -9,11 +9,14 @@
   width: 100%;
   transform: translate3d(0, 0, 0);
   position: relative;
-  z-index: 2;
   background: var(--super-tabs-toolbar-background, var(--ion-color-base));
   overflow: visible;
   box-sizing: border-box;
+  pointer-events: auto;
+  touch-action: pan-x;
+  z-index: 2;
   order: -1;
+
   -webkit-user-select: none;
   -webkit-touch-callout: none;
   -webkit-text-size-adjust: none;

@@ -12,8 +12,9 @@
   flex-grow: 0;
   width: var(--super-tab-width, 100vw);
   transform: translate3d(0,0,0);
-  box-sizing: content-box;
+  box-sizing: border-box;
   order: -1;
+
   -webkit-user-select: none;
   -webkit-touch-callout: none;
   -webkit-text-size-adjust: none;
