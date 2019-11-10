@@ -180,6 +180,11 @@ case $1 in
 "publish")
   _publish "${@:2}"
   ;;
+
+"docs")
+  find "${DIR}/core/src" -type f -name '*.md' | awk 'match($0, /([a-z-]+)\/readme.md/,m) { print m[1] }' | xargs -I@ cp "${DIR}/core/src/@/readme.md" "${DIR}/docs/@.md"
+  ;;
+
 "exec")
   cd "${DIR}" && _exec "${@:2}"
   ;;
