@@ -14,9 +14,10 @@
 
 ## CSS Custom Properties
 
-| Name                   | Description                                          |
-| ---------------------- | ---------------------------------------------------- |
-| `--st-indicator-color` | Indicator color. Defaults to `--ion-color-contrast`. |
+| Name                    | Description                                          |
+| ----------------------- | ---------------------------------------------------- |
+| `--st-indicator-color`  | Indicator color. Defaults to `--ion-color-contrast`. |
+| `--st-indicator-height` | Indicator height. Defaults to `2px`.                 |
 
 
 ## Dependencies

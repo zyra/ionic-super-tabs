@@ -4,12 +4,15 @@
    * @prop --st-scrollable-toolbar-padding-left: Left padding when `scrollable` is set to true. Defaults to `52px`.
    */
 
+  --st-scrollable-toolbar-padding-left: 52px;
+  --super-tabs-toolbar-background: var(--ion-color-base);
+
   flex: 0 1 auto;
   display: block;
   width: 100%;
   transform: translate3d(0, 0, 0);
   position: relative;
-  background: var(--super-tabs-toolbar-background, var(--ion-color-base));
+  background: var(--super-tabs-toolbar-background);
   overflow: visible;
   box-sizing: border-box;
   pointer-events: auto;
@@ -51,6 +54,6 @@
 }
 
 :host([scrollable][scrollable-padding]) .buttons-container {
-  padding-left: var(--st-scrollable-toolbar-padding-left, 52px);
-  width: calc(100% - var(--st-scrollable-toolbar-padding-left, 52px));
+  padding-left: var(--st-scrollable-toolbar-padding-left);
+  width: calc(100% - var(--st-scrollable-toolbar-padding-left));
 }
