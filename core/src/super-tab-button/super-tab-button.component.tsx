@@ -26,16 +26,7 @@ export class SuperTabButtonComponent implements ComponentInterface {
   @State() label!: HTMLElement | null;
   @State() icon!: HTMLElement | null;
 
-  indexChildren() {
-    this.label = this.el.querySelector('ion-label');
-    this.icon = this.el.querySelector('ion-icon');
-  }
-
   componentWillLoad() {
-    this.indexChildren();
-  }
-
-  componentDidUpdate() {
     this.indexChildren();
   }
 
@@ -44,6 +35,11 @@ export class SuperTabButtonComponent implements ComponentInterface {
     slot!.addEventListener('slotchange', () => {
       this.indexChildren();
     });
+  }
+
+  private indexChildren() {
+    this.label = this.el.querySelector('ion-label');
+    this.icon = this.el.querySelector('ion-icon');
   }
 
   render() {
