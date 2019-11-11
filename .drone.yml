@@ -46,6 +46,24 @@ steps:
       from_secret: npm_email
     folder: angular/dist
 
+- name: Generate docs
+  image: harbor.zyra.ca/public/zmdocs:v1.0.0
+  when:
+    branch:
+      - master
+
+- name: Publish docs
+  image: plugins/gh-pages
+  when:
+    branch:
+      - master
+  settings:
+    username:
+      from_secret: gh_user
+    password:
+      from_secret: gh_token
+    pages_directory: docs
+
 #- name: Update example project
 #  image: plugins/downstream
 #  settings:
