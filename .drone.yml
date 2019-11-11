@@ -49,7 +49,7 @@ steps:
     folder: angular/dist
 
 - name: Generate docs
-  image: harbor.zyra.ca/public/zmdocs:v1.0.2
+  image: harbor.zyra.ca/public/zmdocs:v1.0.4
   when:
     branch:
       - master
@@ -80,6 +80,6 @@ steps:
 
 ---
 kind: signature
-hmac: 0be9275d322b5340e06e9e7416b9c2d86e0650e3735fc649c0d80729c90d25b7
+hmac: 68f5791051834ff4b1a99f84ee298a9b2f40f89481f3a3f62f425dfb3d133632
 
 ...
