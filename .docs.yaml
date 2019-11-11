@@ -2,6 +2,7 @@ siteTitle: Super Tabs
 description: Swipeable tabs for Ionic apps
 repo: https://github.com/zyra/ionic-super-tabs
 outDir: docs
+baseUrl: https://zyra.github.io/ionic-super-tabs
 
 pagePatterns:
 - name: '{{ index .PathMatches 0 1 }}'
