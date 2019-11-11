@@ -1,0 +1,17 @@
+.git
+.idea
+Dockerfile
+.docs.yaml
+.drone.yml
+.gitignore
+README.md
+super-tabs.sh
+docs
+node_modules
+core/node_modules
+core/dist
+core/loader
+core/hydrate
+core/.stencil
+angular/node_modules
+angular/dist
