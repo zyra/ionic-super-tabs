@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Super Tabs - Swipeable tabs for Ionic apps</title>
+    <meta name="description" content="Swipeable tabs for Ionic apps">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#fafafa">
+</head>
+<body>
+<nav role="navigation">
+    <div class="container flex items-center justify-between flex-wrap p-6 mx-auto">
+        <div class="flex items-center flex-shrink-0 text-indigo-500 mr-6">
+            <span class="font-semibold text-xl tracking-tight">
+                Super Tabs
+            </span>
+        </div>
+        <div class="block">
+            <button id="sidenav-open-button" class="flex items-center px-3 py-2 text-indigo-400 hover:text-indigo-500">
+                <svg class="fill-current h-5 w-5" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+            </button>
+            <button id="sidenav-close-button" class="flex items-center px-3 py-2 text-indigo-400 hover:text-indigo-500 hidden">
+                <svg class="fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"></path></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+<div class="container mx-auto">
+    <div class="flex">
+        <nav class="w-full lg:w-1/5 p-6 hidden lg:block" id="sidenav" role="navigation">
+            <ul class="list-reset" role="none">
+                
+                    
+                        <li role="none" class="mb-6">
+                            <span class="font-semibold text-gray-500">Getting started</span>
+                            <ul class="list-reset ml-1" role="none">
+                                
+                                    <li role="none">
+                                        <a href="/" role="link" aria-label="Introduction" class="block p-1 text-gray-600 hover:text-gray-700">Introduction</a>
+                                    </li>
+                                
+                            </ul>
+                        </li>
+                    
+                
+                    
+                        <li role="none" class="mb-6">
+                            <span class="font-semibold text-gray-500">Components</span>
+                            <ul class="list-reset ml-1" role="none">
+                                
+                                    <li role="none">
+                                        <a href="/components/super-tab" role="link" aria-label="super-tab" class="block p-1 text-gray-600 hover:text-gray-700">super-tab</a>
+                                    </li>
+                                
+                                    <li role="none">
+                                        <a href="/components/super-tab-button" role="link" aria-label="super-tab-button" class="block p-1 text-gray-600 hover:text-gray-700">super-tab-button</a>
+                                    </li>
+                                
+                                    <li role="none">
+                                        <a href="/components/super-tab-indicator" role="link" aria-label="super-tab-indicator" class="block p-1 text-gray-600 hover:text-gray-700">super-tab-indicator</a>
+                                    </li>
+                                
+                                    <li role="none">
+                                        <a href="/components/super-tabs" role="link" aria-label="super-tabs" class="block p-1 text-gray-600 hover:text-gray-700">super-tabs</a>
+                                    </li>
+                                
+                                    <li role="none">
+                                        <a href="/components/super-tabs-container" role="link" aria-label="super-tabs-container" class="block p-1 text-gray-600 hover:text-gray-700">super-tabs-container</a>
+                                    </li>
+                                
+                                    <li role="none">
+                                        <a href="/components/super-tabs-toolbar" role="link" aria-label="super-tabs-toolbar" class="block p-1 text-gray-600 hover:text-gray-700">super-tabs-toolbar</a>
+                                    </li>
+                                
+                            </ul>
+                        </li>
+                    
+                
+            </ul>
+        </nav>
+        <div class="w-full p-6" id="content-container">
+            <h1 id="swipeable-tabs-for-ionic">Swipeable tabs for Ionic</h1>
+
+<p><a href="https://www.npmjs.com/package/ionic2-super-tabs/"><img src="https://img.shields.io/npm/l/ionic2-super-tabs.svg" alt="npm" /></a>
+<a href="https://www.npmjs.com/package/ionic2-super-tabs"><img src="https://img.shields.io/npm/dt/ionic2-super-tabs.svg" alt="npm" /></a>
+<a href="https://www.npmjs.com/package/ionic2-super-tabs"><img src="https://img.shields.io/npm/dm/ionic2-super-tabs.svg" alt="npm" /></a>
+<a href="https://drone.zyra.ca/zyra/ionic-super-tabs"><img src="https://drone.zyra.ca/api/badges/zyra/ionic-super-tabs/status.svg" alt="Build Status" /></a></p>
+
+<hr />
+
+<h2 id="installation">Installation</h2>
+
+<pre><code class="language-shell"># Vanilla JS / React / Vue
+npm i -S @ionic-super-tabs/core
+
+# Angular
+npm i -S @ionic-super-tabs/angular
+</code></pre>
+
+<hr />
+
+<h2 id="usage">Usage</h2>
+
+<h4 id="angular">Angular</h4>
+
+<pre><code class="language-html">&lt;super-tabs [config]=&quot;config&quot; (tabChange)=&quot;onTabChange($event)&quot;&gt;
+  &lt;super-tabs-container&gt;
+    &lt;super-tab&gt;
+      &lt;!-- You can pass anything to a super tab including an ion-nav --&gt;
+      &lt;ion-nav [root]=&quot;myPage&quot; [rootParams]=&quot;myParams&quot;&gt;&lt;/ion-nav&gt;
+    &lt;/super-tab&gt;
+    &lt;super-tab&gt;...&lt;/super-tab&gt;
+    &lt;super-tab&gt;...&lt;/super-tab&gt;
+    &lt;!-- ability to dynamically add or remove tabs --&gt;
+    &lt;super-tab *ngFor=&quot;let tab of tabs&quot;&gt;...&lt;/super-tab&gt;
+  &lt;/super-tabs-container&gt;
+  
+  &lt;super-tabs-toolbar&gt;
+    &lt;!-- Listen to click events on any tab button --&gt;
+    &lt;super-tab-button (click)=&quot;onTabClick($event)&quot;&gt;
+      &lt;ion-label&gt;Call&lt;/ion-label&gt;
+      &lt;ion-icon name=&quot;call&quot;&gt;&lt;/ion-icon&gt;
+    &lt;/super-tab-button&gt;
+    &lt;super-tab-button&gt;...&lt;/super-tab-button&gt;
+    &lt;super-tab-button&gt;...&lt;/super-tab-button&gt;
+    &lt;super-tab-button *ngFor=&quot;let tab of tabs&quot;&gt;...&lt;/super-tab-button&gt;
+  &lt;/super-tabs-toolbar&gt;
+&lt;/super-tabs&gt;
+</code></pre>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const openButton = document.getElementById('sidenav-open-button');
+        const closeButton  = document.getElementById('sidenav-close-button');
+        const sidenav = document.getElementById('sidenav');
+        const container = document.getElementById('content-container');
+
+        openButton.addEventListener('click', () => {
+            sidenav.classList.replace('hidden', 'block');
+            container.classList.add('hidden');
+            openButton.classList.add('hidden');
+            closeButton.classList.remove('hidden');
+        });
+
+        closeButton.addEventListener('click', () => {
+            sidenav.classList.replace('block', 'hidden');
+            container.classList.remove('hidden');
+            openButton.classList.remove('hidden');
+            closeButton.classList.add('hidden');
+        });
+    })();
+</script>
+</body>
+</html>
