@@ -51,6 +51,8 @@ steps:
   when:
     branch:
       - master
+  commands:
+    - zmdoc g
 
 - name: Publish docs
   image: plugins/gh-pages
@@ -76,6 +78,6 @@ steps:
 
 ---
 kind: signature
-hmac: 7de40ff3cfe662b3f2b641654512613da34634199de4a938ee129a9af7eef12f
+hmac: 50d6fc56ae57ced338ce709c7cd18bab6d324b54a69be6d3615c3d0cb01bbe21
 
 ...
