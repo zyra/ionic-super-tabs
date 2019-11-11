@@ -6,17 +6,19 @@ name: default
 clone:
   depth: 1
 
-steps:
-- name: Install node modules
-  image: node:12-alpine
-  commands:
-  - npm install
-  - npx lerna bootstrap
+volumes:
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
 
+steps:
 - name: Build
-  image: node:12-alpine
+  image: docker
+  volumes:
+  - name: dockersock
+    path: /var/run/docker.sock
   commands:
-  - npm run build
+  - docker build .
 
 - name: Publish core package
   image: plugins/npm
@@ -52,7 +54,7 @@ steps:
     branch:
       - master
   commands:
-    - zmdoc g
+    - zmdocs g
 
 - name: Publish docs
   image: plugins/gh-pages
