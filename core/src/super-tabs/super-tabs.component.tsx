@@ -132,16 +132,16 @@ export class SuperTabsComponent implements ComponentInterface {
 
     // set the selected tab so the toolbar & container are aligned and in sync
     // this.selectTab(this.activeTabIndex);
-    this.container.setActiveTabIndex(this.activeTabIndex);
-    this.toolbar.setActiveTab(this.activeTabIndex);
+    this.container && this.container.setActiveTabIndex(this.activeTabIndex);
+    this.toolbar && this.toolbar.setActiveTab(this.activeTabIndex);
 
     // setup event listeners so we can synchronize child components
     // 1. listen to selectedTabIndex changes emitted by the container.
-    this.el.addEventListener('selectedTabIndexChange', this.onContainerSelectedTabChange.bind(this));
+    this.container && this.el.addEventListener('selectedTabIndexChange', this.onContainerSelectedTabChange.bind(this));
     // 2. listen to activeTabIndex changes emitted by the container
-    this.el.addEventListener('activeTabIndexChange', this.onContainerActiveTabChange.bind(this));
+    this.container && this.el.addEventListener('activeTabIndexChange', this.onContainerActiveTabChange.bind(this));
     // 3. listen to tab button clicks emitted by the toolbar
-    this.el.addEventListener('buttonClick', this.onToolbarButtonClick.bind(this));
+    this.toolbar && this.el.addEventListener('buttonClick', this.onToolbarButtonClick.bind(this));
   }
 
   private async onContainerSelectedTabChange(ev: any) {
