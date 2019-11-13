@@ -1,0 +1,34 @@
+@import "./variables";
+
+@mixin st-button-variables() {
+  --st-base-color-active: #{$st-button-base-color-active};
+  --st-base-color-inactive: #{$st-button-base-color-inactive};
+
+  --st-icon-size: #{$st-button-icon-size};
+  --st-icon-color-inactive: #{$st-button-icon-color-inactive};
+  --st-icon-color-active: #{$st-button-icon-color-active};
+
+  --st-label-line-height: #{$st-button-label-line-height};
+  --st-label-height: #{$st-button-label-height};
+  --st-label-font-size: #{$st-button-label-font-size};
+  --st-label-text-transform: #{$st-button-label-text-transform};
+  --st-label-font-weight: #{$st-button-label-font-weight};
+  --st-label-padding-bottom: #{$st-button-label-padding-bottom};
+  --st-label-color-inactive: #{$st-button-label-color-inactive};
+  --st-label-color-active: #{$st-button-label-color-active};
+}
+
+@mixin st-tab-variables() {
+  --super-tab-width: #{$st-width};
+  --super-tab-height: #{$st-height};
+}
+
+@mixin st-indicator-variables() {
+  --st-indicator-height: #{$st-indicator-height};
+  --st-indicator-color: #{$st-indicator-color};
+}
+
+@mixin st-toolbar-variables() {
+  --st-scrollable-toolbar-padding-left: #{$st-scrollable-toolbar-padding-left};
+  --super-tabs-toolbar-background: #{$st-toolbar-background};
+}

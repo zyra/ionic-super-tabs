@@ -1,3 +1,5 @@
+@import "../mixins";
+
 @mixin labelIcon {
   ion-label, ion-icon, ::slotted(ion-label), ::slotted(ion-icon) {
     @content
@@ -32,21 +34,7 @@
    * @prop --st-label-color-inactive: inactive label color. Defaults to `var(--st-base-color-inactive)`
    * @prop --st-label-color-active: active label color. Defaults to `var(--st-base-color-active)`
    */
-  --st-base-color-active: var(--ion-color-contrast);
-  --st-base-color-inactive: rgba(var(--ion-color-contrast-rgb), 0.7);
-
-  --st-icon-size: 24px;
-  --st-icon-color-inactive: var(--st-base-color-inactive);
-  --st-icon-color-active: var(--st-base-color-active);
-
-  --st-label-line-height: 14px;
-  --st-label-height: 14px;
-  --st-label-font-size: 14px;
-  --st-label-text-transform: uppercase;
-  --st-label-font-weight: 500;
-  --st-label-padding-bottom: 16px;
-  --st-label-color-inactive: var(--st-base-color-inactive);
-  --st-label-color-active: var(--st-base-color-active);
+  @include st-button-variables();
 
   flex: 1 0 0;
   cursor: pointer;

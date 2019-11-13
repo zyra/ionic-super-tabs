@@ -12,14 +12,6 @@
 | `toolbarPosition` | `toolbar-position` | Toolbar position This determines the position of the indicator | `"bottom" \| "top"` | `'top'` |
 
 
-## CSS Custom Properties
-
-| Name                    | Description                                          |
-| ----------------------- | ---------------------------------------------------- |
-| `--st-indicator-color`  | Indicator color. Defaults to `--ion-color-contrast`. |
-| `--st-indicator-height` | Indicator height. Defaults to `2px`.                 |
-
-
 ## Dependencies
 
 ### Used by

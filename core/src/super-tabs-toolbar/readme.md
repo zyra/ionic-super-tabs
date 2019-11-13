@@ -26,6 +26,8 @@
 
 | Name                                   | Description                                                        |
 | -------------------------------------- | ------------------------------------------------------------------ |
+| `--st-indicator-color`                 | Indicator color. Defaults to `--ion-color-contrast`.               |
+| `--st-indicator-height`                | Indicator height. Defaults to `2px`.                               |
 | `--st-scrollable-toolbar-padding-left` | Left padding when `scrollable` is set to true. Defaults to `52px`. |
 | `--super-tabs-toolbar-background`      | Toolbar background color. Defaults to `--ion-color-base`.          |
 

@@ -1,0 +1,42 @@
+/**
+ * super-tab-button variables
+ */
+
+/// @prop - Active color of a toolbar button
+$st-button-base-color-active: #{var(--ion-color-contrast)} !default;
+/// @prop - Inactive color of a toolbar button
+$st-button-base-color-inactive: #{rgba(var(--ion-color-contrast-rgb), 0.7)} !default;
+
+/// @prop - Toolbar button icon size
+$st-button-icon-size: 24px !default;
+/// @prop - Toolbar button inactive color
+$st-button-icon-color-inactive: var(--st-base-color-inactive) !default;
+/// @prop - Toolbar button active color
+$st-button-icon-color-active: var(--st-base-color-active) !default;
+
+$st-button-label-line-height: 14px !default;
+$st-button-label-height: 14px !default;
+$st-button-label-font-size: 14px !default;
+$st-button-label-text-transform: uppercase !default;
+$st-button-label-font-weight: 500 !default;
+$st-button-label-padding-bottom: 16px !default;
+$st-button-label-color-inactive: var(--st-base-color-inactive) !default;
+$st-button-label-color-active: var(--st-base-color-active) !default;
+
+/**
+ * super-tab variables
+ */
+$st-width: 100vw !default;
+$st-height: 100% !default;
+
+/**
+ * super-tab-indicator variables
+ */
+$st-indicator-height: 2px !default;
+$st-indicator-color: var(--ion-color-contrast, white) !default;
+
+/**
+ * super-tab-toolbar variables
+ */
+$st-scrollable-toolbar-padding-left: 52px !default;
+$st-toolbar-background: var(--ion-color-base) !default;

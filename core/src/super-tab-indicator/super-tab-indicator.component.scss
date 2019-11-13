@@ -1,12 +1,6 @@
+@import "../mixins";
+
 :host {
-  /**
-   * @prop --st-indicator-height: Indicator height. Defaults to `2px`.
-   * @prop --st-indicator-color: Indicator color. Defaults to `--ion-color-contrast`.
-   */
-
-  --st-indicator-height: 2px;
-  --st-indicator-color: var(--ion-color-contrast, white);
-
   display: block;
   height: var(--st-indicator-height);
   width: 100px;

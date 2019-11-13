@@ -4,6 +4,7 @@ import { Component, ComponentInterface, Element, Method, h } from '@stencil/core
   tag: 'super-tab',
   styleUrl: 'super-tab.component.scss',
   shadow: true,
+  scoped: false,
 })
 export class SuperTabComponent implements ComponentInterface {
   @Element() el!: HTMLSuperTabElement;
