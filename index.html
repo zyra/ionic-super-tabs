@@ -37,6 +37,23 @@
 							<li role="none">
 								<a href="https://zyra.github.io/ionic-super-tabs/" role="link" aria-label="Introduction" class="block p-1 text-indigo-600">Introduction</a>
 							</li>
+							<li role="none">
+								<a href="/getting-started/angular" role="link" aria-label="Angular" class="block p-1 text-gray-600 hover:text-gray-700">Angular</a>
+							</li>
+							<li role="none">
+								<a href="/getting-started/javascript" role="link" aria-label="JavaScript" class="block p-1 text-gray-600 hover:text-gray-700">JavaScript</a>
+							</li>
+					</ul>
+				</li>
+				<li role="none">
+					<a href="/configuration" role="link" aria-label="Configuration" class="block p-1 text-gray-600 hover:text-gray-700">Configuration</a>
+				</li>
+				<li role="none" class="mb-6">
+					<span class="font-semibold text-gray-500">Usage guide</span>
+					<ul class="list-reset ml-1" role="none">
+							<li role="none">
+								<a href="/usage/angular" role="link" aria-label="Angular" class="block p-1 text-gray-600 hover:text-gray-700">Angular</a>
+							</li>
 					</ul>
 				</li>
 				<li role="none" class="mb-6">
@@ -65,54 +82,31 @@
             </ul>
         </nav>
         <div class="w-full p-6" id="content-container">
-		<h1 id="swipeable-tabs-for-ionic">Swipeable tabs for Ionic</h1>
+		<h1 id="super-tabs">Super Tabs</h1>
 
-<p><a href="https://www.npmjs.com/package/ionic2-super-tabs/"><img src="https://img.shields.io/npm/l/ionic2-super-tabs.svg" alt="npm" /></a>
-<a href="https://www.npmjs.com/package/ionic2-super-tabs"><img src="https://img.shields.io/npm/dt/ionic2-super-tabs.svg" alt="npm" /></a>
-<a href="https://www.npmjs.com/package/ionic2-super-tabs"><img src="https://img.shields.io/npm/dm/ionic2-super-tabs.svg" alt="npm" /></a>
-<a href="https://drone.zyra.ca/zyra/ionic-super-tabs"><img src="https://drone.zyra.ca/api/badges/zyra/ionic-super-tabs/status.svg" alt="Build Status" /></a></p>
+<p>Swipeable tabs for Ionic apps</p>
 
-<hr />
+<h2 id="introduction">Introduction</h2>
 
-<h2 id="installation">Installation</h2>
+<p><strong><em>Super Tabs</em></strong> is a set of web components to build swipe-able views in <a href="https://ionicframework.com" target="_blank">Ionic</a> apps.
+ The module was designed based on <a href="https://material.io/components/tabs/" target="_blank">Material Design Guidelines</a>
+ to provide a simple and familiar user experience.</p>
 
-<pre><code class="language-shell"># Vanilla JS / React / Vue
-npm i -S @ionic-super-tabs/core
+<h2 id="support">Support</h2>
 
-# Angular
-npm i -S @ionic-super-tabs/angular
-</code></pre>
+<h4 id="community-support">Community support</h4>
 
-<hr />
+<p>Having some trouble? search existing issues<a href="https://github.com/zyra/ionic-super-tabs/issues">issues</a> on Github, or <a href="https://github.com/zyra/ionic-super-tabs/issues/new?assignees=&amp;labels=&amp;template=bug_report.md&amp;title=">submit a bug report</a>.</p>
 
-<h2 id="usage">Usage</h2>
+<h2 id="contributing">Contributing</h2>
 
-<h4 id="angular">Angular</h4>
+<p>To request a feature create a new issue. Pull requests are welcome.</p>
 
-<pre><code class="language-html">&lt;super-tabs [config]=&quot;config&quot; (tabChange)=&quot;onTabChange($event)&quot;&gt;
-  &lt;super-tabs-container&gt;
-    &lt;super-tab&gt;
-      &lt;!-- You can pass anything to a super tab including an ion-nav --&gt;
-      &lt;ion-nav [root]=&quot;myPage&quot; [rootParams]=&quot;myParams&quot;&gt;&lt;/ion-nav&gt;
-    &lt;/super-tab&gt;
-    &lt;super-tab&gt;...&lt;/super-tab&gt;
-    &lt;super-tab&gt;...&lt;/super-tab&gt;
-    &lt;!-- ability to dynamically add or remove tabs --&gt;
-    &lt;super-tab *ngFor=&quot;let tab of tabs&quot;&gt;...&lt;/super-tab&gt;
-  &lt;/super-tabs-container&gt;
-  
-  &lt;super-tabs-toolbar&gt;
-    &lt;!-- Listen to click events on any tab button --&gt;
-    &lt;super-tab-button (click)=&quot;onTabClick($event)&quot;&gt;
-      &lt;ion-label&gt;Call&lt;/ion-label&gt;
-      &lt;ion-icon name=&quot;call&quot;&gt;&lt;/ion-icon&gt;
-    &lt;/super-tab-button&gt;
-    &lt;super-tab-button&gt;...&lt;/super-tab-button&gt;
-    &lt;super-tab-button&gt;...&lt;/super-tab-button&gt;
-    &lt;super-tab-button *ngFor=&quot;let tab of tabs&quot;&gt;...&lt;/super-tab-button&gt;
-  &lt;/super-tabs-toolbar&gt;
-&lt;/super-tabs&gt;
-</code></pre>
+<p>Features with minimal impact on performance or complexity have a higher probability of being implemented/merged.</p>
+
+<h2 id="license">License</h2>
+
+<p>This project is licensed under the <a href="https://github.com/zyra/ionic-super-tabs/blob/master/LICENSE.md">MIT License</a>.</p>
 
         </div>
     </div>

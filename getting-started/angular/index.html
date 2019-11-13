@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>super-tab-indicator</title>
+    <title>Getting started with Angular</title>
     <meta name="description" content="Swipeable tabs for Ionic apps">
     <base href="https://zyra.github.io/ionic-super-tabs/" />
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
@@ -38,7 +38,7 @@
 								<a href="https://zyra.github.io/ionic-super-tabs/" role="link" aria-label="Introduction" class="block p-1 text-gray-600 hover:text-gray-700">Introduction</a>
 							</li>
 							<li role="none">
-								<a href="/getting-started/angular" role="link" aria-label="Angular" class="block p-1 text-gray-600 hover:text-gray-700">Angular</a>
+								<a href="/getting-started/angular" role="link" aria-label="Angular" class="block p-1 text-indigo-600">Angular</a>
 							</li>
 							<li role="none">
 								<a href="/getting-started/javascript" role="link" aria-label="JavaScript" class="block p-1 text-gray-600 hover:text-gray-700">JavaScript</a>
@@ -66,7 +66,7 @@
 								<a href="components/super-tab-button" role="link" aria-label="super-tab-button" class="block p-1 text-gray-600 hover:text-gray-700">super-tab-button</a>
 							</li>
 							<li role="none">
-								<a href="components/super-tab-indicator" role="link" aria-label="super-tab-indicator" class="block p-1 text-indigo-600">super-tab-indicator</a>
+								<a href="components/super-tab-indicator" role="link" aria-label="super-tab-indicator" class="block p-1 text-gray-600 hover:text-gray-700">super-tab-indicator</a>
 							</li>
 							<li role="none">
 								<a href="components/super-tabs" role="link" aria-label="super-tabs" class="block p-1 text-gray-600 hover:text-gray-700">super-tabs</a>
@@ -82,52 +82,48 @@
             </ul>
         </nav>
         <div class="w-full p-6" id="content-container">
-		<h1 id="super-tab-indicator">super-tab-indicator</h1>
+		<h1 id="getting-started-with-angular">Getting Started with Angular</h1>
 
-<!-- Auto Generated Below -->
+<h2 id="installation">Installation</h2>
 
-<h2 id="properties">Properties</h2>
+<h4 id="1-install-the-module">1. Install the module</h4>
 
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Attribute</th>
-<th>Description</th>
-<th>Type</th>
-<th>Default</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td><code>toolbarPosition</code></td>
-<td><code>toolbar-position</code></td>
-<td>Toolbar position This determines the position of the indicator</td>
-<td><code>&quot;bottom&quot; \| &quot;top&quot;</code></td>
-<td><code>'top'</code></td>
-</tr>
-</tbody>
-</table>
-
-<h2 id="dependencies">Dependencies</h2>
-
-<h3 id="used-by">Used by</h3>
-
-<ul>
-<li><a href="../super-tabs-toolbar">super-tabs-toolbar</a></li>
-</ul>
-
-<h3 id="graph">Graph</h3>
-
-<pre><code class="language-mermaid">graph TD;
-  super-tabs-toolbar --&gt; super-tab-indicator
-  style super-tab-indicator fill:#f9f,stroke:#333,stroke-width:4px
+<pre><code class="language-shell">npm i --save @ionic-super-tabs/angular
 </code></pre>
 
-<hr />
+<h4 id="2-import-the-module">2. Import the module</h4>
 
-<p><em>Built with <a href="https://stenciljs.com/">StencilJS</a></em></p>
+<p>You must import <code>SuperTabsModule.forRoot()</code> once only. This is usually imported in your app&rsquo;s root module (e.g <code>AppModule</code>),
+but it can be imported in other modules depending on your app structure.</p>
+
+<p>For lazy loaded app you must also import <code>SuperTabsModule</code> to have access to the provided components.</p>
+
+<pre><code class="language-typescript">import { SuperTabsModule } from '@ionic-super-tabs/angular';
+
+// Root module import example
+@NgModule({
+  ...
+  imports: [
+    ...
+    SuperTabsModule.forRoot(),
+  ],
+  ...
+})
+export class AppModule {}
+
+// Child module import example
+@NgModule({
+  ...
+  imports: [
+    ...
+    SuperTabsModule,
+  ],
+  ...
+})
+export class HomePageModule {}
+</code></pre>
+
+<p>See the <a href="/usage/angular">Angular Usage Guide</a> for examples on how to setup <strong><em>Super Tabs</em></strong>.</p>
 
         </div>
     </div>

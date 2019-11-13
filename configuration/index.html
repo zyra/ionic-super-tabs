@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>super-tab-indicator</title>
+    <title>Configuration</title>
     <meta name="description" content="Swipeable tabs for Ionic apps">
     <base href="https://zyra.github.io/ionic-super-tabs/" />
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
@@ -46,7 +46,7 @@
 					</ul>
 				</li>
 				<li role="none">
-					<a href="/configuration" role="link" aria-label="Configuration" class="block p-1 text-gray-600 hover:text-gray-700">Configuration</a>
+					<a href="/configuration" role="link" aria-label="Configuration" class="block p-1 text-indigo-600">Configuration</a>
 				</li>
 				<li role="none" class="mb-6">
 					<span class="font-semibold text-gray-500">Usage guide</span>
@@ -66,7 +66,7 @@
 								<a href="components/super-tab-button" role="link" aria-label="super-tab-button" class="block p-1 text-gray-600 hover:text-gray-700">super-tab-button</a>
 							</li>
 							<li role="none">
-								<a href="components/super-tab-indicator" role="link" aria-label="super-tab-indicator" class="block p-1 text-indigo-600">super-tab-indicator</a>
+								<a href="components/super-tab-indicator" role="link" aria-label="super-tab-indicator" class="block p-1 text-gray-600 hover:text-gray-700">super-tab-indicator</a>
 							</li>
 							<li role="none">
 								<a href="components/super-tabs" role="link" aria-label="super-tabs" class="block p-1 text-gray-600 hover:text-gray-700">super-tabs</a>
@@ -82,52 +82,114 @@
             </ul>
         </nav>
         <div class="w-full p-6" id="content-container">
-		<h1 id="super-tab-indicator">super-tab-indicator</h1>
+		<h1 id="configuration">Configuration</h1>
 
-<!-- Auto Generated Below -->
+<p>Configuring <strong><em>Super Tabs</em></strong> can be done by setting the <code>config</code> property on a <code>&lt;super-tab&gt;</code> element.</p>
 
-<h2 id="properties">Properties</h2>
+<p>Example:</p>
 
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Attribute</th>
-<th>Description</th>
-<th>Type</th>
-<th>Default</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td><code>toolbarPosition</code></td>
-<td><code>toolbar-position</code></td>
-<td>Toolbar position This determines the position of the indicator</td>
-<td><code>&quot;bottom&quot; \| &quot;top&quot;</code></td>
-<td><code>'top'</code></td>
-</tr>
-</tbody>
-</table>
-
-<h2 id="dependencies">Dependencies</h2>
-
-<h3 id="used-by">Used by</h3>
-
-<ul>
-<li><a href="../super-tabs-toolbar">super-tabs-toolbar</a></li>
-</ul>
-
-<h3 id="graph">Graph</h3>
-
-<pre><code class="language-mermaid">graph TD;
-  super-tabs-toolbar --&gt; super-tab-indicator
-  style super-tab-indicator fill:#f9f,stroke:#333,stroke-width:4px
+<pre><code class="language-html">&lt;!-- home.page.html --&gt;
+&lt;super-tabs [config]=&quot;config&quot;&gt;
 </code></pre>
 
-<hr />
+<pre><code class="language-ts">&lt;!-- home.page.ts --&gt;
+  ...
+  
+  config: SuperTabsConfig = {
+    sideMenu: 'left',
+    shortSwipeDuration: 180,
+  };
+</code></pre>
 
-<p><em>Built with <a href="https://stenciljs.com/">StencilJS</a></em></p>
+<h2 id="defaults">Defaults</h2>
+
+<pre><code class="language-ts">export const DEFAULT_CONFIG: SuperTabsConfig = {
+  dragThreshold: 10,
+  allowElementScroll: false,
+  maxDragAngle: 40,
+  sideMenuThreshold: 50,
+  transitionDuration: 300,
+  shortSwipeDuration: 300,
+  debug: false,
+  avoidElements: false,
+};
+</code></pre>
+
+<h2 id="reference">Reference</h2>
+
+<pre><code class="language-ts">/**
+   * Max drag angle in degrees.
+   *
+   * Defaults to `40`
+   */
+  maxDragAngle?: number;
+
+  /**
+   * Drag threshold in pixels.
+   *
+   * This value defines how far the user have to swipe for the swipe to be treated as a swipe gesture.
+   *
+   * Defaults to `20`
+   */
+  dragThreshold?: number;
+
+  /**
+   * Allows elements inside tabs to be dragged or scrolled through.
+   *
+   * Setting this value to `true` will allow touch events to be propagated to child components.
+   *
+   * Defaults to `false`.
+   */
+  allowElementScroll?: boolean;
+
+  /**
+   * Transition duration in milliseconds.
+   *
+   * This value is used for all transitions and animations.
+   *
+   * Defaults to `150`.
+   */
+  transitionDuration?: number;
+
+  /**
+   * Side menu location.
+   *
+   * If this value is set to `right` or `left`, the super tabs component will avoid listening to swipe events
+   * in the specified region(s) to avoid interfering with a side menu event listeners.
+   *
+   * Defaults to `undefined`.
+   */
+  sideMenu?: 'left' | 'right' | 'both';
+
+  /**
+   * Side menu threshold in pixels.
+   *
+   * Defaults to `50`.
+   */
+  sideMenuThreshold?: number;
+
+  /**
+   * Short swipe duration in milliseconds.
+   *
+   * Short swipe is when a user quickly swipes between tabs. If the swipe duration is less than or equal to this
+   * configured value, then we assume that the user wants to switch tabs.
+   * To disable this behaviour set this value to `0`.
+   *
+   * Defaults to `300`
+   */
+  shortSwipeDuration?: number;
+
+  /**
+   * Enable debug mode.
+   * Defaults to `false`.
+   */
+  debug?: boolean;
+
+  /**
+   * Whether the container should look and avoid elements with avoid-super-tabs attribute
+   */
+  avoidElements?: boolean;
+</code></pre>
 
         </div>
     </div>

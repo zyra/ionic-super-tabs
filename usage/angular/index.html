@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>super-tab-indicator</title>
+    <title>Angular Usage Guide</title>
     <meta name="description" content="Swipeable tabs for Ionic apps">
     <base href="https://zyra.github.io/ionic-super-tabs/" />
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
@@ -52,7 +52,7 @@
 					<span class="font-semibold text-gray-500">Usage guide</span>
 					<ul class="list-reset ml-1" role="none">
 							<li role="none">
-								<a href="/usage/angular" role="link" aria-label="Angular" class="block p-1 text-gray-600 hover:text-gray-700">Angular</a>
+								<a href="/usage/angular" role="link" aria-label="Angular" class="block p-1 text-indigo-600">Angular</a>
 							</li>
 					</ul>
 				</li>
@@ -66,7 +66,7 @@
 								<a href="components/super-tab-button" role="link" aria-label="super-tab-button" class="block p-1 text-gray-600 hover:text-gray-700">super-tab-button</a>
 							</li>
 							<li role="none">
-								<a href="components/super-tab-indicator" role="link" aria-label="super-tab-indicator" class="block p-1 text-indigo-600">super-tab-indicator</a>
+								<a href="components/super-tab-indicator" role="link" aria-label="super-tab-indicator" class="block p-1 text-gray-600 hover:text-gray-700">super-tab-indicator</a>
 							</li>
 							<li role="none">
 								<a href="components/super-tabs" role="link" aria-label="super-tabs" class="block p-1 text-gray-600 hover:text-gray-700">super-tabs</a>
@@ -82,52 +82,140 @@
             </ul>
         </nav>
         <div class="w-full p-6" id="content-container">
-		<h1 id="super-tab-indicator">super-tab-indicator</h1>
-
-<!-- Auto Generated Below -->
-
-<h2 id="properties">Properties</h2>
-
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Attribute</th>
-<th>Description</th>
-<th>Type</th>
-<th>Default</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td><code>toolbarPosition</code></td>
-<td><code>toolbar-position</code></td>
-<td>Toolbar position This determines the position of the indicator</td>
-<td><code>&quot;bottom&quot; \| &quot;top&quot;</code></td>
-<td><code>'top'</code></td>
-</tr>
-</tbody>
-</table>
-
-<h2 id="dependencies">Dependencies</h2>
-
-<h3 id="used-by">Used by</h3>
+		<h1 id="angular-usage-guide">Angular Usage Guide</h1>
 
 <ul>
-<li><a href="../super-tabs-toolbar">super-tabs-toolbar</a></li>
+<li><a href="#basic-usage">Basic usage</a></li>
+<li><a href="#scrollable-toolbar">Scrollable toolbar</a></li>
+<li><a href="#toolbar-positioning">Toolbar positioning</a></li>
+<li><a href="#routing">Routing</a></li>
+<li><a href="#theming">Theming</a></li>
 </ul>
 
-<h3 id="graph">Graph</h3>
+<h2 id="basic-usage">Basic usage</h2>
 
-<pre><code class="language-mermaid">graph TD;
-  super-tabs-toolbar --&gt; super-tab-indicator
-  style super-tab-indicator fill:#f9f,stroke:#333,stroke-width:4px
+<pre><code class="language-html">&lt;ion-header class=&quot;ion-no-border&quot;&gt;
+  &lt;ion-toolbar&gt;
+    &lt;ion-title&gt;Super Tabs&lt;/ion-title&gt;
+  &lt;/ion-toolbar&gt;
+&lt;/ion-header&gt;
+
+&lt;super-tabs&gt;
+  &lt;super-tabs-toolbar slot=&quot;top&quot;&gt;
+    &lt;super-tab-button&gt;
+      &lt;ion-icon name=&quot;home&quot;&gt;&lt;/ion-icon&gt;
+      &lt;ion-label&gt;Page #1&lt;/ion-label&gt;    
+    &lt;/super-tab-button&gt;
+    &lt;super-tab-button&gt;
+      &lt;ion-icon name=&quot;home&quot;&gt;&lt;/ion-icon&gt;
+      &lt;ion-label&gt;Page #2&lt;/ion-label&gt;    
+    &lt;/super-tab-button&gt;
+    &lt;super-tab-button&gt;
+      &lt;ion-icon name=&quot;home&quot;&gt;&lt;/ion-icon&gt;
+      &lt;ion-label&gt;Page #3&lt;/ion-label&gt;    
+    &lt;/super-tab-button&gt;
+  &lt;/super-tabs-toolbar&gt;
+  &lt;super-tabs-container&gt;
+    &lt;super-tab&gt;
+      &lt;ion-content&gt;
+        Page #1
+      &lt;/ion-content&gt;
+    &lt;/super-tab&gt;
+    &lt;super-tab&gt;
+      &lt;ion-content&gt;
+        Page #2
+      &lt;/ion-content&gt;
+    &lt;/super-tab&gt;
+    &lt;super-tab&gt;
+      &lt;ion-content&gt;
+        Page #3
+      &lt;/ion-content&gt;
+    &lt;/super-tab&gt;
+  &lt;/super-tabs-container&gt;
+&lt;/super-tabs&gt;
 </code></pre>
 
-<hr />
+<h2 id="scrollable-toolbar">Scrollable toolbar</h2>
 
-<p><em>Built with <a href="https://stenciljs.com/">StencilJS</a></em></p>
+<p>Enabling toolbar scrolling is recommended if the toolbar gets crowded with many tabs.</p>
+
+<p>To enable this feature, set the <code>scrollable</code> attribute on <code>&lt;super-tabs-toolbar&gt;</code>.</p>
+
+<p>Example:</p>
+
+<pre><code class="language-html">&lt;super-tabs&gt;
+  &lt;super-tab-toolbar slot=&quot;top&quot; scrollable&gt;
+    &lt;!-- ... --&gt;  
+  &lt;/super-tab-toolbar&gt;
+  &lt;!-- ... --&gt;
+&lt;/super-tabs&gt;
+</code></pre>
+
+<h2 id="toolbar-positioning">Toolbar positioning</h2>
+
+<p>To position the toolbar below the tabs, set the <code>slot</code> attribute to <code>bottom</code>.</p>
+
+<p>Example:</p>
+
+<pre><code class="language-html">&lt;super-tabs&gt;
+  &lt;super-tab-toolbar slot=&quot;bottom&quot;&gt;
+    &lt;!-- ... --&gt;  
+  &lt;/super-tab-toolbar&gt;
+  &lt;!-- ... --&gt;
+&lt;/super-tabs&gt;
+</code></pre>
+
+<h2 id="routing">Routing</h2>
+
+<p>To use external pages inside a <code>&lt;super-tab&gt;</code> you can use <code>&lt;ion-nav&gt;</code> <em><small>(instead of <code>&lt;ion-content&gt;</code> in basic usage example)</small></em>.</p>
+
+<p>Note that lazy loading is not supported yet, so you must pass the target page as a variable.</p>
+
+<p>Example:</p>
+
+<pre><code class="language-html">&lt;super-tabs&gt;
+  &lt;!-- ... --&gt;
+  &lt;super-tabs-container&gt;
+     &lt;!-- ... --&gt;
+     &lt;super-tab&gt;
+       &lt;ion-nav [root]=&quot;myPage&quot; [rootParams]=&quot;{ hello: 'world' }&quot;&gt;&lt;/ion-nav&gt;
+     &lt;/super-tab&gt;
+  &lt;/super-tabs-container&gt;
+&lt;/super-tabs&gt;
+</code></pre>
+
+<pre><code class="language-ts">import { MyPage } from '../path/to/my.page';
+
+@Component({
+  ...
+})
+export class HomePage {
+  myPage = MyPage;
+}
+</code></pre>
+
+<h2 id="theming">Theming</h2>
+
+<p>Styling <strong><em>Super Tabs</em></strong> can be done by setting the available CSS variables. To see the available variables check the
+documentation for the specific element.</p>
+
+<p>You can set variables in your page:</p>
+
+<pre><code class="language-scss">// home.page.scss
+:host {  
+  --super-tabs-toolbar-background: black;
+  --st-indicator-color: yellow;
+}
+</code></pre>
+
+<p>or in your root variables:</p>
+
+<pre><code class="language-scss">// variables.scss
+:root {
+  --st-base-color-inactive: rgba(255, 255, 255, 0.6);
+  --st-base-color-active: rgba(255, 255, 255, 0.99);
+}
+</code></pre>
 
         </div>
     </div>
