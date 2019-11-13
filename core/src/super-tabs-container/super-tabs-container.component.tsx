@@ -247,7 +247,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
   @Listen('touchmove', { passive: true, capture: true })
   async onTouchMove(ev: TouchEvent) {
-    if (!this.swipeEnabled || !this.initialCoords || !this.lastPosX) {
+    if (!this.swipeEnabled || !this.initialCoords || typeof this.lastPosX !== 'number') {
       return;
     }
 

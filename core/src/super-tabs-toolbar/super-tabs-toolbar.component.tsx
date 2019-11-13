@@ -70,7 +70,6 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   private activeTabIndex: number = 0;
   private indicatorEl: HTMLSuperTabIndicatorElement | undefined;
   private buttonsContainerEl: HTMLDivElement | undefined;
-  private shouldCapture?: boolean;
   private initialCoords?: STCoord;
   private lastPosX: number | undefined;
   private isDragging: boolean | undefined;
@@ -153,78 +152,80 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   @Listen('touchstart')
   async onTouchStart(ev: TouchEvent) {
+    if (!this.scrollable) {
+      return;
+    }
+
     this.debug('onTouchStart called with: ', ev);
 
-    this.queue.read(() => {
-      const coords = pointerCoord(ev);
-      const vw = this.el.clientWidth;
+    const coords = pointerCoord(ev);
+    const vw = this.el.clientWidth;
 
-      if (coords.x < this.leftThreshold || coords.x > vw - this.rightThreshold) {
-        // ignore this gesture, it started in the side menu touch zone
-        this.shouldCapture = false;
-        return;
-      }
+    if (coords.x < this.leftThreshold || coords.x > vw - this.rightThreshold) {
+      // ignore this gesture, it started in the side menu touch zone
+      return;
+    }
 
-      this.initialCoords = coords;
-      this.lastPosX = coords.x;
-    });
+    this.initialCoords = coords;
+    this.lastPosX = coords.x;
   }
 
-  @Listen('touchmove')
+  @Listen('touchmove', { passive: true, capture: true })
   async onTouchMove(ev: TouchEvent) {
-    if (!this.buttonsContainerEl) {
+    if (!this.buttonsContainerEl || !this.scrollable || !this.initialCoords || typeof this.lastPosX !== 'number') {
       this.debug('onTouchMove called before this.buttonsContainerEl was defined');
       return Promise.resolve();
     }
 
-    this.queue.read(() => {
-      const coords = pointerCoord(ev);
+    const coords = pointerCoord(ev);
 
-      if (typeof this.lastPosX !== 'number') {
-        return;
-      }
+    if (!this.isDragging) {
+      const shouldCapture = checkGesture(coords, this.initialCoords!, this.config!);
 
-      if (!this.isDragging) {
-        if (typeof this.shouldCapture !== 'boolean') {
-          // we haven't decided yet if we want to capture this gesture
-          this.shouldCapture = checkGesture(coords, this.initialCoords!, this.config!);
+      if (!shouldCapture) {
+        if (Math.abs(coords.y - this.initialCoords.y) > 100) {
+          this.initialCoords = void 0;
+          this.lastPosX = void 0;
         }
-
-        if (this.shouldCapture !== true) {
-          return;
-        }
-
-        // gesture is good, let's capture all next onTouchMove events
-        this.isDragging = true;
-      }
-
-      // get delta X
-      const deltaX: number = this.lastPosX - coords.x;
-
-      // update last X value
-      this.lastPosX = coords.x;
-
-      if (deltaX === 0) {
         return;
       }
 
-      // scroll container
-      const scrollLeft = getScrollX(this.buttonsContainerEl!);
-      const scrollX = getNormalizedScrollX(this.buttonsContainerEl!, deltaX);
+      // gesture is good, let's capture all next onTouchMove events
+      this.isDragging = true;
+    }
 
-      if (scrollX === scrollLeft) {
-        return;
-      }
-      this.moveContainer(scrollX, false);
-    });
+    if (!this.isDragging) {
+      return;
+    }
+
+    ev.stopImmediatePropagation();
+
+    // get delta X
+    const deltaX: number = this.lastPosX - coords.x;
+
+    // update last X value
+    this.lastPosX = coords.x;
+
+    if (deltaX === 0) {
+      return;
+    }
+
+    // scroll container
+    const scrollLeft = getScrollX(this.buttonsContainerEl!);
+    const scrollX = getNormalizedScrollX(this.buttonsContainerEl!, deltaX);
+
+    if (scrollX === scrollLeft) {
+      return;
+    }
+    this.moveContainer(scrollX, false);
   }
 
-  @Listen('touchend')
+  @Listen('touchend', { passive: false, capture: true })
   async onTouchEnd() {
     this.debug('onTouchEnd called');
 
     this.isDragging = false;
-    this.shouldCapture = void 0;
+    this.initialCoords = void 0;
     this.lastPosX = void 0;
   }
 
