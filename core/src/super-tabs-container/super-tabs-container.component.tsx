@@ -277,7 +277,6 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     // stop anything else from capturing these events, to make sure the content doesn't slide
     if (!this.config!.allowElementScroll) {
       ev.stopImmediatePropagation();
-      ev.preventDefault();
     }
 
     // get delta X
