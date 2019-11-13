@@ -103,7 +103,7 @@ export class SuperTabsComponent implements ComponentInterface {
   @Listen('resize', { target: 'window', capture: false, passive: true })
   onWindowResize() {
     this.debug('onWindowResize');
-    this.toolbar.setSelectedTab(this.activeTabIndex);
+    this.toolbar && this.toolbar.setSelectedTab(this.activeTabIndex);
     this.container.reindexTabs();
   }
 
@@ -116,7 +116,7 @@ export class SuperTabsComponent implements ComponentInterface {
 
     requestAnimationFrame(() => {
       this.container.moveContainerByIndex(this.activeTabIndex, false);
-      this.toolbar.setSelectedTab(this.activeTabIndex, false);
+      this.toolbar && this.toolbar.setSelectedTab(this.activeTabIndex, false);
     });
   }
 
