@@ -21,17 +21,17 @@ pages:
   editOnGithub: true
 - name: config
   title: Configuration
-  path: /configuration
+  path: configuration
   source: doc-pages/configuration.md
   editOnGithub: true
 - name: install-ng
   title: Getting started with Angular
-  path: /getting-started/angular
+  path: getting-started/angular
   source: doc-pages/getting-started/angular.md
   editOnGithub: true
 - name: usage-ng
   title: Angular Usage Guide
-  path: /usage/angular
+  path: usage/angular
   source: doc-pages/usage/angular.md
   editOnGithub: true
 
@@ -43,19 +43,19 @@ menuItems:
   items:
   - title: Introduction
   - title: Angular
-    link: /getting-started/angular
+    link: getting-started/angular
   - title: JavaScript
-    link: /getting-started/javascript
+    link: getting-started/javascript
 
 - title: Configuration
-  link: /configuration
+  link: configuration
 
 - title: Usage guide
   name: usage-guide
   group: true
   items:
   - title: Angular
-    link: /usage/angular
+    link: usage/angular
 
 - title: Components
   name: components

@@ -40,4 +40,4 @@ export class HomePageModule {}
 ```   
 
 
-See the [Angular Usage Guide](/usage/angular) for examples on how to setup ***Super Tabs***.
+See the [Angular Usage Guide](usage/angular) for examples on how to setup ***Super Tabs***.
