@@ -1,16 +1,14 @@
-@import "../mixins";
+@import "../variables";
 
 :host {
-  @include st-tab-variables();
-
   display: flex;
   flex-flow: row nowrap;
   min-width: 100%;
   flex: 1 1 auto;
   position: relative;
   box-sizing: border-box;
-  width: var(--super-tab-width);
-  height: var(--super-tab-height);
+  width: var(--super-tab-width, $st-width);
+  height: var(--super-tab-height, $st-height);
   overflow: hidden;
   transform: translate3d(0, 0, 0);
   touch-action: pan-y;

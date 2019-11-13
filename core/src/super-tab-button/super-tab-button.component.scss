@@ -1,4 +1,4 @@
-@import "../mixins";
+@import "../variables";
 
 @mixin labelIcon {
   ion-label, ion-icon, ::slotted(ion-label), ::slotted(ion-icon) {
@@ -34,7 +34,6 @@
    * @prop --st-label-color-inactive: inactive label color. Defaults to `var(--st-base-color-inactive)`
    * @prop --st-label-color-active: active label color. Defaults to `var(--st-base-color-active)`
    */
-  @include st-button-variables();
 
   flex: 1 0 0;
   cursor: pointer;
@@ -69,21 +68,21 @@
   }
 
   @include label {
-    color: var(--st-label-color-inactive);
-    line-height: var(--st-label-line-height);
-    height: var(--st-label-height);
-    font-size: var(--st-label-font-size);
-    text-transform: var(--st-label-text-transform);
-    font-weight: var(--st-label-font-weight);
-    padding-bottom: var(--st-label-padding-bottom);
+    color: var(--st-label-color-inactive, $st-button-label-color-inactive);
+    line-height: var(--st-label-line-height, $st-button-label-line-height);
+    height: var(--st-label-height, $st-button-label-height);
+    font-size: var(--st-label-font-size, $st-button-label-font-size);
+    text-transform: var(--st-label-text-transform, $st-button-label-text-transform);
+    font-weight: var(--st-label-font-weight, $st-button-label-font-weight);
+    padding-bottom: var(--st-label-padding-bottom, $st-button-label-padding-bottom);
   }
 
   @include icon {
-    color: var(--st-icon-color-inactive);
-    fill: var(--st-icon-color-inactive);
-    min-height: var(--st-icon-size);
-    min-width: var(--st-icon-size);
-    font-size: var(--st-icon-size);
+    color: var(--st-icon-color-inactive, $st-button-icon-color-inactive);
+    fill: var(--st-icon-color-inactive, $st-button-icon-color-inactive);
+    min-height: var(--st-icon-size, $st-button-icon-size);
+    min-width: var(--st-icon-size, $st-button-icon-size);
+    font-size: var(--st-icon-size, $st-button-icon-size);
     padding-top: 12px;
   }
 }
@@ -101,12 +100,12 @@
   }
 
   @include label {
-    color: var(--st-label-color-active);
+    color: var(--st-label-color-active, $st-button-label-color-active);
   }
 
   @include icon {
-    color: var(--st-icon-color-active);
-    fill: var(--st-icon-color-active);
+    color: var(--st-icon-color-active, $st-button-label-color-active);
+    fill: var(--st-icon-color-active, $st-button-label-color-active);
   }
 }
 

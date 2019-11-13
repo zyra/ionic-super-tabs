@@ -1,10 +1,10 @@
-@import "../mixins";
+@import "../variables";
 
 :host {
   display: block;
-  height: var(--st-indicator-height);
+  height: var(--st-indicator-height, $st-indicator-height);
   width: 100px;
-  background: var(--st-indicator-color);
+  background: var(--st-indicator-color, $st-indicator-color);
   position: absolute;
   pointer-events: none;
   touch-action: none;
