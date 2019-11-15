@@ -1,10 +1,10 @@
 # Angular Usage Guide
 
-* [Basic usage](#basic-usage)
-* [Scrollable toolbar](#scrollable-toolbar)
-* [Toolbar positioning](#toolbar-positioning)
-* [Routing](#routing)
-* [Theming](#theming)
+* [Basic usage](usage/angular/#basic-usage)
+* [Scrollable toolbar](usage/angular/#scrollable-toolbar)
+* [Toolbar positioning](usage/angular/#toolbar-positioning)
+* [Routing](usage/angular/#routing)
+* [Theming](usage/angular/#theming)
 
 ## Basic usage
 ```html

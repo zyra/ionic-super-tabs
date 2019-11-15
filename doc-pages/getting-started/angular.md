@@ -1,6 +1,5 @@
 # Getting Started with Angular
 
-
 ## Installation
 
 #### 1. Install the module

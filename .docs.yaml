@@ -44,8 +44,8 @@ menuItems:
   - title: Introduction
   - title: Angular
     link: getting-started/angular
-  - title: JavaScript
-    link: getting-started/javascript
+#  - title: JavaScript
+#    link: getting-started/javascript
 
 - title: Configuration
   link: configuration
@@ -60,3 +60,7 @@ menuItems:
 - title: Components
   name: components
   group: true
+
+templates:
+- name: base
+  source: .doctemplate

@@ -1,7 +1,6 @@
 # Super Tabs
 Swipeable tabs for Ionic apps
 
-
 ## Introduction
 ***Super Tabs*** is a set of web components to build swipe-able views in <a href="https://ionicframework.com" target="_blank">Ionic</a> apps.
  The module was designed based on <a href="https://material.io/components/tabs/" target="_blank">Material Design Guidelines</a> 
