@@ -84,11 +84,11 @@ export class SuperTabsComponent implements ComponentInterface {
     const lastIndex = this.activeTabIndex;
 
     if (this.container) {
-      await this.container.setActiveTabIndex(index);
+      await this.container.setActiveTabIndex(index, true, animate);
     }
 
     if (this.toolbar) {
-      await this.toolbar.setActiveTab(index);
+      await this.toolbar.setActiveTab(index, true, animate);
     }
 
     this.emitTabChangeEvent(index, lastIndex);
