@@ -6,8 +6,131 @@
     <meta name="description" content="Swipeable tabs for Ionic apps">
     <base href="https://zyra.github.io/ionic-super-tabs/" />
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism-tomorrow.min.css" integrity="sha256-xevuwyBEb2ZYh4nDhj0g3Z/rDBnM569hg9Vq6gEw/Sg=" crossorigin="anonymous" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fafafa">
+    <style>
+    h1, h2, h3, h4, h5, h6, p, div, code {
+      -webkit-font-smoothing: auto;
+      -moz-osx-font-smoothing: auto;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: 3rem;
+      color: rgba(102, 126, 234, 0.6);
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      line-height: 1.4rem;
+      text-transform: uppercase;
+      margin-top: 3rem;
+      font-weight: 600;
+      color: rgba(95, 128, 187, 0.8);
+    }
+
+    h4 {
+        font-size: 1rem;
+        line-height: 1.2rem;
+        text-transform: uppercase;
+        margin-top: 1rem;
+        font-weight: 600;
+        color: rgba(63, 93, 150, 0.99);
+    }
+
+    h4 + p {
+      padding-top: 0.4rem;
+    }
+
+    p {
+      padding-top: 1rem;
+      font-size: 1rem;
+      line-height: 1.4rem;
+      letter-spacing: 0.07rem;
+      max-width: 600px;
+      text-align: justify;
+      color: rgba(0,0,0,0.87);
+    }
+
+    p code, table code {
+        background: rgb(45, 45, 45);
+        color: #ffb5b7;
+        padding: 2px 8px;
+        word-break: break-all;
+        letter-spacing: normal;
+        display: inline-block;
+    }
+
+    a {
+      color: #6470dc;
+    }
+
+    a:hover {
+      color: #4659ff;
+    }
+
+    table {
+        background: rgba(0,0,0,0.01);
+        margin: 1rem 0;
+        width: 100%;
+        max-width: 100%;
+        overflow-y: auto;
+    }
+
+    thead {
+
+    }
+
+    thead tr {
+
+    }
+
+    thead tr th {
+      padding: 1rem 0.5rem;
+      background: rgba(0,0,0,0.03);
+      color: rgba(0,0,0,0.67);
+    }
+
+    thead tr th:not(:last-child), tbody tr td:not(:last-child) {
+      border-right: 1px solid rgba(0,0,0,0.15);
+    }
+
+    thead tr, tbody tr:not(:last-child) {
+      border-bottom: 1px solid rgba(0,0,0,0.15);
+    }
+
+    tbody {
+
+    }
+
+    tbody tr {
+
+    }
+
+    tbody tr td {
+      padding: 0.5rem;
+    }
+
+    #graph, #graph + pre, #dependencies, #depends-on, #depends-on + ul {
+      display: none;
+    }
+
+    hr {
+      margin-top: 3rem;
+    }
+
+    #properties + table tbody tr td:nth-child(3) {
+      width: 40%;
+    }
+
+    #events + table tbody tr td:nth-child(2) {
+      width: 48%;
+    }
+
+    </style>
 </head>
 <body>
 <nav role="navigation">
@@ -29,10 +152,10 @@
 </nav>
 <div class="container mx-auto">
     <div class="flex">
-        <nav class="w-full lg:w-1/5 p-6 hidden lg:block" id="sidenav" role="navigation">
+        <nav class="w-full lg:w-1/4 p-6 hidden lg:block" id="sidenav" role="navigation">
             <ul class="list-reset" role="none">
-				<li role="none" class="mb-6">
-					<span class="font-semibold text-gray-500">Getting started</span>
+				<li role="none" class="my-1">
+					<span class="font-semibold text-gray-400">Getting started</span>
 					<ul class="list-reset ml-1" role="none">
 							<li role="none">
 								<a href="https://zyra.github.io/ionic-super-tabs/" role="link" aria-label="Introduction" class="block p-1 text-gray-600 hover:text-gray-700">Introduction</a>
@@ -40,24 +163,21 @@
 							<li role="none">
 								<a href="getting-started/angular" role="link" aria-label="Angular" class="block p-1 text-gray-600 hover:text-gray-700">Angular</a>
 							</li>
-							<li role="none">
-								<a href="getting-started/javascript" role="link" aria-label="JavaScript" class="block p-1 text-gray-600 hover:text-gray-700">JavaScript</a>
-							</li>
 					</ul>
 				</li>
-				<li role="none">
-					<a href="configuration" role="link" aria-label="Configuration" class="block p-1 text-gray-600 hover:text-gray-700">Configuration</a>
+				<li role="none" class="my=1">
+					<a href="configuration" role="link" aria-label="Configuration" class="block py-1 pr-1 text-gray-600 hover:text-gray-700">Configuration</a>
 				</li>
-				<li role="none" class="mb-6">
-					<span class="font-semibold text-gray-500">Usage guide</span>
+				<li role="none" class="my-1">
+					<span class="font-semibold text-gray-400">Usage guide</span>
 					<ul class="list-reset ml-1" role="none">
 							<li role="none">
 								<a href="usage/angular" role="link" aria-label="Angular" class="block p-1 text-gray-600 hover:text-gray-700">Angular</a>
 							</li>
 					</ul>
 				</li>
-				<li role="none" class="mb-6">
-					<span class="font-semibold text-gray-500">Components</span>
+				<li role="none" class="my-1">
+					<span class="font-semibold text-gray-400">Components</span>
 					<ul class="list-reset ml-1" role="none">
 							<li role="none">
 								<a href="components/super-tab" role="link" aria-label="super-tab" class="block p-1 text-gray-600 hover:text-gray-700">super-tab</a>
@@ -81,7 +201,7 @@
 				</li>
             </ul>
         </nav>
-        <div class="w-full p-6" id="content-container">
+        <div class="w-full lg:w-3/4 p-6" id="content-container">
 		<h1 id="super-tab-indicator">super-tab-indicator</h1>
 
 <!-- Auto Generated Below -->
@@ -132,7 +252,10 @@
         </div>
     </div>
 </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/prism.js" integrity="sha256-hFhFKoZ+mZTEMFJc8FQyuDDHVB1x9v+rJRu3DelyOHQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-typescript.js" integrity="sha256-pDpItYLMSApStvqbBe51zq9wIgBkVM81OWNH2pqL3mQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-shell-session.min.js" integrity="sha256-Jy8oX8yb4vOF1XXD4omkL5QRBb1wxSC8A0Ck9En8fa8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-bash.js" integrity="sha256-iAZZqWH4eVQeSza3X25jRVetUoFVIWqF/YYVyFJl9R0=" crossorigin="anonymous"></script>
 <script>
     (function () {
         const openButton = document.getElementById('sidenav-open-button');
