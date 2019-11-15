@@ -183,7 +183,7 @@ export class SuperTabsComponent implements ComponentInterface {
 
     const { index } = ev.detail;
 
-    this.container && this.container.setActiveTabIndex(index);
+    this.container && this.container.setActiveTabIndex(index, true, true);
 
     this.emitTabChangeEvent(index);
 
