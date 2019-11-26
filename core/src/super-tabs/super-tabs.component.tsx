@@ -4,7 +4,8 @@ import {
   Element,
   Event,
   EventEmitter,
-  h, Host,
+  h,
+  Host,
   Listen,
   Method,
   Prop,
@@ -12,6 +13,7 @@ import {
 } from '@stencil/core';
 import { SuperTabChangeEventDetail, SuperTabsConfig } from '../interface';
 import { debugLog, DEFAULT_CONFIG } from '../utils';
+
 
 /**
  * Root component that controls the other super-tab components.
@@ -79,7 +81,7 @@ export class SuperTabsComponent implements ComponentInterface {
    */
   @Method()
   async selectTab(index: number, animate: boolean = true) {
-    this.debug('selectTab called with :', index, animate);
+    this.debug('selectTab', index, animate);
 
     const lastIndex = this.activeTabIndex;
 
@@ -113,10 +115,16 @@ export class SuperTabsComponent implements ComponentInterface {
     // listen to `slotchange` event to detect any changes in children
     this.el.shadowRoot!.addEventListener('slotchange', this.onSlotchange.bind(this));
 
-
     requestAnimationFrame(() => {
-      this.container.moveContainerByIndex(this.activeTabIndex, false);
-      this.toolbar && this.toolbar.setSelectedTab(this.activeTabIndex, false);
+      if (this.container) {
+        this.container.moveContainerByIndex(this.activeTabIndex, false);
+      }
+
+      if (this.toolbar) {
+        this.toolbar.setSelectedTab(this.activeTabIndex, false);
+      }
+
+      this.setupEventListeners();
     });
   }
 
@@ -131,17 +139,34 @@ export class SuperTabsComponent implements ComponentInterface {
     this.indexChildren();
 
     // set the selected tab so the toolbar & container are aligned and in sync
-    // this.selectTab(this.activeTabIndex);
-    this.container && this.container.setActiveTabIndex(this.activeTabIndex);
-    this.toolbar && this.toolbar.setActiveTab(this.activeTabIndex);
 
-    // setup event listeners so we can synchronize child components
-    // 1. listen to selectedTabIndex changes emitted by the container.
-    this.container && this.el.addEventListener('selectedTabIndexChange', this.onContainerSelectedTabChange.bind(this));
-    // 2. listen to activeTabIndex changes emitted by the container
-    this.container && this.el.addEventListener('activeTabIndexChange', this.onContainerActiveTabChange.bind(this));
-    // 3. listen to tab button clicks emitted by the toolbar
-    this.toolbar && this.el.addEventListener('buttonClick', this.onToolbarButtonClick.bind(this));
+    if (this.container) {
+      this.container.setActiveTabIndex(this.activeTabIndex);
+    }
+
+    if (this.toolbar) {
+      this.toolbar.setActiveTab(this.activeTabIndex);
+    }
+  }
+
+  /**
+   * Setup event listeners to synchronize child components
+   */
+  private async setupEventListeners() {
+    if (this.container) {
+      await this.container.componentOnReady();
+      this.el.addEventListener('selectedTabIndexChange', this.onContainerSelectedTabChange.bind(this));
+      this.el.addEventListener('activeTabIndexChange', this.onContainerActiveTabChange.bind(this));
+    } else {
+      this.debug('setupEventListeners: container does not exist');
+    }
+
+    if (this.toolbar) {
+      await this.toolbar.componentOnReady();
+      this.el.addEventListener('buttonClick', this.onToolbarButtonClick.bind(this));
+    } else {
+      this.debug('setupEventListeners: toolbar does not exist');
+    }
   }
 
   private async onContainerSelectedTabChange(ev: any) {
@@ -168,7 +193,7 @@ export class SuperTabsComponent implements ComponentInterface {
   }
 
   private onContainerActiveTabChange(ev: any) {
-    this.debug('onContainerActiveTabChange called with: ', ev);
+    this.debug('onContainerActiveTabChange', ev);
     const index: number = ev.detail;
 
     this.emitTabChangeEvent(index);
@@ -179,7 +204,7 @@ export class SuperTabsComponent implements ComponentInterface {
   }
 
   private onToolbarButtonClick(ev: any) {
-    this.debug('onToolbarButtonClick called with: ', ev);
+    this.debug('onToolbarButtonClick', ev);
 
     const { index } = ev.detail;
 
@@ -191,7 +216,7 @@ export class SuperTabsComponent implements ComponentInterface {
   }
 
   private indexChildren() {
-    this.debug('indexChildren called');
+    this.debug('indexChildren');
 
     const container = this.el.querySelector('super-tabs-container');
     const toolbar = this.el.querySelector('super-tabs-toolbar');
@@ -210,8 +235,6 @@ export class SuperTabsComponent implements ComponentInterface {
   }
 
   private async onSlotchange() {
-    this.debug('onSlotChange fired');
-
     // re-index the child components
     this.indexChildren();
 

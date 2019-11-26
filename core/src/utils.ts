@@ -1,4 +1,3 @@
-import { QueueApi } from '@stencil/core';
 import { SuperTabsConfig } from './interface';
 
 
@@ -44,7 +43,7 @@ function getScrollCoord(start: number, dest: number, startTime: number, currentT
   return Math.ceil((timeFn * (dest - start)) + start);
 }
 
-function scroll(el: Element, startX: number, startY: number, x: number, y: number, startTime: number, duration: number, queue: QueueApi) {
+function scroll(el: Element, startX: number, startY: number, x: number, y: number, startTime: number, duration: number) {
   const currentTime = getTs();
   const scrollX = startX === x ? x : getScrollCoord(startX, x, startTime, currentTime, duration);
   const scrollY = startY === y ? y : getScrollCoord(startY, y, startTime, currentTime, duration);
@@ -56,11 +55,11 @@ function scroll(el: Element, startX: number, startY: number, x: number, y: numbe
   }
 
   requestAnimationFrame(() => {
-    scroll(el, startX, startY, x, y, startTime, duration, queue);
+    scroll(el, startX, startY, x, y, startTime, duration);
   });
 }
 
-export const scrollEl = (el: Element, x: number, y: number, duration: number = 300, queue: QueueApi) => {
+export const scrollEl = (el: Element, x: number, y: number, duration: number = 300) => {
   if (duration <= 0) {
     requestAnimationFrame(() => {
       el.scrollTo(x, y);
@@ -68,14 +67,11 @@ export const scrollEl = (el: Element, x: number, y: number, duration: number = 3
     return;
   }
 
-  queue.read(() => {
+  requestAnimationFrame(() => {
     const startX = el.scrollLeft;
     const startY = el.scrollTop;
     const now = getTs();
-
-    requestAnimationFrame(() => {
-      scroll(el, startX, startY, x, y, now, duration, queue);
-    });
+    scroll(el, startX, startY, x, y, now, duration);
   });
 };
 

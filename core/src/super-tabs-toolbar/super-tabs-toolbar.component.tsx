@@ -9,8 +9,8 @@ import {
   Listen,
   Method,
   Prop,
-  QueueApi,
   State,
+  Watch,
 } from '@stencil/core';
 import { SuperTabsConfig } from '../interface';
 import { checkGesture, debugLog, getNormalizedScrollX, getScrollX, pointerCoord, scrollEl, STCoord } from '../utils';
@@ -53,9 +53,6 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
    */
   @Prop({ reflectToAttr: true }) scrollablePadding: boolean = true;
 
-  /** @internal */
-  @Prop({ context: 'queue' }) queue!: QueueApi;
-
   /**
    * Emits an event when a button is clicked
    * Event data contains the clicked SuperTabButton component
@@ -76,13 +73,18 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   private leftThreshold: number = 0;
   private rightThreshold: number = 0;
   private slot!: HTMLSlotElement;
+  private hostCls: any = {};
+  private clientWidth: number = 0;
 
   async componentDidLoad() {
     this.debug('componentDidLoad');
 
+    this.setHostCls();
     await this.queryButtons();
     this.slot = this.el.shadowRoot!.querySelector('slot') as HTMLSlotElement;
     this.slot.addEventListener('slotchange', this.onSlotChange.bind(this));
+
+    this.clientWidth = this.el.clientWidth;
 
     if (this.activeTabIndex > 0) {
       requestAnimationFrame(() => {
@@ -92,7 +94,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   }
 
   componentWillUpdate() {
-    this.debug('componentWillUpdate fired');
+    this.debug('componentWillUpdate');
     this.updateThresholds();
   }
 
@@ -124,7 +126,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
       return Promise.resolve();
     }
 
-    scrollEl(this.buttonsContainerEl, scrollX, 0, animate ? this.config!.transitionDuration : 0, this.queue);
+    scrollEl(this.buttonsContainerEl, scrollX, 0, animate ? this.config!.transitionDuration : 0);
     return Promise.resolve();
   }
 
@@ -156,10 +158,10 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
       return;
     }
 
-    this.debug('onTouchStart called with: ', ev);
+    this.debug('onTouchStart', ev);
 
     const coords = pointerCoord(ev);
-    const vw = this.el.clientWidth;
+    const vw = this.clientWidth;
 
     if (coords.x < this.leftThreshold || coords.x > vw - this.rightThreshold) {
       // ignore this gesture, it started in the side menu touch zone
@@ -222,34 +224,50 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   @Listen('touchend', { passive: false, capture: true })
   async onTouchEnd() {
-    this.debug('onTouchEnd called');
+    this.debug('onTouchEnd');
 
     this.isDragging = false;
     this.initialCoords = void 0;
     this.lastPosX = void 0;
   }
 
+  @Watch('color')
+  async onColorUpdate() {
+    this.setHostCls();
+  }
+
+  private setHostCls() {
+    const cls: any = {};
+
+    if (typeof this.color === 'string' && this.color.trim().length > 0) {
+      cls['ion-color-' + this.color.trim()] = true;
+    }
+
+    this.hostCls = cls;
+  }
+
   private async onSlotChange() {
-    this.debug('onSlotChange fired');
+    this.debug('onSlotChange');
+    this.clientWidth = this.el.clientWidth;
     await this.queryButtons();
     await this.alignIndicator(this.activeTabIndex);
   }
 
   private async queryButtons() {
+    this.debug('Querying buttons');
     const buttons = Array.from(this.el.querySelectorAll('super-tab-button'));
     await Promise.all(buttons.map(b => b.componentOnReady()));
 
-    if (!buttons) {
-      return;
-    }
+    if (buttons) {
+      for (let i = 0; i < buttons.length; i++) {
+        const button = buttons[i];
+        button.index = i;
+        button.scrollableContainer = this.scrollable;
+        button.active = this.activeTabIndex === i;
 
-    for (let i = 0; i < buttons.length; i++) {
-      const button = buttons[i];
-      button.index = i;
-      button.scrollableContainer = this.scrollable;
-
-      if (this.activeTabIndex === i) {
-        this.markButtonActive(button);
+        if (button.active) {
+          this.activeButton = button;
+        }
       }
     }
 
@@ -289,31 +307,29 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
       return;
     }
 
-    this.queue.read(() => {
-      let pos: number;
+    let pos: number;
 
-      const ip = this.indicatorPosition!;
-      const iw = this.indicatorWidth!;
-      const mw = this.buttonsContainerEl!.clientWidth;
-      const sp = getScrollX(this.buttonsContainerEl!);
+    const ip = this.indicatorPosition!;
+    const iw = this.indicatorWidth!;
+    const mw = this.buttonsContainerEl!.clientWidth;
+    const sp = getScrollX(this.buttonsContainerEl!);
 
-      const centerDelta = (mw / 2 - iw / 2);
+    const centerDelta = (mw / 2 - iw / 2);
 
-      if (ip + iw + centerDelta > mw + sp) {
-        // we need to move the segment container to the left
-        const delta: number = ip + iw + centerDelta - mw - sp;
-        pos = sp + delta;
-      } else if (ip - centerDelta < sp) {
-        // we need to move the segment container to the right
-        pos = ip - centerDelta;
-        pos = Math.max(pos, 0);
-        pos = pos > ip ? ip - mw + iw : pos;
-      }
+    if (ip + iw + centerDelta > mw + sp) {
+      // we need to move the segment container to the left
+      const delta: number = ip + iw + centerDelta - mw - sp;
+      pos = sp + delta;
+    } else if (ip - centerDelta < sp) {
+      // we need to move the segment container to the right
+      pos = ip - centerDelta;
+      pos = Math.max(pos, 0);
+      pos = pos > ip ? ip - mw + iw : pos;
+    }
 
-      if (typeof pos! === 'number') {
-        this.moveContainer(pos!, animate);
-      }
-    });
+    if (typeof pos! === 'number') {
+      this.moveContainer(pos!, animate);
+    }
   }
 
   /**
@@ -323,18 +339,17 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
    * @param [animate] {boolean=false} whether to animate the transition
    */
   private alignIndicator(index: number, animate: boolean = false) {
-    this.debug('alignIndicator', index, animate);
+    if (!this.showIndicator) {
+      this.debug('showIndicator is false');
+      return;
+    }
 
     if (!this.indicatorEl) {
       this.debug('alignIndicator called before this.buttonsContainerEl was defined');
       return;
     }
 
-    if (!this.showIndicator) {
-      return;
-    }
-
-    this.queue.read(() => {
+    requestAnimationFrame(() => {
       const remainder = index % 1;
       const isDragging = this.isDragging = remainder > 0;
 
@@ -366,14 +381,10 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
         this.adjustContainerScroll(animate || !isDragging);
       }
 
-      this.debug('alignIndicator.pre-raf', this.indicatorPosition, this.indicatorWidth);
-      requestAnimationFrame(() => {
-        if (!this.showIndicator || this.indicatorEl) {
-          this.indicatorEl!.style.setProperty('--st-indicator-position-x', this.indicatorPosition + 'px');
-          this.indicatorEl!.style.setProperty('--st-indicator-scale-x', String(this.indicatorWidth! / 100));
-          this.indicatorEl!.style.setProperty('--st-indicator-transition-duration', this.isDragging ? '0' : `${this.config!.transitionDuration}ms`);
-        }
-      });
+
+      this.indicatorEl!.style.setProperty('--st-indicator-position-x', this.indicatorPosition + 'px');
+      this.indicatorEl!.style.setProperty('--st-indicator-scale-x', String(this.indicatorWidth! / 100));
+      this.indicatorEl!.style.setProperty('--st-indicator-transition-duration', this.isDragging ? '0' : `${this.config!.transitionDuration}ms`);
     });
   }
 
@@ -385,16 +396,8 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   }
 
   render() {
-    this.debug('Rendering');
-
-    const cls: any = {};
-
-    if (typeof this.color === 'string' && this.color.trim().length > 0) {
-      cls['ion-color-' + this.color.trim()] = true;
-    }
-
     return (
-      <Host role="navigation" class={cls}>
+      <Host role="navigation" class={this.hostCls}>
         <div class="buttons-container" ref={(ref: any) => this.buttonsContainerEl = ref}>
           <slot/>
           {this.showIndicator &&

@@ -91,7 +91,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     const tabs = Array.from(this.el.querySelectorAll('super-tab'));
     await Promise.all(tabs.map(t => t.componentOnReady()));
     this.tabs = tabs;
-    this.debug('onSlotChange', 'total tabs:', this.tabs.length);
+    this.debug('onSlotChange', this.tabs.length);
 
     if (this.ready && typeof this._activeTabIndex === 'number') {
       this.moveContainerByIndex(this._activeTabIndex, true);
@@ -99,7 +99,6 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   componentWillUpdate() {
-    this.debug('componentDidUpdate fired');
     this.indexTabs();
   }
 
@@ -120,11 +119,9 @@ export class SuperTabsContainerComponent implements ComponentInterface {
    */
   @Method()
   moveContainerByIndex(index: number, animate?: boolean): Promise<void> {
-    this.debug('moveContainerByIndex called with:', index, animate);
     const scrollX = this.indexToPosition(index);
 
     if (scrollX === 0 && index > 0) {
-      this.debug('moveContainerByIndex', 'scrollX === 0 && index > 0');
       return Promise.resolve();
     }
 
@@ -140,8 +137,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
    */
   @Method()
   moveContainer(scrollX: number, animate?: boolean): Promise<void> {
-    this.debug('moveContainer', scrollX, animate);
-    scrollEl(this.el, scrollX, 0, animate ? this.config!.transitionDuration : 0, this.queue);
+    scrollEl(this.el, scrollX, 0, animate ? this.config!.transitionDuration : 0);
     return Promise.resolve();
   }
 
@@ -179,7 +175,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       current.getRootScrollableEl()
         .then(el => {
           if (el) {
-            scrollEl(el, 0, 0, this.config!.transitionDuration, this.queue);
+            scrollEl(el, 0, 0, this.config!.transitionDuration);
           }
         });
     });
@@ -316,18 +312,16 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     const shortSwipe = this.config!.shortSwipeDuration! > 0 && deltaTime <= this.config!.shortSwipeDuration!;
     const shortSwipeDelta = coords.x - this.initialCoords!.x;
 
-    this.queue.read(() => {
-      let selectedTabIndex = this.calcSelectedTab();
-      const expectedTabIndex = Math.round(selectedTabIndex);
+    let selectedTabIndex = this.calcSelectedTab();
+    const expectedTabIndex = Math.round(selectedTabIndex);
 
-      if (shortSwipe && expectedTabIndex === this._activeTabIndex) {
-        selectedTabIndex += shortSwipeDelta > 0 ? -1 : 1;
-      }
+    if (shortSwipe && expectedTabIndex === this._activeTabIndex) {
+      selectedTabIndex += shortSwipeDelta > 0 ? -1 : 1;
+    }
 
-      selectedTabIndex = this.normalizeSelectedTab(selectedTabIndex);
-      this.updateActiveTabIndex(selectedTabIndex);
-      this.moveContainerByIndex(selectedTabIndex, true);
-    });
+    selectedTabIndex = this.normalizeSelectedTab(selectedTabIndex);
+    this.updateActiveTabIndex(selectedTabIndex);
+    this.moveContainerByIndex(selectedTabIndex, true);
 
     this.isDragging = false;
     this.initialCoords = void 0;
@@ -338,7 +332,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     this.scrollWidth = this.el.scrollWidth;
     this.clientWidth = this.el.clientWidth;
 
-    this.debug('indexTab called', 'scrollWidth:', this.scrollWidth, 'clientWidth:', this.clientWidth);
+    this.debug('indexTab', this.scrollWidth, this.clientWidth);
 
     if (this.scrollWidth === 0 || this.clientWidth === 0) {
       requestAnimationFrame(() => {
@@ -380,7 +374,6 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   private positionToIndex(scrollX: number) {
-    this.debug('positionToIndex', scrollX, this.clientWidth);
     const tabWidth = this.clientWidth;
     return scrollX / tabWidth;
   }
@@ -409,7 +402,6 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   render() {
-    this.debug('Rendering');
     return <slot></slot>;
   }
 }
