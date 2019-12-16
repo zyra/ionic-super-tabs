@@ -6,11 +6,9 @@ let didInitialize = false;
 
 export function appInit(doc: Document, zone: NgZone) {
   return async function () {
-    console.log('init');
 
     const win: any = doc.defaultView as any;
 
-    console.log('Initializing');
 
     if (!win || didInitialize) {
       return;
