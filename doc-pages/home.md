@@ -10,7 +10,7 @@ Swipeable tabs for Ionic apps
 ## Support
 
 #### Community support
-Having some trouble? search existing issues[issues](https://github.com/zyra/ionic-super-tabs/issues) on Github, or [submit a bug report](https://github.com/zyra/ionic-super-tabs/issues/new?assignees=&labels=&template=bug_report.md&title=).
+Having some trouble? search existing [issues](https://github.com/zyra/ionic-super-tabs/issues) on Github, or [submit a bug report](https://github.com/zyra/ionic-super-tabs/issues/new?assignees=&labels=&template=bug_report.md&title=).
 
 ## Contributing
 To request a feature create a new issue. Pull requests are welcome. 
