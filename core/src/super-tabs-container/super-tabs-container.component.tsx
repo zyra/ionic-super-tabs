@@ -167,6 +167,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   @Method()
   async scrollToTop() {
     if (this._activeTabIndex === undefined || this.tabs === undefined) {
+      this.debug('activeTabIndex or tabs was undefined');
       return;
     }
 

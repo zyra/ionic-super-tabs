@@ -9,7 +9,14 @@
   height: var(--super-tab-height, $st-height);
   position: relative;
   display: block;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  contain: size style;
+
+  &[noScroll] {
+    overflow-y: hidden;
+  }
+
   z-index: 1;
   flex-shrink: 0;
   flex-grow: 0;

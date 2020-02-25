@@ -1,4 +1,5 @@
-import { Component, ComponentInterface, Element, Method, h } from '@stencil/core';
+import { Component, ComponentInterface, Element, h, Method } from '@stencil/core';
+
 
 @Component({
   tag: 'super-tab',
@@ -24,7 +25,7 @@ export class SuperTabComponent implements ComponentInterface {
       return ionContent.getScrollElement();
     }
 
-    return null;
+    return this.el;
   }
 
   render() {
