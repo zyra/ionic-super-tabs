@@ -81,25 +81,19 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   private slot!: HTMLSlotElement;
   private ready?: boolean;
 
-  componentDidLoad() {
+  async componentDidLoad() {
     this.debug('componentDidLoad');
+    await this.indexTabs();
     this.slot = this.el.shadowRoot!.querySelector('slot') as HTMLSlotElement;
     this.slot.addEventListener('slotchange', this.onSlotChange.bind(this));
   }
 
   private async onSlotChange() {
-    const tabs = Array.from(this.el.querySelectorAll('super-tab'));
-    await Promise.all(tabs.map(t => t.componentOnReady()));
-    this.tabs = tabs;
     this.debug('onSlotChange', this.tabs.length);
-
-    if (this.ready && typeof this._activeTabIndex === 'number') {
-      this.moveContainerByIndex(this._activeTabIndex, true);
-    }
   }
 
-  componentWillUpdate() {
-    this.indexTabs();
+  async componentWillUpdate() {
+    await this.indexTabs();
   }
 
   /**
@@ -107,7 +101,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
    */
   @Method()
   async reindexTabs() {
-    this.indexTabs();
+    await this.indexTabs();
   }
 
   /**
@@ -334,7 +328,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     this.lastPosX = void 0;
   }
 
-  private indexTabs(): any {
+  private async indexTabs() {
     this.scrollWidth = this.el.scrollWidth;
     this.clientWidth = this.el.clientWidth;
 
@@ -345,6 +339,13 @@ export class SuperTabsContainerComponent implements ComponentInterface {
         this.indexTabs();
       });
       return;
+    }
+
+    const tabs = Array.from(this.el.querySelectorAll('super-tab'));
+    await Promise.all(tabs.map(t => t.componentOnReady()));
+    this.tabs = tabs;
+    if (this.ready && typeof this._activeTabIndex === 'number') {
+      this.moveContainerByIndex(this._activeTabIndex, true);
     }
 
     if (this.config) {

@@ -30,11 +30,8 @@ export class SuperTabButtonComponent implements ComponentInterface {
 
   private retryAttempts: number = 0;
 
-  componentWillLoad() {
-    this.indexChildren();
-  }
-
   componentDidLoad() {
+    this.indexChildren();
     this.initCmp();
   }
 

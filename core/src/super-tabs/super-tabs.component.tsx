@@ -80,7 +80,6 @@ export class SuperTabsComponent implements ComponentInterface {
     this.debug('setConfig called with: ', config);
 
     this._config = { ...DEFAULT_CONFIG, ...config };
-    this.propagateConfig();
   }
 
   private propagateConfig() {
@@ -126,8 +125,29 @@ export class SuperTabsComponent implements ComponentInterface {
     this.container.reindexTabs();
   }
 
+  async componentWillLoad() {
+    this.debug('componentWillLoad');
+
+    if (this.config) {
+      await this.setConfig(this.config);
+    }
+  }
+
   componentDidLoad() {
     this.debug('componentDidLoad');
+
+    // index children
+    this.indexChildren();
+
+    // set the selected tab so the toolbar & container are aligned and in sync
+
+    if (this.container) {
+      this.container.setActiveTabIndex(this.activeTabIndex);
+    }
+
+    if (this.toolbar) {
+      this.toolbar.setActiveTab(this.activeTabIndex);
+    }
 
     // listen to `slotchange` event to detect any changes in children
     this.el.shadowRoot!.addEventListener('slotchange', this.onSlotchange.bind(this));
@@ -161,27 +181,6 @@ export class SuperTabsComponent implements ComponentInterface {
     this.setupEventListeners();
 
     this.initPromiseResolve();
-  }
-
-  async componentWillLoad() {
-    this.debug('componentWillLoad');
-
-    if (this.config) {
-      await this.setConfig(this.config);
-    }
-
-    // index children
-    this.indexChildren();
-
-    // set the selected tab so the toolbar & container are aligned and in sync
-
-    if (this.container) {
-      this.container.setActiveTabIndex(this.activeTabIndex);
-    }
-
-    if (this.toolbar) {
-      this.toolbar.setActiveTab(this.activeTabIndex);
-    }
   }
 
   /**
