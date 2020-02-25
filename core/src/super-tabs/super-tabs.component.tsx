@@ -63,7 +63,7 @@ export class SuperTabsComponent implements ComponentInterface {
   private _config: SuperTabsConfig = DEFAULT_CONFIG;
   private initAttempts: number = 0;
   private initPromise: Promise<void>;
-  private initPromiseResolve: Function;
+  private initPromiseResolve!: Function;
 
   constructor() {
     this.initPromise = new Promise<void>((resolve) => {
