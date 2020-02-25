@@ -15,7 +15,7 @@ import { SuperTabChangeEventDetail, SuperTabsConfig } from '../interface';
 import { debugLog, DEFAULT_CONFIG } from '../utils';
 
 
-const maxSetupListenersAttempts: number = 1e3;
+const maxInitRetries: number = 1e3;
 
 /**
  * Root component that controls the other super-tab components.
@@ -61,7 +61,7 @@ export class SuperTabsComponent implements ComponentInterface {
   private container!: HTMLSuperTabsContainerElement;
   private toolbar!: HTMLSuperTabsToolbarElement;
   private _config: SuperTabsConfig = DEFAULT_CONFIG;
-  private setupListenersAttempts: number = 0;
+  private initAttempts: number = 0;
 
   /**
    * Set/update the configuration
@@ -119,16 +119,31 @@ export class SuperTabsComponent implements ComponentInterface {
     this.el.shadowRoot!.addEventListener('slotchange', this.onSlotchange.bind(this));
 
     requestAnimationFrame(() => {
-      if (this.container) {
-        this.container.moveContainerByIndex(this.activeTabIndex, false);
-      }
-
-      if (this.toolbar) {
-        this.toolbar.setSelectedTab(this.activeTabIndex, false);
-      }
-
-      this.setupEventListeners();
+      this.initComponent();
     });
+  }
+
+  private initComponent() {
+    if (!this.container) {
+      if (++this.initAttempts < maxInitRetries) {
+        requestAnimationFrame(() => {
+          this.initComponent();
+        });
+        return;
+      }
+    }
+
+    this.debug(`failed to init ${this.initAttempts} times`);
+
+    if (this.container) {
+      this.container.moveContainerByIndex(this.activeTabIndex, false);
+    }
+
+    if (this.toolbar) {
+      this.toolbar.setSelectedTab(this.activeTabIndex, false);
+    }
+
+    this.setupEventListeners();
   }
 
   async componentWillLoad() {
@@ -156,17 +171,6 @@ export class SuperTabsComponent implements ComponentInterface {
    * Setup event listeners to synchronize child components
    */
   private async setupEventListeners() {
-    if (!this.container) {
-      if (++this.setupListenersAttempts < maxSetupListenersAttempts) {
-        requestAnimationFrame(() => {
-          this.setupEventListeners();
-        });
-        return;
-      }
-    }
-
-    this.debug(`failed to setup event listeners ${this.setupListenersAttempts} times`);
-
     if (this.container) {
       await this.container.componentOnReady();
       this.el.addEventListener('selectedTabIndexChange', this.onContainerSelectedTabChange.bind(this));
