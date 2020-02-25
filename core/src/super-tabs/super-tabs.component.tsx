@@ -62,6 +62,14 @@ export class SuperTabsComponent implements ComponentInterface {
   private toolbar!: HTMLSuperTabsToolbarElement;
   private _config: SuperTabsConfig = DEFAULT_CONFIG;
   private initAttempts: number = 0;
+  private initPromise: Promise<void>;
+  private initPromiseResolve: Function;
+
+  constructor() {
+    this.initPromise = new Promise<void>((resolve) => {
+      this.initPromiseResolve = resolve;
+    });
+  }
 
   /**
    * Set/update the configuration
@@ -72,6 +80,10 @@ export class SuperTabsComponent implements ComponentInterface {
     this.debug('setConfig called with: ', config);
 
     this._config = { ...DEFAULT_CONFIG, ...config };
+    this.propagateConfig();
+  }
+
+  private propagateConfig() {
     this.container && (this.container.config = this._config);
     this.toolbar && (this.toolbar.config = this._config);
   }
@@ -85,6 +97,8 @@ export class SuperTabsComponent implements ComponentInterface {
   @Method()
   async selectTab(index: number, animate: boolean = true) {
     this.debug('selectTab', index, animate);
+
+    await this.initPromise;
 
     const lastIndex = this.activeTabIndex;
 
@@ -143,7 +157,10 @@ export class SuperTabsComponent implements ComponentInterface {
       this.toolbar.setSelectedTab(this.activeTabIndex, false);
     }
 
+    this.propagateConfig();
     this.setupEventListeners();
+
+    this.initPromiseResolve();
   }
 
   async componentWillLoad() {
@@ -241,15 +258,13 @@ export class SuperTabsComponent implements ComponentInterface {
 
     if (container && this.container !== container) {
       this.container = container;
-
-      container.config = this._config;
     }
 
     if (toolbar && this.toolbar !== toolbar) {
       this.toolbar = toolbar;
-
-      toolbar.config = this._config;
     }
+
+    this.propagateConfig();
   }
 
   private async onSlotchange() {
