@@ -3,7 +3,8 @@
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 WORK_DIR=${TMP:-$DIR}
 WS_DIR="${WORK_DIR}/.super-tabs-tmp"
-EXAMPLE_PROJECT_DIR="$(cd "${DIR}/../" >/dev/null 2>&1 && pwd)/ionic-super-tabs-example"
+EXAMPLE_PROJECT_DIR_DEFAULT="$(cd "${DIR}/../" >/dev/null 2>&1 && pwd)/ionic-super-tabs-example"
+EXAMPLE_PROJECT_DIR=${EXAMPLE_PROJECT_DIR:-${EXAMPLE_PROJECT_DIR_DEFAULT}}
 
 trap '_cleanWorkspace' EXIT
 trap 'exit' SIGINT SIGTERM

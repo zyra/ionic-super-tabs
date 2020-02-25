@@ -15,6 +15,8 @@ import { SuperTabChangeEventDetail, SuperTabsConfig } from '../interface';
 import { debugLog, DEFAULT_CONFIG } from '../utils';
 
 
+const maxSetupListenersAttempts: number = 1e3;
+
 /**
  * Root component that controls the other super-tab components.
  *
@@ -59,6 +61,7 @@ export class SuperTabsComponent implements ComponentInterface {
   private container!: HTMLSuperTabsContainerElement;
   private toolbar!: HTMLSuperTabsToolbarElement;
   private _config: SuperTabsConfig = DEFAULT_CONFIG;
+  private setupListenersAttempts: number = 0;
 
   /**
    * Set/update the configuration
@@ -153,6 +156,17 @@ export class SuperTabsComponent implements ComponentInterface {
    * Setup event listeners to synchronize child components
    */
   private async setupEventListeners() {
+    if (!this.container) {
+      if (++this.setupListenersAttempts < maxSetupListenersAttempts) {
+        requestAnimationFrame(() => {
+          this.setupEventListeners();
+        });
+        return;
+      }
+    }
+
+    this.debug(`failed to setup event listeners ${this.setupListenersAttempts} times`);
+
     if (this.container) {
       await this.container.componentOnReady();
       this.el.addEventListener('selectedTabIndexChange', this.onContainerSelectedTabChange.bind(this));
