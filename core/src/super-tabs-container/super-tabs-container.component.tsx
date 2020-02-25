@@ -166,12 +166,17 @@ export class SuperTabsContainerComponent implements ComponentInterface {
    */
   @Method()
   async scrollToTop() {
-    if (this._activeTabIndex === undefined) {
+    if (this._activeTabIndex === undefined || this.tabs === undefined) {
       return;
     }
 
     const current = this.tabs[this._activeTabIndex];
     this.queue.read(() => {
+      if (!current) {
+        this.debug('Current active tab was undefined in scrollToTop');
+        return;
+      }
+
       current.getRootScrollableEl()
         .then(el => {
           if (el) {
