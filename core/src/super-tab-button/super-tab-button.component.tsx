@@ -1,6 +1,8 @@
 import { Component, ComponentInterface, Element, h, Host, Prop, State } from '@stencil/core';
 
 
+const maxRetryAttempts = 1e3;
+
 @Component({
   tag: 'super-tab-button',
   styleUrl: 'super-tab-button.component.scss',
@@ -26,11 +28,28 @@ export class SuperTabButtonComponent implements ComponentInterface {
   @State() label!: HTMLElement | null;
   @State() icon!: HTMLElement | null;
 
+  private retryAttempts: number = 0;
+
   componentWillLoad() {
     this.indexChildren();
   }
 
   componentDidLoad() {
+    this.initCmp();
+  }
+
+  private initCmp() {
+    if (!this.el || !this.el.shadowRoot) {
+      if (++this.retryAttempts < maxRetryAttempts) {
+        requestAnimationFrame(() => this.initCmp());
+        return;
+      }
+    }
+
+    if (!this.label && !this.icon) {
+      this.indexChildren();
+    }
+
     const slot = this.el!.shadowRoot!.querySelector('slot');
     slot!.addEventListener('slotchange', () => {
       this.indexChildren();
