@@ -1,6 +1,6 @@
 {
   "name": "@ionic-super-tabs/core",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
