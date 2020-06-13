@@ -2,7 +2,7 @@
 import * as d from './proxies';
 
 export const DIRECTIVES = [
-d.SuperTab,
+  d.SuperTab,
   d.SuperTabButton,
   d.SuperTabs,
   d.SuperTabsContainer,
