@@ -329,12 +329,10 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   private async indexTabs() {
-    this.scrollWidth = this.el.scrollWidth;
-    this.clientWidth = this.el.clientWidth;
+    const boundingRect = this.el.getBoundingClientRect();
+    this.clientWidth = boundingRect.width;
 
-    this.debug('indexTab', this.scrollWidth, this.clientWidth);
-
-    if (this.scrollWidth === 0 || this.clientWidth === 0) {
+    if (this.clientWidth === 0) {
       requestAnimationFrame(() => {
         this.indexTabs();
       });
@@ -342,6 +340,11 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     }
 
     const tabs = Array.from(this.el.querySelectorAll('super-tab'));
+
+    this.scrollWidth = this.clientWidth * tabs.length;
+
+    this.debug('indexTab', this.scrollWidth, this.clientWidth);
+
     await Promise.all(tabs.map(t => t.componentOnReady()));
     this.tabs = tabs;
     if (this.ready && typeof this._activeTabIndex === 'number') {

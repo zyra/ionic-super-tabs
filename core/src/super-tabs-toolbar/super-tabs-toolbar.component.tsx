@@ -61,8 +61,24 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   @State() buttons: HTMLSuperTabButtonElement[] = [];
 
+  /**
+   * Current indicator position.
+   * This value is undefined until the component is fully initialized.
+   * @private
+   */
   private indicatorPosition: number | undefined;
+
+  /**
+   * Current indicator width.
+   * This value is undefined until the component is fully initialized.
+   * @private
+   */
   private indicatorWidth: number | undefined;
+
+  /**
+   * Reference to the current active button
+   * @private
+   */
   private activeButton?: HTMLSuperTabButtonElement;
   private activeTabIndex: number = 0;
   private indicatorEl: HTMLSuperTabIndicatorElement | undefined;
@@ -219,7 +235,8 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
     if (scrollX === scrollLeft) {
       return;
     }
-    this.moveContainer(scrollX, false);
+
+    return this.moveContainer(scrollX, false);
   }
 
   @Listen('touchend', { passive: false, capture: true })
@@ -353,10 +370,10 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
       const remainder = index % 1;
       const isDragging = this.isDragging = remainder > 0;
 
-      let position: number, width: number;
-
       const floor = Math.floor(index), ceil = Math.ceil(index);
       const button = this.buttons[floor];
+
+      let position: number, width: number;
 
       if (!button) {
         return;
@@ -367,6 +384,14 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
       if (this.isDragging && floor !== ceil) {
         const buttonB = this.buttons[ceil];
+
+        if (!buttonB) {
+          // the scroll position we received is higher than the max possible position
+          // this could happen due to bad CSS (by developer or this module)
+          // or bad scrolling logic?
+          return;
+        }
+
         const buttonBWidth = buttonB.clientWidth;
         const buttonBPosition = buttonB.offsetLeft;
 
