@@ -1,6 +1,6 @@
 {
   "name": "@ionic-super-tabs/angular",
-  "version": "7.0.2",
+  "version": "7.0.3",
   "description": "Ionic Super Tabs bindings for Angular applications",
   "scripts": {
     "build": "ng build",
@@ -11,7 +11,7 @@
   "author": "Zyra Media Inc. <info@zyra.ca>",
   "license": "MIT",
   "dependencies": {
-    "@ionic-super-tabs/core": "^7.0.2"
+    "@ionic-super-tabs/core": "^7.0.3"
   },
   "keywords": [
     "ionic",
