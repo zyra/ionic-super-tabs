@@ -7,9 +7,9 @@ clone:
   depth: 1
 
 volumes:
-  - name: dockersock
-    host:
-      path: /var/run/docker.sock
+- name: dockersock
+  host:
+    path: /var/run/docker.sock
 
 steps:
 - name: Build
@@ -52,15 +52,18 @@ steps:
   image: harbor.zyra.ca/public/zmdocs:v1.1.0
   when:
     branch:
-      - master
+    - master
   commands:
-    - zmdocs g
+  - zmdocs g
 
 - name: Publish docs
   image: plugins/gh-pages
   when:
+    event:
+      exclude:
+      - pull_request
     branch:
-      - master
+    - master
   settings:
     username:
       from_secret: gh_user
@@ -80,6 +83,6 @@ steps:
 
 ---
 kind: signature
-hmac: 2ff061af89c02c2bddb9f93563be4b445fc15148fa4231c4f5aa77149de40477
+hmac: 377034cc4d231e71c45182662eae2f61dfe50b2d363982d5056d871954af320e
 
 ...

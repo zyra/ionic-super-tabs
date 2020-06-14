@@ -13,7 +13,7 @@ import {
   Watch,
 } from '@stencil/core';
 import { SuperTabsConfig } from '../interface';
-import { checkGesture, debugLog, getNormalizedScrollX, getScrollX, pointerCoord, scrollEl, STCoord } from '../utils';
+import { checkGesture, debugLog, getNormalizedScrollX, pointerCoord, scrollEl, STCoord } from '../utils';
 
 
 @Component({
@@ -61,36 +61,52 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   @State() buttons: HTMLSuperTabButtonElement[] = [];
 
+  width!: number;
+  offsetLeft!: number;
+
+  /**
+   * Current indicator position.
+   * This value is undefined until the component is fully initialized.
+   * @private
+   */
   private indicatorPosition: number | undefined;
+
+  /**
+   * Current indicator width.
+   * This value is undefined until the component is fully initialized.
+   * @private
+   */
   private indicatorWidth: number | undefined;
+
+  /**
+   * Reference to the current active button
+   * @private
+   */
   private activeButton?: HTMLSuperTabButtonElement;
   private activeTabIndex: number = 0;
   private indicatorEl: HTMLSuperTabIndicatorElement | undefined;
   private buttonsContainerEl: HTMLDivElement | undefined;
   private initialCoords?: STCoord;
   private lastPosX: number | undefined;
+  private touchStartTs: number = 0;
+  private lastClickTs: number = 0;
   private isDragging: boolean | undefined;
   private leftThreshold: number = 0;
   private rightThreshold: number = 0;
   private slot!: HTMLSlotElement;
   private hostCls: any = {};
-  private clientWidth: number = 0;
 
   async componentDidLoad() {
-    this.debug('componentDidLoad');
-
     this.setHostCls();
     await this.queryButtons();
     this.slot = this.el.shadowRoot!.querySelector('slot') as HTMLSlotElement;
     this.slot.addEventListener('slotchange', this.onSlotChange.bind(this));
 
-    this.clientWidth = this.el.clientWidth;
+    this.updateWidth();
 
-    if (this.activeTabIndex > 0) {
-      requestAnimationFrame(() => {
-        this.alignIndicator(this.activeTabIndex);
-      });
-    }
+    requestAnimationFrame(() => {
+      this.setActiveTab(this.activeTabIndex, true, false);
+    });
   }
 
   componentWillUpdate() {
@@ -98,9 +114,23 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
     this.updateThresholds();
   }
 
+  componentDidRender() {
+    this.updateWidth();
+  }
+
+  private updateWidth() {
+    const cr = this.el.getBoundingClientRect();
+    this.width = Math.round(cr.width * 100) / 100;
+    this.offsetLeft = cr.left;
+  }
+
   /** @internal */
   @Method()
   setActiveTab(index: number, align?: boolean, animate?: boolean): Promise<void> {
+    index = Math.max(0, Math.min(Math.round(index), this.buttons.length - 1));
+
+    this.debug('setActiveTab', index, align, animate);
+
     this.activeTabIndex = index;
     this.markButtonActive(this.buttons[index]);
 
@@ -126,16 +156,11 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
       return Promise.resolve();
     }
 
-    scrollEl(this.buttonsContainerEl, scrollX, 0, animate ? this.config!.transitionDuration : 0);
+    scrollEl(this.buttonsContainerEl, scrollX, this.config!.nativeSmoothScroll!, animate ? this.config!.transitionDuration : 0);
     return Promise.resolve();
   }
 
-  @Listen('click')
-  onClick(ev: any) {
-    if (!ev || !ev.target) {
-      return;
-    }
-
+  private getButtonFromEv(ev: any): HTMLSuperTabButtonElement | undefined {
     let button: HTMLSuperTabButtonElement = ev.target;
 
     const tag = button.tagName.toLowerCase();
@@ -148,6 +173,31 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
       button = button.closest('super-tab-button') as HTMLSuperTabButtonElement;
     }
 
+    return button;
+  }
+
+  @Listen('click')
+  onClick(ev: any) {
+    if (!ev || !ev.target) {
+      this.debug('Got a click event with no target!', ev);
+      return;
+    }
+
+    if (Date.now() - this.touchStartTs <= 150) {
+      return;
+    }
+
+    const button = this.getButtonFromEv(ev);
+
+    if (!button) {
+      return;
+    }
+
+    this.onButtonClick(button);
+  }
+
+  private onButtonClick(button: HTMLSuperTabButtonElement) {
+    this.lastClickTs = Date.now();
     this.setActiveTab(button.index as number, true, true);
     this.buttonClick.emit(button);
   }
@@ -161,13 +211,14 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
     this.debug('onTouchStart', ev);
 
     const coords = pointerCoord(ev);
-    const vw = this.clientWidth;
+    const vw = this.width;
 
     if (coords.x < this.leftThreshold || coords.x > vw - this.rightThreshold) {
       // ignore this gesture, it started in the side menu touch zone
       return;
     }
 
+    this.touchStartTs = Date.now();
     this.initialCoords = coords;
     this.lastPosX = coords.x;
   }
@@ -175,8 +226,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   @Listen('touchmove', { passive: true, capture: true })
   async onTouchMove(ev: TouchEvent) {
     if (!this.buttonsContainerEl || !this.scrollable || !this.initialCoords || typeof this.lastPosX !== 'number') {
-      this.debug('onTouchMove called before this.buttonsContainerEl was defined');
-      return Promise.resolve();
+      return;
     }
 
     const coords = pointerCoord(ev);
@@ -205,26 +255,45 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
     // get delta X
     const deltaX: number = this.lastPosX - coords.x;
 
-    // update last X value
-    this.lastPosX = coords.x;
-
     if (deltaX === 0) {
       return;
     }
 
-    // scroll container
-    const scrollLeft = getScrollX(this.buttonsContainerEl!);
-    const scrollX = getNormalizedScrollX(this.buttonsContainerEl!, deltaX);
+    // update last X value
+    this.lastPosX = coords.x;
 
-    if (scrollX === scrollLeft) {
-      return;
-    }
-    this.moveContainer(scrollX, false);
+    requestAnimationFrame(() => {
+      if (!this.isDragging) {
+        // when swiping fast; this might run after we're already done scrolling
+        // which leads to "choppy" animations since this instantly scrolls to location
+        return;
+      }
+
+      // scroll container
+      const scrollX = getNormalizedScrollX(this.buttonsContainerEl!, this.buttonsContainerEl!.clientWidth, deltaX);
+
+      if (scrollX === this.buttonsContainerEl!.scrollLeft) {
+        return;
+      }
+
+      this.buttonsContainerEl!.scroll(scrollX, 0);
+    });
   }
 
   @Listen('touchend', { passive: false, capture: true })
-  async onTouchEnd() {
-    this.debug('onTouchEnd');
+  async onTouchEnd(ev: TouchEvent) {
+    if (this.lastClickTs < this.touchStartTs && Date.now() - this.touchStartTs <= 150) {
+      const coords = pointerCoord(ev);
+      if (Math.abs(coords.x - this.initialCoords?.x!) < this.config?.dragThreshold!) {
+        const button = this.getButtonFromEv(ev);
+
+        if (!button) {
+          return;
+        }
+
+        this.onButtonClick(button);
+      }
+    }
 
     this.isDragging = false;
     this.initialCoords = void 0;
@@ -248,9 +317,9 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   private async onSlotChange() {
     this.debug('onSlotChange');
-    this.clientWidth = this.el.clientWidth;
+    this.updateWidth();
     await this.queryButtons();
-    await this.alignIndicator(this.activeTabIndex);
+    await this.setActiveTab(this.activeTabIndex, true);
   }
 
   private async queryButtons() {
@@ -290,6 +359,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
   private markButtonActive(button: HTMLSuperTabButtonElement) {
     if (!button) {
+      this.debug('markButtonActive', 'button was undefined!');
       return;
     }
 
@@ -299,6 +369,12 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
     button.active = true;
     this.activeButton = button;
+  }
+
+  private setButtonsContainerEl(el: HTMLDivElement) {
+    if (el) {
+      this.buttonsContainerEl = el;
+    }
   }
 
   private adjustContainerScroll(animate: boolean) {
@@ -311,23 +387,29 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
 
     const ip = this.indicatorPosition!;
     const iw = this.indicatorWidth!;
-    const mw = this.buttonsContainerEl!.clientWidth;
-    const sp = getScrollX(this.buttonsContainerEl!);
+    const mw = this.buttonsContainerEl.clientWidth;
+    const sp = this.buttonsContainerEl.scrollLeft;
 
-    const centerDelta = (mw / 2 - iw / 2);
+    const centerDelta = ((mw / 2 - iw / 2));
 
-    if (ip + iw + centerDelta > mw + sp) {
+    const a = Math.floor((ip + iw + centerDelta));
+    const b = Math.floor((ip - centerDelta));
+    const c = Math.floor((mw + sp));
+
+    if (a > c) {
       // we need to move the segment container to the left
-      const delta: number = ip + iw + centerDelta - mw - sp;
-      pos = sp + delta;
-    } else if (ip - centerDelta < sp) {
+      pos = ip + iw + centerDelta - mw;
+    } else if (b < sp) {
       // we need to move the segment container to the right
-      pos = ip - centerDelta;
-      pos = Math.max(pos, 0);
+      pos = Math.max(ip - centerDelta, 0);
       pos = pos > ip ? ip - mw + iw : pos;
+    } else {
+      return;
     }
 
-    if (typeof pos! === 'number') {
+    if (!animate) {
+      scrollEl(this.buttonsContainerEl, pos!, false, 50);
+    } else {
       this.moveContainer(pos!, animate);
     }
   }
@@ -338,49 +420,50 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
    * @param index {number} the active tab index
    * @param [animate] {boolean=false} whether to animate the transition
    */
-  private alignIndicator(index: number, animate: boolean = false) {
-    if (!this.showIndicator) {
-      this.debug('showIndicator is false');
+  private async alignIndicator(index: number, animate: boolean = false) {
+    if (!this.showIndicator || !this.indicatorEl) {
       return;
     }
 
-    if (!this.indicatorEl) {
-      this.debug('alignIndicator called before this.buttonsContainerEl was defined');
+    this.debug('Aligning indicator', index);
+
+    const remainder = index % 1;
+    const isDragging = this.isDragging = remainder > 0;
+
+    const floor = Math.floor(index), ceil = Math.ceil(index);
+    const button = this.buttons[floor];
+
+    if (!button) {
       return;
     }
 
-    requestAnimationFrame(() => {
-      const remainder = index % 1;
-      const isDragging = this.isDragging = remainder > 0;
+    let position = button.offsetLeft;
+    let width = button.clientWidth;
 
-      let position: number, width: number;
+    if (isDragging && floor !== ceil) {
+      const buttonB = this.buttons[ceil];
 
-      const floor = Math.floor(index), ceil = Math.ceil(index);
-      const button = this.buttons[floor];
-
-      if (!button) {
+      if (!buttonB) {
+        // the scroll position we received is higher than the max possible position
+        // this could happen due to bad CSS (by developer or this module)
+        // or bad scrolling logic?
         return;
       }
 
-      position = button.offsetLeft;
-      width = button.clientWidth;
+      const buttonBPosition = buttonB.offsetLeft;
+      const buttonBWidth = buttonB.clientWidth;
 
-      if (this.isDragging && floor !== ceil) {
-        const buttonB = this.buttons[ceil];
-        const buttonBWidth = buttonB.clientWidth;
-        const buttonBPosition = buttonB.offsetLeft;
+      position += remainder * (buttonBPosition - position);
+      width += remainder * (buttonBWidth - width);
+    }
 
-        position += remainder * (buttonBPosition - position);
-        width += remainder * (buttonBWidth - width);
-      }
-
+    requestAnimationFrame(() => {
       this.indicatorPosition = position;
       this.indicatorWidth = width;
 
       if (this.scrollable) {
         this.adjustContainerScroll(animate || !isDragging);
       }
-
 
       this.indicatorEl!.style.setProperty('--st-indicator-position-x', this.indicatorPosition + 'px');
       this.indicatorEl!.style.setProperty('--st-indicator-scale-x', String(this.indicatorWidth! / 100));
@@ -398,7 +481,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   render() {
     return (
       <Host role="navigation" class={this.hostCls}>
-        <div class="buttons-container" ref={(ref: any) => this.buttonsContainerEl = ref}>
+        <div class="buttons-container" ref={(ref: any) => this.setButtonsContainerEl(ref)}>
           <slot/>
           {this.showIndicator &&
           <super-tab-indicator ref={(ref: any) => this.indicatorEl = ref}

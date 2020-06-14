@@ -2,11 +2,11 @@ import { SuperTabsConfig } from './interface';
 
 
 export const DEFAULT_CONFIG: SuperTabsConfig = {
-  dragThreshold: 10,
+  dragThreshold: 20,
   allowElementScroll: false,
   maxDragAngle: 40,
   sideMenuThreshold: 50,
-  transitionDuration: 300,
+  transitionDuration: 150,
   shortSwipeDuration: 300,
   debug: false,
   avoidElements: false,
@@ -33,7 +33,17 @@ export function pointerCoord(ev: any): STCoord {
   return { x: 0, y: 0 };
 }
 
-export const getTs = () => window.performance && window.performance.now ? window.performance.now() : Date.now();
+const nativeScrollAvailable: boolean = 'scrollBehavior' in document.documentElement.style;
+
+let _getTs: () => number;
+
+if (window.performance && window.performance.now) {
+  _getTs = window.performance.now.bind(window.performance);
+} else {
+  _getTs = Date.now.bind(Date);
+}
+
+export const getTs = _getTs;
 
 export const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
 
@@ -43,35 +53,39 @@ function getScrollCoord(start: number, dest: number, startTime: number, currentT
   return Math.ceil((timeFn * (dest - start)) + start);
 }
 
-function scroll(el: Element, startX: number, startY: number, x: number, y: number, startTime: number, duration: number) {
+function scroll(el: Element, startX: number, x: number, startTime: number, duration: number) {
   const currentTime = getTs();
   const scrollX = startX === x ? x : getScrollCoord(startX, x, startTime, currentTime, duration);
-  const scrollY = startY === y ? y : getScrollCoord(startY, y, startTime, currentTime, duration);
 
-  el.scrollTo(scrollX, scrollY);
+  el.scrollTo(scrollX, 0);
 
   if (currentTime - startTime >= duration) {
     return;
   }
 
   requestAnimationFrame(() => {
-    scroll(el, startX, startY, x, y, startTime, duration);
+    scroll(el, startX, x, startTime, duration);
   });
 }
 
-export const scrollEl = (el: Element, x: number, y: number, duration: number = 300) => {
+export const scrollEl = (el: Element, x: number, native: boolean, duration: number = 300) => {
   if (duration <= 0) {
     requestAnimationFrame(() => {
-      el.scrollTo(x, y);
+      el.scrollTo(x, 0);
+    });
+    return;
+  }
+
+  if (native && nativeScrollAvailable) {
+    el.scrollTo({
+      left: x,
+      behavior: 'smooth',
     });
     return;
   }
 
   requestAnimationFrame(() => {
-    const startX = el.scrollLeft;
-    const startY = el.scrollTop;
-    const now = getTs();
-    scroll(el, startX, startY, x, y, now, duration);
+    scroll(el, el.scrollLeft, x, getTs(), duration);
   });
 };
 
@@ -97,22 +111,8 @@ export function checkGesture(newCoords: STCoord, initialCoords: STCoord, config:
   return false;
 }
 
-export function getScrollX(el: HTMLElement, delta?: number) {
-  return el.scrollLeft + (typeof delta === 'number' ? delta : 0);
-}
-
-export function getScrollY(el: HTMLElement, delta?: number) {
-  return el.scrollTop + (typeof delta === 'number' ? delta : 0);
-}
-
-export function getNormalizedScrollX(el: HTMLElement, delta?: number) {
-  const minX = 0;
-  const maxX = el.scrollWidth - el.clientWidth;
-  let scrollX = getScrollX(el, delta);
-
-  scrollX = Math.max(minX, Math.min(maxX, scrollX));
-
-  return scrollX;
+export function getNormalizedScrollX(el: HTMLElement, width: number, delta: number = 0): number {
+  return Math.max(0, Math.min(el.scrollWidth - width, el.scrollLeft + delta))
 }
 
 const debugStyle1 = 'background: linear-gradient(135deg,#4150b2,#f71947); border: 1px solid #9a9a9a; color: #ffffff; border-bottom-left-radius: 2px; border-top-left-radius: 2px; padding: 2px 0 2px 4px;';

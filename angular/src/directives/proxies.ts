@@ -3,7 +3,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, NgZone } from '@angular/core';
 import { ProxyCmp, proxyOutputs } from './proxies-utils';
 
-import { Components } from '@ionic-super-tabs/core';
+import { Components } from '@ionic-super-tabs/core'
 
 export declare interface SuperTab extends Components.SuperTab {}
 @ProxyCmp({inputs: ['noScroll'], 'methods': ['getRootScrollableEl']})

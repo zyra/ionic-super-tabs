@@ -7,7 +7,7 @@
     "build": "lerna run build --concurrency 1",
     "test": "lerna run test"
   },
-  "author": "",
+  "author": "Zyra Media Inc. <info@zyra.ca>",
   "license": "MIT",
   "devDependencies": {
     "lerna": "latest",

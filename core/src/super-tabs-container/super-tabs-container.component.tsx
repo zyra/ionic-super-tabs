@@ -12,16 +12,7 @@ import {
   State,
 } from '@stencil/core';
 import { SuperTabsConfig } from '../interface';
-import {
-  checkGesture,
-  debugLog,
-  getNormalizedScrollX,
-  getScrollX,
-  getTs,
-  pointerCoord,
-  scrollEl,
-  STCoord,
-} from '../utils';
+import { checkGesture, debugLog, getTs, pointerCoord, scrollEl, STCoord } from '../utils';
 
 
 @Component({
@@ -77,12 +68,13 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   private leftThreshold: number = 0;
   private rightThreshold: number = 0;
   private scrollWidth: number = 0;
-  private clientWidth: number = 0;
   private slot!: HTMLSlotElement;
   private ready?: boolean;
+  private width: number = 0;
 
   async componentDidLoad() {
     this.debug('componentDidLoad');
+    this.updateWidth();
     await this.indexTabs();
     this.slot = this.el.shadowRoot!.querySelector('slot') as HTMLSlotElement;
     this.slot.addEventListener('slotchange', this.onSlotChange.bind(this));
@@ -90,10 +82,16 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
   private async onSlotChange() {
     this.debug('onSlotChange', this.tabs.length);
+    this.updateWidth();
   }
 
   async componentWillUpdate() {
+    this.updateWidth();
     await this.indexTabs();
+  }
+
+  async componentDidRender() {
+    this.updateWidth();
   }
 
   /**
@@ -101,6 +99,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
    */
   @Method()
   async reindexTabs() {
+    this.updateWidth();
     await this.indexTabs();
   }
 
@@ -131,7 +130,12 @@ export class SuperTabsContainerComponent implements ComponentInterface {
    */
   @Method()
   moveContainer(scrollX: number, animate?: boolean): Promise<void> {
-    scrollEl(this.el, scrollX, 0, animate ? this.config!.transitionDuration : 0);
+    if (animate) {
+      scrollEl(this.el, scrollX, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
+    } else {
+      this.el.scroll(scrollX, 0);
+    }
+
     return Promise.resolve();
   }
 
@@ -175,7 +179,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       current.getRootScrollableEl()
         .then(el => {
           if (el) {
-            scrollEl(el, 0, 0, this.config!.transitionDuration);
+            scrollEl(el, 0, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
           }
         });
     });
@@ -219,7 +223,8 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     }
 
     const coords = pointerCoord(ev);
-    const vw = this.clientWidth;
+    this.updateWidth();
+    const vw = this.width;
     if (coords.x < this.leftThreshold || coords.x > vw - this.rightThreshold) {
       // ignore this gesture, it started in the side menu touch zone
       return;
@@ -250,9 +255,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     const coords = pointerCoord(ev);
 
     if (!this.isDragging) {
-      const shouldCapture = checkGesture(coords, this.initialCoords, this.config!);
-
-      if (!shouldCapture) {
+      if (!checkGesture(coords, this.initialCoords, this.config!)) {
         if (Math.abs(coords.y - this.initialCoords.y) > 100) {
           this.initialCoords = void 0;
           this.lastPosX = void 0;
@@ -260,14 +263,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
         return;
       }
 
-      // gesture is good, let's capture all next onTouchMove events
       this.isDragging = true;
-    }
-
-    // scroll container
-
-    if (!this.isDragging) {
-      return;
     }
 
     // stop anything else from capturing these events, to make sure the content doesn't slide
@@ -282,22 +278,19 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       return;
     }
 
-    const scrollLeft = getScrollX(this.el);
-    const scrollX = getNormalizedScrollX(this.el, deltaX);
+    const scrollX = Math.max(0, Math.min(this.scrollWidth - this.width, this.el.scrollLeft + deltaX));
 
-    if (scrollX === scrollLeft) {
+    if (Math.floor(scrollX) === Math.floor(this.el.scrollLeft)) {
       return;
     }
 
-    this.updateSelectedTabIndex(
-      this.positionToIndex(
-        scrollX,
-      ),
-    );
+    const index = Math.round(this.positionToIndex(scrollX) * 100) / 100;
+    this.updateSelectedTabIndex(index);
 
     // update last X value
     this.lastPosX = coords.x;
-    this.moveContainer(scrollX, false);
+
+    this.el.scroll(scrollX, 0);
   }
 
   @Listen('touchend', { passive: false, capture: true })
@@ -328,20 +321,26 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     this.lastPosX = void 0;
   }
 
+  private updateWidth() {
+    const boundingRect = this.el.getBoundingClientRect();
+    this.width = Math.round(boundingRect.width * 10000) / 10000;
+  }
+
   private async indexTabs() {
-    this.scrollWidth = this.el.scrollWidth;
-    this.clientWidth = this.el.clientWidth;
-
-    this.debug('indexTab', this.scrollWidth, this.clientWidth);
-
-    if (this.scrollWidth === 0 || this.clientWidth === 0) {
+    if (this.width === 0) {
       requestAnimationFrame(() => {
+        this.updateWidth();
         this.indexTabs();
       });
       return;
     }
 
     const tabs = Array.from(this.el.querySelectorAll('super-tab'));
+
+    this.scrollWidth = this.width * tabs.length;
+
+    this.debug('indexTab', this.scrollWidth, this.width);
+
     await Promise.all(tabs.map(t => t.componentOnReady()));
     this.tabs = tabs;
     if (this.ready && typeof this._activeTabIndex === 'number') {
@@ -371,34 +370,22 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   }
 
   private calcSelectedTab(): number {
-    const tabsWidth = this.scrollWidth;
-    const tabWidth = this.clientWidth;
-    const minX = 0;
-    const maxX = tabsWidth - tabWidth;
-    const scrollX = Math.max(minX, Math.min(maxX, getScrollX(this.el)));
-
+    const scrollX = Math.max(0, Math.min(this.scrollWidth - this.width, this.el.scrollLeft));
     return this.positionToIndex(scrollX);
   }
 
   private positionToIndex(scrollX: number) {
-    const tabWidth = this.clientWidth;
+    const tabWidth = this.width;
     return scrollX / tabWidth;
   }
 
   private indexToPosition(tabIndex: number) {
-    this.debug('indexToPosition', tabIndex, this.clientWidth);
-    const tabWidth = this.clientWidth;
-    return tabIndex * tabWidth;
+    return Math.round(tabIndex * this.width * 10000) / 10000;
   }
 
   private normalizeSelectedTab(index: number): number {
-    const tabsWidth = this.scrollWidth;
-    const tabWidth = this.clientWidth;
-    const minX = 0;
-    const maxX = tabsWidth - tabWidth;
-    const scrollX = Math.max(minX, Math.min(maxX, tabWidth * Math.round(index)));
-
-    return scrollX / tabWidth;
+    const scrollX = Math.max(0, Math.min(this.scrollWidth - this.width, this.indexToPosition(index)));
+    return Math.round(scrollX / this.width);
   }
 
   /**
