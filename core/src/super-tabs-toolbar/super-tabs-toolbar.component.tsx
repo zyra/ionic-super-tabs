@@ -156,7 +156,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
       return Promise.resolve();
     }
 
-    scrollEl(this.buttonsContainerEl, scrollX, this.config!.nativeSmoothScroll!, animate ? this.config!.transitionDuration : 0);
+    scrollEl(this.buttonsContainerEl, scrollX, 0, this.config!.nativeSmoothScroll!, animate ? this.config!.transitionDuration : 0);
     return Promise.resolve();
   }
 
@@ -412,7 +412,7 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
     }
 
     if (!animate) {
-      scrollEl(this.buttonsContainerEl, pos!, false, 50);
+      scrollEl(this.buttonsContainerEl, pos!, 0, false, 50);
     } else {
       this.moveContainer(pos!, animate);
     }

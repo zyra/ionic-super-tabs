@@ -127,7 +127,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   @Method()
   moveContainer(scrollX: number, animate?: boolean): Promise<void> {
     if (animate) {
-      scrollEl(this.el, scrollX, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
+      scrollEl(this.el, scrollX, 0, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
     } else {
       this.el.scroll(scrollX, 0);
     }
@@ -175,7 +175,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       current.getRootScrollableEl()
         .then(el => {
           if (el) {
-            scrollEl(el, 0, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
+            scrollEl(el, 0, 0, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
           }
         });
     });
