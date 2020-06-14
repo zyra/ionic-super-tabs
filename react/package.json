@@ -1,6 +1,6 @@
 {
   "name": "@ionic-super-tabs/react",
-  "version": "6.4.0",
+  "version": "7.0.0",
   "description": "Ionic Super Tabs bindings for React applications",
   "author": "Zyra Media Inc. <info@zyra.ca>",
   "license": "MIT",
@@ -25,7 +25,7 @@
     "react"
   ],
   "dependencies": {
-    "@ionic-super-tabs/core": "^6.4.0",
+    "@ionic-super-tabs/core": "^7.0.0",
     "tslib": "*"
   },
   "devDependencies": {
