@@ -6,8 +6,8 @@ import { ProxyCmp, proxyOutputs } from './proxies-utils';
 import { Components } from '@ionic-super-tabs/core'
 
 export declare interface SuperTab extends Components.SuperTab {}
-@ProxyCmp({inputs: ['noScroll'], 'methods': ['getRootScrollableEl']})
-@Component({ selector: 'super-tab', changeDetection: ChangeDetectionStrategy.OnPush, template: '<ng-content></ng-content>', inputs: ['noScroll'] })
+@ProxyCmp({inputs: ['loaded', 'noScroll', 'visible'], 'methods': ['getRootScrollableEl']})
+@Component({ selector: 'super-tab', changeDetection: ChangeDetectionStrategy.OnPush, template: '<ng-content></ng-content>', inputs: ['loaded', 'noScroll', 'visible'] })
 export class SuperTab {
   protected el: HTMLElement;
   constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {

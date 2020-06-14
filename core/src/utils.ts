@@ -10,6 +10,8 @@ export const DEFAULT_CONFIG: SuperTabsConfig = {
   shortSwipeDuration: 300,
   debug: false,
   avoidElements: false,
+  lazyLoad: false,
+  unloadWhenInvisible: false,
 };
 
 export type STCoord = {
