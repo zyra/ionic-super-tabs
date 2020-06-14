@@ -29,7 +29,7 @@ steps:
     NPM_TOKEN:
       from_secret: npm_token
   commands:
-    - echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
+    - echo '//registry.npmjs.org/:_authToken=$${NPM_TOKEN}' > ~/.npmrc
     - ./super-tabs.sh publish
 
 - name: Generate docs
@@ -67,6 +67,6 @@ steps:
 
 ---
 kind: signature
-hmac: 2991761aeb35988517926a6c6692dab9e2c8e9ba8f2056a11b031474c8ea6ede
+hmac: 8af4927362919986d953578e8d4ff1b293543f0b60753e48f65839abc32481a1
 
 ...
