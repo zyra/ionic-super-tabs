@@ -145,14 +145,14 @@ export class SuperTabsContainerComponent implements ComponentInterface {
         return;
       }
 
-      await this.scrollToTop();
+      this.scrollToTop();
     }
 
     if (moveContainer) {
-      await this.moveContainerByIndex(index, animate);
+      this.moveContainerByIndex(index, animate);
     }
 
-    await this.updateActiveTabIndex(index, false);
+    this.updateActiveTabIndex(index, false);
   }
 
   /**
@@ -161,24 +161,23 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   @Method()
   async scrollToTop() {
     if (this._activeTabIndex === undefined || this.tabs === undefined) {
-      this.debug('activeTabIndex or tabs was undefined');
+      this.debug('scrollToTop', 'activeTabIndex or tabs was undefined', this._activeTabIndex, this.tabs);
       return;
     }
 
     const current = this.tabs[this._activeTabIndex];
-    this.queue.read(() => {
-      if (!current) {
-        this.debug('Current active tab was undefined in scrollToTop');
-        return;
-      }
 
-      current.getRootScrollableEl()
-        .then(el => {
-          if (el) {
-            scrollEl(el, 0, 0, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
-          }
-        });
-    });
+    if (!current) {
+      this.debug('Current active tab was undefined in scrollToTop');
+      return;
+    }
+
+    const el = await current.getRootScrollableEl();
+    if (el) {
+      scrollEl(el, 0, 0, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
+    } else {
+      this.debug('scrollToTop', 'couldnt find a scrollable element');
+    }
   }
 
   private updateActiveTabIndex(index: number, emit: boolean = true) {

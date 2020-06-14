@@ -141,14 +141,12 @@ export class SuperTabsComponent implements ComponentInterface {
 
     // set the selected tab so the toolbar & container are aligned and in sync
 
-    if (this.activeTabIndex > 0) {
-      if (this.container) {
-        this.container.setActiveTabIndex(this.activeTabIndex, true, false);
-      }
+    if (this.container) {
+      this.container.setActiveTabIndex(this.activeTabIndex, true, false);
+    }
 
-      if (this.toolbar) {
-        this.toolbar.setActiveTab(this.activeTabIndex, true, false);
-      }
+    if (this.toolbar) {
+      this.toolbar.setActiveTab(this.activeTabIndex, true, false);
     }
 
     // listen to `slotchange` event to detect any changes in children
@@ -171,14 +169,12 @@ export class SuperTabsComponent implements ComponentInterface {
       }
     }
 
-    if (this.activeTabIndex > 0) {
-      if (this.container) {
-        this.container.moveContainerByIndex(this.activeTabIndex, false);
-      }
+    if (this.container) {
+      this.container.setActiveTabIndex(this.activeTabIndex, true, false);
+    }
 
-      if (this.toolbar) {
-        this.toolbar.setActiveTab(this.activeTabIndex, true);
-      }
+    if (this.toolbar) {
+      this.toolbar.setActiveTab(this.activeTabIndex, true);
     }
 
     this.propagateConfig();
