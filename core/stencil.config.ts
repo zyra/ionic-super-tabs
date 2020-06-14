@@ -1,5 +1,7 @@
+import { angularOutputTarget } from '@stencil/angular-output-target';
 import { Config } from '@stencil/core';
 import { sass } from '@stencil/sass';
+
 
 export const config: Config = {
 
@@ -23,10 +25,9 @@ export const config: Config = {
       strict: true,
     },
     {
-      type: 'dist-hydrate-script'
+      type: 'dist-hydrate-script',
     },
-    {
-      type: 'angular',
+    angularOutputTarget({
       componentCorePackage: '@ionic-super-tabs/core',
       directivesProxyFile: '../angular/src/directives/proxies.ts',
       directivesUtilsFile: '../angular/src/directives/proxies-utils.ts',
@@ -34,7 +35,7 @@ export const config: Config = {
       excludeComponents: [
         'super-tab-indicator',
       ],
-    },
+    }),
   ],
   validateTypes: true,
 };
