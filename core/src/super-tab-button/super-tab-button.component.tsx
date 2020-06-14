@@ -20,7 +20,7 @@ export class SuperTabButtonComponent implements ComponentInterface {
   /**
    * Whether the button is disabled
    */
-  @Prop({ reflectToAttr: true }) disabled?: boolean;
+  @Prop({ reflectToAttr: true }) disabled: boolean = false;
 
   /** @internal */
   @Prop() scrollableContainer: boolean = false;
@@ -66,8 +66,8 @@ export class SuperTabButtonComponent implements ComponentInterface {
         aria-disabled={this.disabled ? 'true' : false}
         aria-selected={this.active ? 'true' : 'false'}
         class={{
-          'ion-activatable': true,
-          'ion-focusable': true,
+          'ion-activatable': !this.disabled,
+          'ion-focusable': !this.disabled,
           'icon-only': !!this.icon && !this.label,
           'label-only': !!this.label && !this.icon,
           active: Boolean(this.active),

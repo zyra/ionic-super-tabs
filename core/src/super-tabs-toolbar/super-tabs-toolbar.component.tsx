@@ -197,6 +197,10 @@ export class SuperTabsToolbarComponent implements ComponentInterface {
   }
 
   private onButtonClick(button: HTMLSuperTabButtonElement) {
+    if (!button || button.disabled) {
+      return;
+    }
+
     this.lastClickTs = Date.now();
     this.setActiveTab(button.index as number, true, true);
     this.buttonClick.emit(button);
