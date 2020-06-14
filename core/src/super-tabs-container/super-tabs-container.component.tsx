@@ -83,11 +83,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   private async onSlotChange() {
     this.debug('onSlotChange', this.tabs.length);
     this.updateWidth();
-  }
-
-  async componentWillUpdate() {
-    this.updateWidth();
-    await this.indexTabs();
+    this.indexTabs();
   }
 
   async componentDidRender() {
