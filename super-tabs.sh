@@ -158,11 +158,11 @@ _copy() {
 _publish() {
   _log "Publishing all packages to npm"
   cd "${DIR}/core" || exit 1
-  npm publish || exit 1
+  npm publish --access public || exit 1
   cd "${DIR}/angular/dist" || exit 1
-  npm publish || exit 1
-  cd "${DIR}/react/dist" || exit 1
-  npm publish || exit 1
+  npm publish --access public || exit 1
+  cd "${DIR}/react" || exit 1
+  npm publish --access public || exit 1
 }
 
 _setupWorkspace
