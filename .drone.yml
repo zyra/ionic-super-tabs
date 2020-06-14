@@ -25,7 +25,7 @@ steps:
   - docker build .
 
 - name: Build
-  image: node:12-alpine
+  image: node:12
   when:
     event:
     - tag
@@ -81,6 +81,6 @@ steps:
 
 ---
 kind: signature
-hmac: e8547a95be48f83ddf670475ccae7ba508402e1d621e3cb69af3219072f1b4c5
+hmac: 325be6f79fe9c33c34d9376df0ffce76ae06e1e831666c434bdfa2c45837b85b
 
 ...
