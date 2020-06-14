@@ -22,7 +22,7 @@ export namespace Components {
         /**
           * Whether the button is disabled
          */
-        "disabled"?: boolean;
+        "disabled": boolean;
         "index"?: number;
         "scrollableContainer": boolean;
     }
