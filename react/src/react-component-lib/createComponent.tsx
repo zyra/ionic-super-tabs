@@ -29,12 +29,6 @@ export const createReactComponent = <PropType, ElementType>(tagName: string) => 
 
     componentDidUpdate(prevProps: IonicReactInternalProps<ElementType>) {
       const node = this.ref.current;
-
-      if (node == null) {
-        console.warn('[@ionic-super-tabs/react] componentDidUpdate received a null HTMLElement');
-        return;
-      }
-
       attachEventProps(node, this.props, prevProps);
     }
 

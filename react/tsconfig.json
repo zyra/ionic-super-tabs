@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "strict": true,
+    "strict": false,
     "allowUnreachableCode": false,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
@@ -26,9 +26,6 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx"
-  ],
-  "exclude": [
-    "**/__tests__/**"
   ],
   "compileOnSave": false,
   "buildOnSave": false
