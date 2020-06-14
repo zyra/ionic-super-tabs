@@ -48,6 +48,20 @@ steps:
       from_secret: npm_email
     folder: angular/dist
 
+- name: Publish react package
+  image: plugins/npm
+  when:
+    event:
+    - tag
+  settings:
+    username:
+      from_secret: npm_username
+    password:
+      from_secret: npm_password
+    email:
+      from_secret: npm_email
+    folder: react
+
 - name: Generate docs
   image: harbor.zyra.ca/public/zmdocs:v1.1.0
   when:
@@ -83,6 +97,6 @@ steps:
 
 ---
 kind: signature
-hmac: 377034cc4d231e71c45182662eae2f61dfe50b2d363982d5056d871954af320e
+hmac: f293244b93f5c4503d73898116e17fb369d97c8ebb4eb14de5402d80ee794e66
 
 ...
