@@ -12,13 +12,27 @@ volumes:
     path: /var/run/docker.sock
 
 steps:
-- name: Build
+- name: Fast build
   image: docker
+  when:
+    event:
+      exclude:
+      - tag
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
   commands:
   - docker build .
+
+- name: Build
+  image: node:12-alpine
+  when:
+    event:
+    - tag
+  commands:
+  - npm i
+  - ./super-tabs.sh setup
+  - ./super-tabs.sh build
 
 - name: Publish
   image: node:12
@@ -67,6 +81,6 @@ steps:
 
 ---
 kind: signature
-hmac: 8af4927362919986d953578e8d4ff1b293543f0b60753e48f65839abc32481a1
+hmac: e8547a95be48f83ddf670475ccae7ba508402e1d621e3cb69af3219072f1b4c5
 
 ...
