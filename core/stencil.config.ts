@@ -1,5 +1,6 @@
 import { angularOutputTarget } from '@stencil/angular-output-target';
 import { Config } from '@stencil/core';
+import { reactOutputTarget } from '@stencil/react-output-target';
 import { sass } from '@stencil/sass';
 
 
@@ -32,6 +33,13 @@ export const config: Config = {
       directivesProxyFile: '../angular/src/directives/proxies.ts',
       directivesUtilsFile: '../angular/src/directives/proxies-utils.ts',
       directivesArrayFile: '../angular/src/directives/proxies-list.txt',
+      excludeComponents: [
+        'super-tab-indicator',
+      ],
+    }),
+    reactOutputTarget({
+      componentCorePackage: '@ionic-super-tabs/core',
+      proxiesFile: '../react/src/components.ts',
       excludeComponents: [
         'super-tab-indicator',
       ],

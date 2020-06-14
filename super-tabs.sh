@@ -111,6 +111,11 @@ _build() {
     _exec npx lerna run build --scope=@ionic-super-tabs/core --stream --no-progress --loglevel=silent
     ;;
 
+  "react")
+    _log "Building react module"
+    _exec npx lerna run build --scope=@ionic-super-tabs/react --stream --no-progress --loglevel=silent
+    ;;
+
   *)
     _log "Building all modules"
     _exec npx lerna run build --concurrency=1 --stream --no-progress --loglevel=silent
@@ -155,6 +160,8 @@ _publish() {
   cd "${DIR}/core" || exit 1
   npm publish || exit 1
   cd "${DIR}/angular/dist" || exit 1
+  npm publish || exit 1
+  cd "${DIR}/react/dist" || exit 1
   npm publish || exit 1
 }
 

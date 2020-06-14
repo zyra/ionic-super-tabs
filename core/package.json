@@ -18,6 +18,13 @@
   "scripts": {
     "build": "stencil build"
   },
+  "keywords": [
+    "ionic",
+    "swipeable",
+    "tabs",
+    "module",
+    "component"
+  ],
   "author": "Zyra Media Inc.",
   "license": "MIT",
   "devDependencies": {
