@@ -76,6 +76,8 @@ export interface SuperTabsConfig {
    * Whether the container should look and avoid elements with avoid-super-tabs attribute
    */
   avoidElements?: boolean;
+
+  nativeSmoothScroll?: boolean;
 }
 
 /**

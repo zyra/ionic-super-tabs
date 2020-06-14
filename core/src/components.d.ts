@@ -47,8 +47,9 @@ export namespace Components {
           * Set the selected tab. This will move the container and the toolbar to the selected tab.
           * @param index the index of the tab you want to select
           * @param animate whether you want to animate the transition
+          * @param emit whether you want to emit tab change event
          */
-        "selectTab": (index: number, animate?: boolean) => Promise<void>;
+        "selectTab": (index: number, animate?: boolean, emit?: boolean) => Promise<void>;
         /**
           * Set/update the configuration
           * @param config Configuration object

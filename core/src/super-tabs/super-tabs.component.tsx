@@ -62,7 +62,7 @@ export class SuperTabsComponent implements ComponentInterface {
   private toolbar!: HTMLSuperTabsToolbarElement;
   private _config: SuperTabsConfig = DEFAULT_CONFIG;
   private initAttempts: number = 0;
-  private initPromise: Promise<void>;
+  private readonly initPromise: Promise<void>;
   private initPromiseResolve!: Function;
 
   constructor() {
@@ -77,8 +77,6 @@ export class SuperTabsComponent implements ComponentInterface {
    */
   @Method()
   async setConfig(config: SuperTabsConfig) {
-    this.debug('setConfig called with: ', config);
-
     this._config = { ...DEFAULT_CONFIG, ...config };
   }
 
@@ -130,8 +128,6 @@ export class SuperTabsComponent implements ComponentInterface {
   }
 
   async componentWillLoad() {
-    this.debug('componentWillLoad');
-
     if (this.config) {
       await this.setConfig(this.config);
     }
@@ -145,12 +141,14 @@ export class SuperTabsComponent implements ComponentInterface {
 
     // set the selected tab so the toolbar & container are aligned and in sync
 
-    if (this.container) {
-      this.container.setActiveTabIndex(this.activeTabIndex);
-    }
+    if (this.activeTabIndex > 0) {
+      if (this.container) {
+        this.container.setActiveTabIndex(this.activeTabIndex, true, false);
+      }
 
-    if (this.toolbar) {
-      this.toolbar.setActiveTab(this.activeTabIndex);
+      if (this.toolbar) {
+        this.toolbar.setActiveTab(this.activeTabIndex, true, false);
+      }
     }
 
     // listen to `slotchange` event to detect any changes in children
@@ -163,22 +161,24 @@ export class SuperTabsComponent implements ComponentInterface {
 
   private initComponent() {
     if (!this.container) {
-      if (++this.initAttempts < maxInitRetries) {
+      if (++this.initAttempts <= maxInitRetries) {
         requestAnimationFrame(() => {
           this.initComponent();
         });
         return;
+      } else {
+        this.debug(`container still doesn't exists after ${maxInitRetries} frames`);
       }
     }
 
-    this.debug(`failed to init ${this.initAttempts} times`);
+    if (this.activeTabIndex > 0) {
+      if (this.container) {
+        this.container.moveContainerByIndex(this.activeTabIndex, false);
+      }
 
-    if (this.container) {
-      this.container.moveContainerByIndex(this.activeTabIndex, false);
-    }
-
-    if (this.toolbar) {
-      this.toolbar.setSelectedTab(this.activeTabIndex, false);
+      if (this.toolbar) {
+        this.toolbar.setActiveTab(this.activeTabIndex, true);
+      }
     }
 
     this.propagateConfig();
@@ -208,7 +208,7 @@ export class SuperTabsComponent implements ComponentInterface {
   }
 
   private async onContainerSelectedTabChange(ev: any) {
-    // this.debug('onContainerSelectedTabChange called with: ', ev);
+    this.debug('onContainerSelectedTabChange called with: ', ev);
 
     if (this.toolbar) {
       await this.toolbar.setSelectedTab(ev.detail);
