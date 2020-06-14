@@ -92,9 +92,10 @@ export class SuperTabsComponent implements ComponentInterface {
    * This will move the container and the toolbar to the selected tab.
    * @param index {number} the index of the tab you want to select
    * @param [animate=true] {boolean} whether you want to animate the transition
+   * @param [emit=true] {boolean} whether you want to emit tab change event
    */
   @Method()
-  async selectTab(index: number, animate: boolean = true) {
+  async selectTab(index: number, animate: boolean = true, emit: boolean = true) {
     this.debug('selectTab', index, animate);
 
     await this.initPromise;
@@ -109,7 +110,10 @@ export class SuperTabsComponent implements ComponentInterface {
       await this.toolbar.setActiveTab(index, true, animate);
     }
 
-    this.emitTabChangeEvent(index, lastIndex);
+    if (emit) {
+      this.emitTabChangeEvent(index, lastIndex);
+    }
+
     this.activeTabIndex = lastIndex;
   }
 
@@ -271,7 +275,7 @@ export class SuperTabsComponent implements ComponentInterface {
     this.indexChildren();
 
     // reselect the current tab to ensure that we're on the correct tab
-    this.selectTab(this.activeTabIndex);
+    this.selectTab(this.activeTabIndex, true, false);
   }
 
   /**

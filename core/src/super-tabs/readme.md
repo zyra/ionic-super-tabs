@@ -22,7 +22,7 @@
 
 ## Methods
 
-### `selectTab(index: number, animate?: boolean) => Promise<void>`
+### `selectTab(index: number, animate?: boolean, emit?: boolean) => Promise<void>`
 
 Set the selected tab.
 This will move the container and the toolbar to the selected tab.
