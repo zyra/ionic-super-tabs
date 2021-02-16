@@ -21,8 +21,8 @@ export class SuperTabComponent implements ComponentInterface {
     reflect: true,
   }) noScroll!: boolean;
 
-  @Prop() loaded: boolean = false;
-  @Prop() visible: boolean = false;
+  @Prop() loaded = false;
+  @Prop() visible = false;
 
   componentDidLoad() {
     this.checkIonContent();

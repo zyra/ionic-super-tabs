@@ -170,7 +170,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
         this.debug('Current active tab was undefined in scrollToTop');
         return;
       }
-
+      //  deepcode ignore PromiseNotCaughtGeneral: <comment the reason here>
       current.getRootScrollableEl().then((el) => {
         if (el) {
           scrollEl(el, 0, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
