@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property   | Attribute  | Description                    | Type      | Default |
-| ---------- | ---------- | ------------------------------ | --------- | ------- |
-| `disabled` | `disabled` | Whether the button is disabled | `boolean` | `false` |
+| Property   | Attribute  | Description                    | Type                   | Default     |
+| ---------- | ---------- | ------------------------------ | ---------------------- | ----------- |
+| `disabled` | `disabled` | Whether the button is disabled | `boolean \| undefined` | `undefined` |
 
 
 ## CSS Custom Properties

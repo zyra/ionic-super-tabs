@@ -14,7 +14,6 @@ import {
 import { SuperTabsConfig } from '../interface';
 import { checkGesture, debugLog, getTs, pointerCoord, scrollEl, STCoord } from '../utils';
 
-
 @Component({
   tag: 'super-tabs-container',
   styleUrl: 'super-tabs-container.component.scss',
@@ -127,7 +126,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   @Method()
   moveContainer(scrollX: number, animate?: boolean): Promise<void> {
     if (animate) {
-      scrollEl(this.el, scrollX, 0, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
+      scrollEl(this.el, scrollX, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
     } else {
       this.el.scroll(scrollX, 0);
     }
@@ -145,14 +144,14 @@ export class SuperTabsContainerComponent implements ComponentInterface {
         return;
       }
 
-      this.scrollToTop();
+      await this.scrollToTop();
     }
 
     if (moveContainer) {
-      this.moveContainerByIndex(index, animate);
+      await this.moveContainerByIndex(index, animate);
     }
 
-    this.updateActiveTabIndex(index, false);
+    await this.updateActiveTabIndex(index, false);
   }
 
   /**
@@ -161,23 +160,23 @@ export class SuperTabsContainerComponent implements ComponentInterface {
   @Method()
   async scrollToTop() {
     if (this._activeTabIndex === undefined || this.tabs === undefined) {
-      this.debug('scrollToTop', 'activeTabIndex or tabs was undefined', this._activeTabIndex, this.tabs);
+      this.debug('activeTabIndex or tabs was undefined');
       return;
     }
 
     const current = this.tabs[this._activeTabIndex];
+    this.queue.read(() => {
+      if (!current) {
+        this.debug('Current active tab was undefined in scrollToTop');
+        return;
+      }
 
-    if (!current) {
-      this.debug('Current active tab was undefined in scrollToTop');
-      return;
-    }
-
-    const el = await current.getRootScrollableEl();
-    if (el) {
-      scrollEl(el, 0, 0, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
-    } else {
-      this.debug('scrollToTop', 'couldnt find a scrollable element');
-    }
+      current.getRootScrollableEl().then((el) => {
+        if (el) {
+          scrollEl(el, 0, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
+        }
+      });
+    });
   }
 
   private updateActiveTabIndex(index: number, emit: boolean = true) {
@@ -185,6 +184,10 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
     this._activeTabIndex = index;
     emit && this.activeTabIndexChange.emit(this._activeTabIndex);
+
+    if (this.config!.lazyLoad) {
+      this.lazyLoadTabs();
+    }
   }
 
   private updateSelectedTabIndex(index: number) {
@@ -336,11 +339,14 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
     this.debug('indexTab', this.scrollWidth, this.width);
 
-    await Promise.all(tabs.map(t => t.componentOnReady()));
+    await Promise.all(tabs.map((t) => t.componentOnReady()));
     this.tabs = tabs;
+
     if (this.ready && typeof this._activeTabIndex === 'number') {
       this.moveContainerByIndex(this._activeTabIndex, true);
     }
+
+    this.lazyLoadTabs();
 
     if (this.config) {
       switch (this.config.sideMenu) {
@@ -357,11 +363,47 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     }
 
     if (this._activeTabIndex !== undefined) {
-      this.moveContainerByIndex(this._activeTabIndex, false)
-        .then(() => {
-          this.ready = true;
-        });
+      this.moveContainerByIndex(this._activeTabIndex, false).then(() => {
+        this.ready = true;
+      });
     }
+  }
+
+  private lazyLoadTabs() {
+    if (typeof this._activeTabIndex === 'undefined') {
+      this.debug('lazyLoadTabs', 'called when _activeTabIndex is undefined');
+      return;
+    }
+
+    if (!this.config) {
+      this.debug('lazyLoadTabs', 'called with no config available');
+      return;
+    }
+
+    if (!this.config!.lazyLoad) {
+      this.tabs.forEach((t: HTMLSuperTabElement) => {
+        t.loaded = true;
+        t.visible = true;
+      });
+      return;
+    }
+
+    const activeTab = this._activeTabIndex;
+    const tabs = [...this.tabs];
+
+    const min = activeTab - 1;
+    const max = activeTab + 1;
+
+    let index = 0;
+
+    for (const tab of tabs) {
+      tab.visible = index >= min && index <= max;
+
+      tab.loaded = tab.visible || (this.config!.unloadWhenInvisible ? false : tab.loaded);
+
+      index++;
+    }
+    this.tabs = tabs;
   }
 
   private calcSelectedTab(): number {

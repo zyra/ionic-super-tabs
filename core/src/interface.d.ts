@@ -78,6 +78,9 @@ export interface SuperTabsConfig {
   avoidElements?: boolean;
 
   nativeSmoothScroll?: boolean;
+
+  lazyLoad?: boolean;
+  unloadWhenInvisible?: boolean;
 }
 
 /**
@@ -88,7 +91,7 @@ export interface SuperTabChangeEventDetail {
    * Selected tab index.
    */
   index: number;
-  
+
   /**
    * Indicates whether the tab index has changed.
    */
