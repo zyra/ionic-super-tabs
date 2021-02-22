@@ -17,7 +17,7 @@ export const DECLARATIONS = [
   imports: [CommonModule],
 })
 export class SuperTabsModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<SuperTabsModule> {
     return {
       ngModule: SuperTabsModule,
       providers: [
