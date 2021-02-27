@@ -14,7 +14,6 @@ import {
 import { SuperTabsConfig } from '../interface';
 import { checkGesture, debugLog, getTs, pointerCoord, scrollEl, STCoord } from '../utils';
 
-
 @Component({
   tag: 'super-tabs-container',
   styleUrl: 'super-tabs-container.component.scss',
@@ -171,13 +170,12 @@ export class SuperTabsContainerComponent implements ComponentInterface {
         this.debug('Current active tab was undefined in scrollToTop');
         return;
       }
-
-      current.getRootScrollableEl()
-        .then(el => {
-          if (el) {
-            scrollEl(el, 0, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
-          }
-        });
+      //  deepcode ignore PromiseNotCaughtGeneral: <comment the reason here>
+      current.getRootScrollableEl().then((el) => {
+        if (el) {
+          scrollEl(el, 0, this.config!.nativeSmoothScroll!, this.config!.transitionDuration);
+        }
+      });
     });
   }
 
@@ -341,7 +339,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
 
     this.debug('indexTab', this.scrollWidth, this.width);
 
-    await Promise.all(tabs.map(t => t.componentOnReady()));
+    await Promise.all(tabs.map((t) => t.componentOnReady()));
     this.tabs = tabs;
 
     if (this.ready && typeof this._activeTabIndex === 'number') {
@@ -365,10 +363,9 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     }
 
     if (this._activeTabIndex !== undefined) {
-      this.moveContainerByIndex(this._activeTabIndex, false)
-        .then(() => {
-          this.ready = true;
-        });
+      this.moveContainerByIndex(this._activeTabIndex, false).then(() => {
+        this.ready = true;
+      });
     }
   }
 
@@ -397,10 +394,16 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     const min = activeTab - 1;
     const max = activeTab + 1;
 
+    let index = 0;
+
     for (const tab of tabs) {
-      tab.visible = tab.tabIndex >= min && tab.tabIndex <= max;
-      tab.loaded = tab.visible || this.config!.unloadWhenInvisible ? false : tab.loaded;
+      tab.visible = index >= min && index <= max;
+
+      tab.loaded = tab.visible || (this.config!.unloadWhenInvisible ? false : tab.loaded);
+
+      index++;
     }
+    this.tabs = tabs;
   }
 
   private calcSelectedTab(): number {

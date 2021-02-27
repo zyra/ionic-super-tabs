@@ -12,55 +12,39 @@ volumes:
     path: /var/run/docker.sock
 
 steps:
-- name: Build
+- name: Fast build
   image: docker
+  when:
+    event:
+      exclude:
+      - tag
   volumes:
   - name: dockersock
     path: /var/run/docker.sock
   commands:
   - docker build .
 
-- name: Publish core package
-  image: plugins/npm
+- name: Build
+  image: node:12
   when:
     event:
     - tag
-  settings:
-    username:
-      from_secret: npm_username
-    password:
-      from_secret: npm_password
-    email:
-      from_secret: npm_email
-    folder: core
+  commands:
+  - npm i
+  - ./super-tabs.sh setup
+  - ./super-tabs.sh build
 
-- name: Publish angular package
-  image: plugins/npm
+- name: Publish
+  image: node:12
   when:
     event:
     - tag
-  settings:
-    username:
-      from_secret: npm_username
-    password:
-      from_secret: npm_password
-    email:
-      from_secret: npm_email
-    folder: angular/dist
-
-- name: Publish react package
-  image: plugins/npm
-  when:
-    event:
-    - tag
-  settings:
-    username:
-      from_secret: npm_username
-    password:
-      from_secret: npm_password
-    email:
-      from_secret: npm_email
-    folder: react
+  environment:
+    NPM_TOKEN:
+      from_secret: npm_token
+  commands:
+    - echo '//registry.npmjs.org/:_authToken=$${NPM_TOKEN}' > ~/.npmrc
+    - ./super-tabs.sh publish
 
 - name: Generate docs
   image: harbor.zyra.ca/public/zmdocs:v1.1.0
@@ -97,6 +81,6 @@ steps:
 
 ---
 kind: signature
-hmac: f293244b93f5c4503d73898116e17fb369d97c8ebb4eb14de5402d80ee794e66
+hmac: 325be6f79fe9c33c34d9376df0ffce76ae06e1e831666c434bdfa2c45837b85b
 
 ...

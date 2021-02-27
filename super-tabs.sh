@@ -181,7 +181,8 @@ case $1 in
   ;;
 
 "dev")
-  _build
+  _build --only core
+  _build --only angular
   _copy
   ;;
 
