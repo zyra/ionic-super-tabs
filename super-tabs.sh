@@ -57,11 +57,11 @@ errExit() {
 }
 
 _exec() {
-  s=$(date +%s%N | cut -b1-13)
+#   s=$(date +%s%N | cut -b1-13)
   "$@" || errExit "Failed to execute command"
-  e=$(date +%s%N | cut -b1-13)
-  d=$((e - s))
-  _logv "executed ${*} in ${d}ms"
+#  e=$(date +%s%N | cut -b1-13)
+#  d=$((e - s))
+#  _logv "executed ${*} in ${d}ms"
 }
 
 _execSilent() {

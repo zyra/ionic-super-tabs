@@ -185,9 +185,7 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     this._activeTabIndex = index;
     emit && this.activeTabIndexChange.emit(this._activeTabIndex);
 
-    if (this.config!.lazyLoad) {
-      this.lazyLoadTabs();
-    }
+    this.lazyLoadTabs();
   }
 
   private updateSelectedTabIndex(index: number) {
@@ -342,11 +340,12 @@ export class SuperTabsContainerComponent implements ComponentInterface {
     await Promise.all(tabs.map((t) => t.componentOnReady()));
     this.tabs = tabs;
 
-    if (this.ready && typeof this._activeTabIndex === 'number') {
-      this.moveContainerByIndex(this._activeTabIndex, true);
-    }
+    const activeTabIndex = this._activeTabIndex
 
-    this.lazyLoadTabs();
+    if (this.ready && typeof activeTabIndex === 'number') {
+      this.moveContainerByIndex(activeTabIndex, true);
+      this.lazyLoadTabs();
+    }
 
     if (this.config) {
       switch (this.config.sideMenu) {
@@ -362,8 +361,9 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       }
     }
 
-    if (this._activeTabIndex !== undefined) {
-      this.moveContainerByIndex(this._activeTabIndex, false).then(() => {
+    if (activeTabIndex !== undefined) {
+      this.moveContainerByIndex(activeTabIndex, false).then(() => {
+        this.lazyLoadTabs();
         this.ready = true;
       });
     }
@@ -380,16 +380,16 @@ export class SuperTabsContainerComponent implements ComponentInterface {
       return;
     }
 
-    if (!this.config!.lazyLoad) {
-      this.tabs.forEach((t: HTMLSuperTabElement) => {
-        t.loaded = true;
-        t.visible = true;
-      });
-      return;
-    }
-
     const activeTab = this._activeTabIndex;
     const tabs = [...this.tabs];
+
+    if (!this.config!.lazyLoad) {
+      for (const tab of this.tabs) {
+        tab.loaded = true
+        tab.visible = true
+      }
+      return;
+    }
 
     const min = activeTab - 1;
     const max = activeTab + 1;
