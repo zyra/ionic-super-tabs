@@ -10,6 +10,8 @@ export const DEFAULT_CONFIG: SuperTabsConfig = {
   shortSwipeDuration: 300,
   debug: false,
   avoidElements: false,
+  lazyLoad: false,
+  unloadWhenInvisible: false,
 };
 
 export type STCoord = {
@@ -53,25 +55,25 @@ function getScrollCoord(start: number, dest: number, startTime: number, currentT
   return Math.ceil((timeFn * (dest - start)) + start);
 }
 
-function scroll(el: Element, startX: number, x: number, y: number, startTime: number, duration: number) {
+function scroll(el: Element, startX: number, x: number, startTime: number, duration: number) {
   const currentTime = getTs();
   const scrollX = startX === x ? x : getScrollCoord(startX, x, startTime, currentTime, duration);
 
-  el.scrollTo(scrollX, y);
+  el.scrollTo(scrollX, 0);
 
   if (currentTime - startTime >= duration) {
     return;
   }
 
   requestAnimationFrame(() => {
-    scroll(el, startX, x, y, startTime, duration);
+    scroll(el, startX, x, startTime, duration);
   });
 }
 
-export const scrollEl = (el: Element, x: number, y: number = 0, native: boolean = false, duration: number = 300) => {
+export const scrollEl = (el: Element, x: number, native: boolean, duration: number = 300) => {
   if (duration <= 0) {
     requestAnimationFrame(() => {
-      el.scrollTo(x, y);
+      el.scrollTo(x, 0);
     });
     return;
   }
@@ -79,14 +81,13 @@ export const scrollEl = (el: Element, x: number, y: number = 0, native: boolean 
   if (native && nativeScrollAvailable) {
     el.scrollTo({
       left: x,
-      top: y,
       behavior: 'smooth',
     });
     return;
   }
 
   requestAnimationFrame(() => {
-    scroll(el, el.scrollLeft, x, y, getTs(), duration);
+    scroll(el, el.scrollLeft, x, getTs(), duration);
   });
 };
 

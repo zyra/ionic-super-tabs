@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Element, h, Method, Prop } from '@stencil/core';
+import { Component, ComponentInterface, Element, h, Host, Method, Prop } from '@stencil/core';
 
 
 @Component({
@@ -20,6 +20,9 @@ export class SuperTabComponent implements ComponentInterface {
   @Prop({
     reflect: true,
   }) noScroll!: boolean;
+
+  @Prop() loaded = false;
+  @Prop() visible = false;
 
   componentDidLoad() {
     this.checkIonContent();
@@ -67,6 +70,10 @@ export class SuperTabComponent implements ComponentInterface {
   }
 
   render() {
-    return <slot/>;
+    return <Host style={{ visibility: this.visible ? 'visible' : 'hidden' }}>
+      {
+        this.loaded ? <slot></slot> : null
+      }
+    </Host>;
   }
 }

@@ -12,17 +12,19 @@ export namespace Components {
           * Returns the root scrollable element
          */
         "getRootScrollableEl": () => Promise<HTMLElement | null>;
+        "loaded": boolean;
         /**
           * Set this to true to prevent vertical scrolling of this tab. Defaults to `false`.  This property will automatically be set to true if there is a direct child element of `ion-content`. To override this behaviour make sure to explicitly set this property to `false`.
          */
         "noScroll": boolean;
+        "visible": boolean;
     }
     interface SuperTabButton {
         "active"?: boolean;
         /**
           * Whether the button is disabled
          */
-        "disabled": boolean;
+        "disabled"?: boolean;
         "index"?: number;
         "scrollableContainer": boolean;
     }
@@ -154,10 +156,12 @@ declare global {
 }
 declare namespace LocalJSX {
     interface SuperTab {
+        "loaded"?: boolean;
         /**
           * Set this to true to prevent vertical scrolling of this tab. Defaults to `false`.  This property will automatically be set to true if there is a direct child element of `ion-content`. To override this behaviour make sure to explicitly set this property to `false`.
          */
         "noScroll": boolean;
+        "visible"?: boolean;
     }
     interface SuperTabButton {
         "active"?: boolean;
