@@ -1,6 +1,6 @@
 {
   "name": "@ionic-super-tabs/angular",
-  "version": "7.0.8",
+  "version": "8.0.0",
   "description": "Ionic Super Tabs bindings for Angular applications",
   "scripts": {
     "build": "ng build",
