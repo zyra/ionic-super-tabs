@@ -11,7 +11,8 @@
   "author": "Zyra Media Inc. <info@zyra.ca>",
   "license": "MIT",
   "dependencies": {
-    "@ionic-super-tabs/core": "^7.0.8"
+    "@ionic-super-tabs/core": "^7.0.8",
+    "tslib": "^2.0.0"
   },
   "keywords": [
     "ionic",
@@ -22,27 +23,27 @@
     "angular"
   ],
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.901.8",
-    "@angular-devkit/build-ng-packagr": "~0.901.8",
-    "@angular-devkit/core": "~9.1.8",
-    "@angular-devkit/schematics": "~9.1.8",
-    "@angular/cli": "~9.1.8",
-    "@angular/common": "~9.1.11",
-    "@angular/compiler": "~9.1.11",
-    "@angular/compiler-cli": "~9.1.11",
-    "@angular/core": "~9.1.11",
-    "@angular/forms": "~9.1.11",
-    "@angular/platform-browser": "~9.1.11",
-    "@angular/platform-browser-dynamic": "~9.1.11",
-    "@angular/router": "~9.1.11",
+    "@angular-devkit/build-angular": "~0.1002.4",
+    "@angular-devkit/build-ng-packagr": "~0.1002.4",
+    "@angular-devkit/core": "~10.2.4",
+    "@angular-devkit/schematics": "~10.2.4",
+    "@angular/cli": "~10.2.4",
+    "@angular/common": "~10.2.5",
+    "@angular/compiler": "~10.2.5",
+    "@angular/compiler-cli": "~10.2.5",
+    "@angular/core": "~10.2.5",
+    "@angular/forms": "~10.2.5",
+    "@angular/platform-browser": "~10.2.5",
+    "@angular/platform-browser-dynamic": "~10.2.5",
+    "@angular/router": "~10.2.5",
     "@types/node": "~14.0.13",
     "fs-extra": "~9.0.1",
     "glob": "~7.1.6",
-    "ng-packagr": "~9.1.5",
+    "ng-packagr": "^10.1.0",
     "rxjs": "~6.5.5",
-    "tsickle": "~0.38.1",
-    "tslint": "~5.15.0",
-    "typescript": "~3.8.3",
+    "tsickle": "~0.39.1",
+    "tslint": "~6.1.0",
+    "typescript": "~4.0.8",
     "zone.js": "~0.10.3"
   }
 }
