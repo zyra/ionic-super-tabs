@@ -1,3 +1,4 @@
+/.angular/cache
 build
 node_modules
 dist
